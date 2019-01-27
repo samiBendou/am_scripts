@@ -6,6 +6,7 @@ hours_day = 24  # hours / day
 l_petrol_baril = 159.0  # liters / baril
 petrol_price = 53.53 / l_petrol_baril  # $/L
 fill_ratio = 0.86
+max_planes_display = 7
 
 # Segment market. eco : economical, biz : business, pre : premium
 market = ["eco", "biz", "pre"]
@@ -26,7 +27,7 @@ class Line:
         self.ticket_price = ticket_price  # in $
         self.tax = tax  # in $/flight
         self.hub = hub
-        self.price = price
+        self.price = price  # acquisition price
 
 
 class Plane:
@@ -177,12 +178,17 @@ planes = [
     Plane("CRJ700C", {"eco": 78.0, "biz": 0.0, "pre": 0.0}, speed=834., cons=3.75, price=33.2e6),
     Plane("CRJ900C", {"eco": 90.0, "biz": 0.0, "pre": 0.0}, speed=850., cons=3.58, price=38.2e6),
     Plane("CRJ900", {"eco": 82.0, "biz": 4.0, "pre": 0.0}, speed=850., cons=3.58, price=38.2e6),
+    Plane("ERJ140C", {"eco": 44.0, "biz": 0.0, "pre": 0.0}, speed=828., cons=4.76, price=21.5e6),
     Plane("ERJ170C", {"eco": 80.0, "biz": 0.0, "pre": 0.0}, speed=828., cons=3.74, price=33.5e6),
     Plane("ERJ175C", {"eco": 88.0, "biz": 0.0, "pre": 0.0}, speed=828., cons=3.57, price=37.0e6),
-    Plane("ERJ175", {"eco": 79.0, "biz": 5.0, "pre": 0.0}, speed=828., cons=3.57, price=37.0e6)
+    Plane("ERJ175", {"eco": 79.0, "biz": 5.0, "pre": 0.0}, speed=828., cons=3.57, price=37.0e6),
+    Plane("ATR45-5C", {"eco": 50.0, "biz": 0.0, "pre": 0.0}, speed=540., cons=4.37, price=16.0e6, max_range=1555.),
+    Plane("ATR45-6C", {"eco": 50.0, "biz": 0.0, "pre": 0.0}, speed=540., cons=4.18, price=16.4e6, max_range=1629.),
 ]
 
-hubs = [Hub(tax=4497.0)]
+hubs = [
+    Hub(tax=4497.0)
+]
 
 lines = [
     Line("BOM",
@@ -202,16 +208,16 @@ lines = [
          hub=hubs[0])
 ]
 
-for line in lines:
-    sorted_planes = sorted(planes, key=lambda x: x.rentability(line), reverse=True)
+for l in lines:
+    sorted_planes = sorted(planes, key=lambda x: x.rentability(l), reverse=True)[:max_planes_display]
 
     for plane in sorted_planes:
-        plane.display_matching_infos(line)
+        plane.display_matching_infos(l)
 
-    n_groups = len(planes)
+    n_groups = len(sorted_planes)
 
-    profits = tuple(map(lambda x: sum(x.profits_at_matching(line).values()) / 1.e6, sorted_planes))
-    initial_costs = tuple(map(lambda x: x.price * x.match_demand(line)["eco"] / 100.e6, sorted_planes))
+    profits = tuple(map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes))
+    initial_costs = tuple(map(lambda x: x.price * x.match_demand(l)["eco"] / 100.e6, sorted_planes))
     names = tuple(map(lambda x: x.name, sorted_planes))
 
     fig, ax = plt.subplots()
@@ -233,7 +239,7 @@ for line in lines:
                      label='Initial cost (100M$)')
 
     plt.xlabel('Planes')
-    plt.title('Repartition profits/initial cost HYD->' + line.name)
+    plt.title('Repartition profits/initial cost HYD->' + l.name)
     plt.xticks(index + bar_width / 2, names)
     plt.legend()
 
