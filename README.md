@@ -10,19 +10,12 @@ Just clone the project. You must have matplotlib and numpy libraries installed a
 
 ### Getting Started
 
+The script scraps data from airline manager website to provide you usefull informations
+
 #### Demand prevision for opening a new line
 
 If you often ask yourself how much planes and which types should I buy when opening this new line, this script can provide
-you a rational evaluation. Just add the plane you want to evaluate of the `planes` array this way :
-
-```python
-
-planes = [
-...,
-Plane(params),
-...,
-]
-```
+you a rational evaluation.
 
 Add your hubs onto the `hubs` array and the lines you want to evaluate onto the `lines` array the same way as you've done for
 `planes` array.
