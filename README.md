@@ -6,7 +6,8 @@ of your decisions.
 
 ### Install
 
-Just clone the project. You must have matplotlib and numpy libraries installed a python 3.6 environment.
+**Note** WIP here
+Clone the project. You must have matplotlib and numpy libraries installed a python 3.6 environment.
 
 ### Getting Started
 
