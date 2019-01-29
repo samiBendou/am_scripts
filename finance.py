@@ -12,16 +12,27 @@ days_per_week = 7
 
 EXPORTS_ROOT = "exports/"
 
+plot_when_get = True
+
 subplot_keys = [
-    ["flight", "aircraft.checkA", "incident", "divers", "finance.loanAutomaticPayment"],
+    ["flight", "aircraft.checkA", "airline.research", "finance.loanAutomaticPayment"],
     ["staff.iata.hire", "staff.iata.training", "staff.salary"],
     ["marketing.internalAudit", "marketing.externalAudit", "marketing.superSimulation",
      "marketing.simulationPurchase"],
     ["finances.debitSum", "finances.creditSum"]
 ]
 
+excluded_keys = [
+    "aircraft.purchase",
+    "finance.loanAutomaticPayment",
+    "aircraft.checkA",
+    "network.linePurchase",
+    "finances.debitSum",
+    "finances.creditSum"
+]
 
-class ExportData:
+
+class FinancialData:
     def __init__(self, filename="export.csv"):
         self.filename = EXPORTS_ROOT + filename
         self.date = datetime.now()
@@ -67,7 +78,7 @@ class ExportData:
         json_split = self.filename.split("/")
         json_filename = json_split[-1].replace(".csv", ".json")
 
-        json_data = ExportData(filename=self.filename)
+        json_data = FinancialData(filename=self.filename)
         try:
             json_data.read_json()
             delta = abs(self.date - json_data.date)
@@ -105,57 +116,64 @@ class ExportData:
             x.append((self.date - (n - 1 - k) * day).strftime("%m-%d"))
         return x
 
-    def plot_raw_data(self):
+    def get_raw_data(self):
         x = self.get_formated_date_x()
+        y = {}
         fields = self.fields
 
         for k in range(0, len(subplot_keys)):
             for key in subplot_keys[k]:
-                try:
-                    plt.plot(x, list(map(lambda t: abs(t) / 1.e6, fields[key]["data"])), label=fields[key]["verbose"])
-                except TypeError:
+                y[key] = list(map(lambda t: abs(t) / 1.e6, fields[key]["data"]))
+                if not plot_when_get:
                     continue
+                plt.plot(x, y[key], label=fields[key]["verbose"])
 
+            if not plot_when_get:
+                continue
             plt.legend()
             plt.xlabel("Date MM-DD")
             plt.ylabel("Millions $")
             plt.show()
 
-    def plot_pdata(self):
+        return y
+
+    def get_rel_data(self):
         x = self.get_formated_date_x()
+        y = {}
         fields = self.fields
 
         for k in range(0, len(subplot_keys)):
             for key in subplot_keys[k]:
-                y = []
+                y[key] = []
                 for t in range(0, len(x)):
                     flights_revenue = float(fields["flight"]["data"][t])
                     try:
-                        y.append((100 * abs(fields[key]["data"][t]) / flights_revenue) if flights_revenue > 0. else 0)
+                        y[key].append((100 * abs(fields[key]["data"][t]) / flights_revenue) if flights_revenue > 0. else 0)
                     except TypeError:
                         continue
                     except ZeroDivisionError:
-                        y.append(0)
+                        y[key].append(0)
 
-                plt.plot(x, y, label=fields[key]["verbose"])
+                if not plot_when_get:
+                    continue
+
+                plt.plot(x, y[key], label=fields[key]["verbose"])
                 plt.legend()
                 plt.xlabel("Date MM-DD")
                 plt.ylabel("Percent %")
+
+            if not plot_when_get:
+                continue
             plt.show()
 
-    def plot_cashflow(self):
+        return y
+
+    def get_cashflow(self):
         x = self.get_formated_date_x()
         y = []
         y_gain = []
         y_loss = []
-        excluded_keys = [
-            "aircraft.purchase",
-            "finance.loanAutomaticPayment",
-            "aircraft.checkA",
-            "network.linePurchase",
-            "finances.debitSum",
-            "finances.creditSum"
-        ]
+
         for t in range(0, len(x)):
             y.append(sum(self.fields["finance.loanAutomaticPayment"]["data"]) / days_per_week / 1.e6)
             y_gain.append(0)
@@ -176,6 +194,9 @@ class ExportData:
                 except TypeError:
                     continue
 
+        if not plot_when_get:
+            return y
+
         plt.plot(x, y, label="Cashflow")
         plt.plot(x, y_gain, label="Gain")
         plt.plot(x, y_loss, label="Loss")
@@ -187,11 +208,14 @@ class ExportData:
         plt.ylabel("Millions $")
         plt.show()
 
+        return y
 
-export_data = ExportData("export_new.csv")
+
+export_data = FinancialData("export_new.csv")
 export_data.read_csv()
 export_data.write_json()
 print(export_data.str_json())
 
-export_data.plot_cashflow()
-export_data.plot_pdata()
+export_data.get_cashflow()
+export_data.get_rel_data()
+export_data.get_raw_data()
