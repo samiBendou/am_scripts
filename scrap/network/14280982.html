@@ -1,0 +1,1433 @@
+    <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="Playrion">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="format-detection" content="telephone=no">
+        <meta name="description" content="Airlines Manager est un jeu de gestion de compagnie aérienne, totalement gratuit.">
+                    <meta name="apple-itunes-app" content="app-id=823481079">
+        
+        <title> Détail d&#039;une ligne </title>
+
+        <link rel="shortcut icon" href="/favicon.ico?v1.6.11" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v1.6.11">
+        
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+          crossorigin=""/>
+
+                        <link rel="stylesheet" href="/css/am-201812261435.css?v1.6.11" />
+
+            
+        
+    </head>
+    <body >
+        <script type="text/javascript">
+            var fb_param = {};
+            fb_param.pixel_id = '6007101070175';
+            fb_param.value = '0.00';
+            (function(){
+                var fpw = document.createElement('script');
+                fpw.async = true;
+                fpw.src = (location.protocol=='http:'?'http':'https')+'://connect.facebook.net/en_US/fp.js';
+                var ref = document.getElementsByTagName('script')[0];
+                ref.parentNode.insertBefore(fpw, ref);
+            })();
+        </script>
+        <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6007101070175&amp;value=0" /></noscript>
+
+        <script type="text/javascript">
+  var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30410782-1']);
+    _gaq.push(['_setDomainName', 'airlines-manager.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+        <div id="txtLog"></div>
+        <div id="largeContainer" style="margin: auto;background: url('/images/interface/largeContainer_topBg.jpg') top center no-repeat\9;background: url('/images/interface/largeContainer_topBg.jpg'), url('/images/interface/largeContainer_bottomBg.jpg');background-position: top center, bottom center;background-repeat: no-repeat, no-repeat;background-color: #9FC1DC;">
+
+                        <ul id="notificationCenter" style="display: none">
+                                            </ul>
+
+            <div id="mainContainer" data-locale="fr" data-maptext="Cliquez pour afficher la carte des vols">
+                                <div id="mainHeader">
+
+                                        
+                                                <div></div>
+                    
+                    <a href="/account/" title="Gestion du compte" >Gestion du compte</a>
+
+                                            <div>
+                                                        <p id="header_dateTime"></p>
+                        </div>
+                    
+                    <a href="http://forum.airlines-manager.com/index.php" target="_blank"> Forum </a>
+
+                                            <a href="/amplus/sponsorship" title="Parrainez vos amis et gagnez des AM Coins !"><img src="/images/icons/cadeau_parrainage.png?v1.6.11"/> Parrainage </a>
+                    
+                    <a href="/logout"> x déconnexion </a>
+                </div>
+
+                                
+                <div id="mainProfile">
+                                        <div id="mainAvatar" class="lightning">
+                                                    <!--[if IE]>
+                                <img id="mainAvatar_airlinePic" src="/images/logoCompanies/113256_f58?v1.6.11"/>
+                            <![endif]-->
+                            <!--[if !IE]><!-->
+                                <div id="mainAvatar_airlinePic" style="background-image:url(https://static.airlines-manager.com/images/logoCompanies/113256_f58);">&nbsp;</div>
+                            <!--<![endif]-->
+                                                                            <img id="mainAvatar_playerPic" src="/images/avatars/avatar4/avatar.png?v1.6.11"/>
+                                                <div id="mainAvatar_ui">
+                            <div  id="starSystem">
+                                <div id="star1" class="0 noStarBig"></div>
+                                <div id="star2" class="0 noStarSmall"></div>
+                                <div id="star3" class="0 noStarSmall"></div>
+                                <div id="star4" class="0 noStarSmall"></div>
+                                <div id="star5" class="1 bronzeStarSmall"></div>
+                            </div>
+                            <a id="homeLink" title="Accueil" href="/home"></a>
+                            <a id="profileLink" href="/home"></a>
+                            <p id="profileName">Bendou</p>
+                            <a id="airlineLink" href="/company/profile/airline/113256"></a>
+                        </div>
+                    </div>
+                </div>
+
+                                <div id="mainMenu">
+                    <div id="accessBar">
+                        <a href="/network/"   tabindex="1" title="Gestion du réseau"   class="pictoMain icons75-network " id="picto2">&nbsp;</a>
+                        
+                        <a href="/aircraft"  tabindex="2" title="Gestion des avions"  class="pictoMain icons75-aircraft " id="picto1">&nbsp;</a>
+                        
+                        <a href="/company/"   tabindex="3" title="Gestion de la compagnie"   class="pictoMain icons75-airline " id="picto3">&nbsp;</a>
+
+                        <a href="/staff/general-informations" tabindex="4" title="Personnel" class="pictoMain icons75-staff " id="picto4">&nbsp;</a>
+
+                        <a href="/research"  tabindex="5" title="Centre de recherche"  class="pictoMain icons75-research " id="picto5">&nbsp;</a>
+                        
+                        <a href="/services/"  tabindex="6" title="Services"  class="pictoMain icons75-services " id="picto8">&nbsp;</a>
+                        
+                        <a href="/finances/"  tabindex="8" title="Finances"  class="pictoMain icons75-finance " id="picto7">&nbsp;</a>
+                        
+                        <a href="/marketing/" tabindex="7" title="Bureau du marketing" class="pictoMain icons75-marketing " id="picto6">&nbsp;</a>
+                        
+                        <a href="/amplus/"    tabindex="9" title="Am plus©"    class="pictoMain icons75-amPlus " id="picto9">&nbsp;</a>
+                        <ul class="accessBar-subMenu">
+        <li id="subOne">
+        <a href="/network/planning" class="icons30 icons30-aircraft_planning"><span>Planifier les vols</span> </a>
+        <a href="/network/generalplanning" class="icons30 icons30-network_generalPlanning"><span>Planning général</span></a>
+        <a href="/network/newhub" class="icons30 icons30-network_newhub"><span>Acheter un hub</span></a>
+        <a href="/network/newline" class="icons30 icons30-network_newLine"><span>Ouvrir une ligne</span></a>
+                    <a href="/alliance/hubsharing" class="icons30 icons30-alliance_hubSharing"><span>Partage du réseau</span></a>
+                <a href="/network/" class="icons30 icons30-network_dashboard"><span>Réseau</span></a>
+    </li>
+            <li id="subTwo">
+        <a href="/aircraft/buy" class="icons30 icons30-aircraft_buy"><span>Achat d&#039;un avion</span></a>
+        <a href="/aircraft/liveries" class="icons30 icons30-assignLiveries"><span>Gestion des livrées</span></a>
+                    <a href="/maintenance/book" class="icons30 icons30-maintenance_book"><span>Carnet d&#039;entretien</span></a>
+                <a href="/aircraft" class="icons30 icons30-aircraft_dashboard"><span>Avions</span></a>
+    </li>
+            <li id="subThree">
+        <a href="/company/customise" class="icons30 icons30-personnalisation"><span>Personnalisation</span></a>
+        <a href="/company/profile/airline/113256" class="icons30 icons30-profil" ><span>Profil</span></a>
+        <a href="/company/ranking/" class="icons30 icons30-company_ranking"><span>Classement général</span></a>
+                    <a href="/company/cockpitasous" class="icons30 icons30-cockpit_a_sous"><span>Cockpit à sous</span></a>
+                <a href="/company/" class="icons30 icons30-company_dashboard"><span>Compagnie</span></a>
+    </li>
+            <li id="subStaff">
+        <a href="/staff/hiring" class="icons30 icons30-iata_staff_hiring"><span>Processus d&#039;embauche</span></a>
+        <a href="/staff/iata-training" class="icons30 icons30-iata_training_process"><span>Processus de formation</span></a>
+        <a href="/staff/repartition" class="icons30 icons30-iata_staff_repartition"><span>Répartition des travailleurs</span></a>
+        <a href="/staff/general-informations" class="icons30 icons30-employee_dashboard"><span>Informations générales</span></a>
+    </li>
+            <li id="subResearch">
+        <a href="/research" class="icons30 icons30-research_dashboard"><span>Général</span></a>
+        <a href="/research/service" class="icons30 icons30-research_services"><span> Services</span></a>
+        <a href="/research/avions" class="icons30 icons30-research_aircraft"><span>Avions</span></a>
+        <a href="/research/cargo" class="icons30 icons30-research_cargo"><span>Cargo</span></a>
+        <a href="/research/humanresources" class="icons30 icons30-research_humanresources"><span>Personnel</span></a>        <a href="/research/labo" class="icons30 icons30-research_mafia"><span>Labo - transformation de R$</span></a>
+    </li>
+            <li id="subFour">
+                                <a href="/services/4" class="icons30 icons30-partners_services"><span>Partenariat</span></a>
+                                <a href="/services/2" class="icons30 icons30-facilities_services"><span>Infrastructure</span></a>
+                                <a href="/services/1" class="icons30 icons30-catering_services"><span>Services à bord</span></a>
+                                <a href="/services/3" class="icons30 icons30-airport_services"><span>Aéroportuaire</span></a>
+                <a href="/services/" class="icons30 icons30-company_services"><span>Services</span></a>
+    </li>
+            <li id="subFive">
+        <a href="/finances/bank" class="icons30 icons30-finances_banking_list"><span>Banques</span></a>
+        <a href="/finances/accounting" class="icons30 icons30-finances_accounting"><span>Comptabilité générale</span></a>
+        <a href="/finances/" class="icons30 icons30-finances"><span>Finances</span></a>
+    </li>
+            <li id="subSix">
+        <a href="/marketing/internalaudit/linelist" class="icons30 icons30-marketing_internalAudit"><span>Audit interne</span></a>
+        <a href="/marketing/pricing/" class="icons30 icons30-marketing_globalPricing"><span>Gestion des tarifs</span></a>
+        <a href="/marketing/" class="icons30 icons30-marketing_dashboard"><span>Marketing</span></a>
+    </li>
+    </ul>
+                    </div>
+
+                    <div id="ressourcesBar">
+                        <div>
+                            <span id="ressource1" class="lightning" title="Fonds de recherche">44 290 000 $</span>
+                            <span id="ressource2" class="lightning" title="TravelCards"><a href="/shop/workshop">2 650</a></span>
+                        </div>
+                        <div>
+                            <span id="ressource3" class="lightning" title="Dollars">29 061 206 $</span>
+                            <span id="ressource4" class="lightning" title="AM Coins">658</span>
+                        </div>
+                    </div>
+                    <div id="shortcutBar">
+                        <a href="/network/planning"  title="Planifier les vols"><img src="/images/icons30/aircraft_planning.png?v1.6.11"/></a>
+
+                        <span id="financePanelBtn" href="/financePanel/" title="Prévision flux de trésorerie"><img src="/images/icons30/financePanel_index.png?v1.6.11"/></span>
+                        
+                                                    <a href="/company/cockpitasous"  title="Cockpit à sous"><img src="/images/company/cockpitASous/picto30.png?v1.6.11" style="height: 25px; width: 25px; background-position: center;"/></a>
+                                             
+                    </div>
+                </div>
+
+
+
+                
+                                <div id="mainContent">
+                                            <div id="top-alliance-dashboard">
+    <ul>
+        <li class="allianceLogoBox">
+                            <img src="/images/interface/defaultLogo.jpg?v1.6.11" width="75" height="35" />
+                    </li>
+        <li class="allianceName"><b>Baidou</b></li>
+        <li><img src="/images/icons30/dollarx30.png?v1.6.11" width="30" height="30" title="fonds de l&#039;alliance"/>0 $</li>
+        <li><img src="/images/icons30/researchdollarx30.png?v1.6.11" width="30" height="30" title="fonds pour la recherche de l&#039;alliance" /> 0 $</li>
+        <li title="classement général"><img src="/images/icons30/alliances_classementx30.png?v1.6.11" width="30" height="30" /> Général : 0e</li>
+        <li class="allianceUnreadedNews" onclick='location.href="/alliance/wall"' title="notifications en attente"><img src="/images/icons30/notificationx30.png?v1.6.11"/> x 0</li>
+    </ul>
+</div>                                                            <div id="mainContentRight">
+                        <div id="special-offer"></div>
+                        <div id="secretaryBox"></div>
+                        
+
+                        
+
+<div id="rightMenuBox" >
+            <div>
+    <a href="/shop/workshop" title="Atelier" id="pictoWorkshop" class="icons75-workshop ">&nbsp;</a>
+    <a href="/alliance/wall" title="Alliance" id="pictoAlliance" class="icons75-alliance ">&nbsp;</a>
+</div>
+<div>
+            <a href="/shop" title="Boutique" id="pictoShop" class="icons75-shop">&nbsp;</a>
+    
+    <a href="/message/incoming" title="Messagerie" id="pictoMessage" class="icons75-mail ">&nbsp;</a></div>
+
+<div>
+    <a href="http://help.airlines-manager.com?lang=fr" target="_blank" id="pictoHelp" title="Aide" class="icons75-help">&nbsp;</a>
+
+            <a href="/gazette/" id="pictoGazette"  title="La Gazette" class="icons75-gazette " >&nbsp;</a>
+    </div>
+
+    </div>
+
+            <div class="adminMenuBox">
+            <a href="/aircraft/liveries" title="airline painter" class="icon-airline-painter">&nbsp;</a>
+        </div>
+    
+    <div id="chatLink">
+        <a href="/chat">
+            <img src="/images/icons/chat-main.png?v1.6.11" alt="Général"/>
+            <span>Accéder au chat</span>
+        </a>
+    </div>
+
+
+                                                <div id="rightInfoBox">
+    <div id="rightInfoBoxTop">
+        <div id="rightInfoBoxButton" class="uiEnlarge"></div>
+    </div>
+    <div id="rightInfoBoxMiddle">
+            <ul id="rightInfoBoxContent">
+                                    <li>
+                        <div>
+                            <div>
+                                <div>
+                                    <img class="catImage" src="/images/icons30/research_dashboard.png?v1.6.11" alt="Icon"/>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text">Recherche</div>
+                                <div>
+                                                                            <div class="date"> 
+                                            <span class="amcountdown" data-timeremaining="4034">...</span>    
+                                            <a class="useAjax hidden" href="/amplus/amcoins/use/event/67862094"> Terminer </a>
+                                        </div>
+                                        <div>
+                                            <a class="useAjax" href="/amplus/amcoins/popup/event/67862094">
+                                                <img class="amCoinsDynamicCount" src="/images/icons20/chrono.png?v1.6.11" alt="Coins" data-amcoinsdynamiccount="{&quot;isMaintenance&quot;:false,&quot;remainingTime&quot;:4034}" data-amcoinsdynamiccountvalue="11" title="Livraison instantanée pour 11 AM Coins"/>
+                                            </a>
+                                        </div>
+                                                                    </div>
+                            </div>
+                        </div>
+                    </li>
+                
+                                    <li class="deliverAll">
+                        <div>
+                            <a class="validBtnBlue deliverAllBtn useAjax" href="/amplus/amcoins/popup/deliverAll">
+                                <div>
+                                    <img src="/images/icons20/chrono.png?v1.6.11" alt="Coins" />
+                                    <p>Tout livrer</p>
+                                                                            <p class="amCoinsDynamicCountTotal">11 </p><img src="/images/icons20/coins.png?v1.6.11" />
+                                                                    </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="deliverAll">
+                        <div>
+                                                                                        <a class="validBtnBlue deliverAllBtn fastDeliveryButton useAjax" href="/amplus/amcoins/deliverended">
+                                    <div>
+                                        <p>Valider les livraisons terminées</p>
+                                    </div>
+                                </a>
+                                                    </div>
+                    </li>
+                    <li class="amCoinsPurchase">
+                        <div>
+                            <a href="/shop#sponsorPay" id="sponsorPayAction" class="validBtnBlue">
+                                <div>
+                                    <p>Obtenir </p><img src="/images/icons20/coins.png?v1.6.11" /><p> gratuit</p>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                            </ul>
+
+    </div>
+    <div id="rightInfoBoxBottom"></div>
+</div>
+                        
+                        
+                        <div class="videoHelpBlock">
+                                                    </div>
+                    </div>
+
+                                        <div id="mainContentLeft" >
+                        <div id="pageHead" >
+                            <img src=" /images/icons30/network_showLine.png?v1.6.11 "/>
+                            <h1> Détail d&#039;une ligne </h1>
+                            <div id="catMenu"> <a href="/network/planning"  title="Planifier les vols"><img src="/images/icons30/aircraft_planning.png?v1.6.11"/></a>
+<a href="/network/generalplanning"  title="Planning général"><img src="/images/icons30/network_generalPlanning.png?v1.6.11"/></a>
+<a href="/network/newhub"    title="Acheter un hub"><img src="/images/icons30/network_newHub.png?v1.6.11"/></a>
+<a href="/network/newline"   title="Ouvrir une ligne" id="network_newLinePicto"><img src="/images/icons30/network_newLine.png?v1.6.11"/></a>
+<a href="/network/" title="Réseau aérien"><img src="/images/icons30/network_dashboard.png?v1.6.11"/></a> </div>
+                            <div id="topOnSubMenu">
+                                <div id="subMenu"> <a href="/network/showline/14280982"        title="Détail d&#039;une ligne" ><img src="/images/icons30/network_showLine.png?v1.6.11"/></a>
+<a href="/network/showline/14280982/flights" title="Vols sur la ligne" id="showLineFlightPicto"><img src="/images/icons30/network_showLineFlights.png?v1.6.11"/></a>
+<a href="/network/showline/14280982/sell"        title="Vendre la ligne" class="useAjax"><img src="/images/icons30/network_sellLine.png?v1.6.11"/></a>
+ </div>
+                            </div>
+                        </div>
+                        <div id="pageContent">
+                            <div id="content">
+                                <div id="showLine"/>
+    <div id="map_container">
+                <div id="map_NetworkJson" class="hidden">{"airports":[{"name":"Rajiv Gandhi International Airport","iata":"HYD","latitude":17.239999999999998,"longitude":78.428055999999998},{"name":"Bengaluru International Airport","iata":"BLR","latitude":13.198888999999999,"longitude":77.705556000000001}],"lines":[{"id":14280982,"airportStartLng":78.428055999999998,"airportStartLat":17.239999999999998,"airportEndLng":77.705556000000001,"airportEndLat":13.198888999999999}],"aircrafts":[{"distancePct":1,"direction":0,"pctSecs":0.00037043897017966285,"airportStartLng":78.428055999999998,"airportStartLat":17.239999999999998,"airportEndLng":77.705556000000001,"airportEndLat":13.198888999999999,"flightid":5204470971},{"distancePct":0.60844600852009634,"direction":1,"pctSecs":0.00037043897017966285,"airportStartLng":78.428055999999998,"airportStartLat":17.239999999999998,"airportEndLng":77.705556000000001,"airportEndLat":13.198888999999999,"flightid":5203985583}]}</div>
+
+                <div id="map_canvas"></div>
+
+                <div id="map_filters">
+            <h3>Filtres</h3>
+            <hr/>
+            <label>
+                                    <input type="checkbox" id="map_showAircrafts" checked="checked" />
+                                &nbsp;Afficher les avions
+            </label>
+            <hr/>
+            <span class="hubBtn">Hub</span> HYD
+            <hr/>
+            <label>Sélection de ligne
+
+                <select class="linePicker">
+                        <option></option>
+                                            <option value="/network/showline/14280982" selected="selected">
+                            HYD - BLR
+                        </option>
+                                            <option value="/network/showline/14270617" >
+                            HYD - BOM
+                        </option>
+                                            <option value="/network/showline/14281127" >
+                            HYD - CCU
+                        </option>
+                                            <option value="/network/showline/14270736" >
+                            HYD - DEL
+                        </option>
+                                            <option value="/network/showline/14283483" >
+                            HYD - GOI
+                        </option>
+                                            <option value="/network/showline/14825894" >
+                            HYD - ISB
+                        </option>
+                                            <option value="/network/showline/14825889" >
+                            HYD - KHI
+                        </option>
+                                            <option value="/network/showline/14270755" >
+                            HYD - MAA
+                        </option>
+                                    </select>
+            </label>
+        </div>
+    </div>
+
+    <h2 class="picto_dl grayscale"><span class="opacity1">Informations</span></h2>
+
+    <div class="lineTitle">
+        <span class="lineBtn"> Ligne </span>
+        HYD - <i>Hyderabad</i> -  Rajiv Gandhi International Airport /
+        BLR - <i>Bangalore</i> - Bengaluru International Airport
+    </div>
+
+    <div>
+        <ul id="box1">
+            <li>Catégories acceptées : <b>
+<img src="/images/icons20/cat1.png?v1.6.11" alt="cat1"/>
+    <img src="/images/icons/fleche_categories.png?v1.6.11" />
+    <img src="/images/icons20/cat9.png?v1.6.11" alt="cat9"/>
+
+</b></li>
+            <li>Distance : <b>456 km</b></li>
+            <li>Taxes : <b>5 776 $</b></li>
+            <li>Aéroport de départ : <b>HYD / <img src="/images/flags/in.png" alt="in"/> Inde</b></li>
+        </ul>
+
+        <ul id="box2">
+            <li>Date d&#039;achat : <b>20/12/2018 à 17h09</b></li>
+            <li>Avions affectés : <strong>4</strong></li>
+            <li>Nombre de vols hebdomadaires : <strong>133</strong></li>
+            <li>Aéroport d&#039;arrivée : <b>BLR / <img src="/images/flags/in.png" alt="in"/> Inde</b></li>
+        </ul>
+    </div>
+
+    <div id="statistics">
+        <h2 class="picto_dl grayscale"><span class="opacity1">Statistiques</span></h2>
+
+        <h3>Chiffre d&#039;affaires</h3>
+        <div>
+            <div>
+                <div class="dashMachine leftCol">
+                    <span>Aujourd&#039;hui</span>
+                    <span>723 646 $</span>
+                </div>
+            </div>
+            <div>
+                <div class="dashMachine rightCol">
+                    <span>Hier</span>
+                    <span>996 041 $</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Coût</h3>
+        <div>
+            <div>
+                <div class="dashMachine leftCol">
+                    <span>Aujourd&#039;hui</span>
+                    <span>152 726 $</span>
+                </div>
+            </div>
+            <div>
+                <div class="dashMachine rightCol">
+                    <span>Hier</span>
+                    <span>210 223 $</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Revenus auxiliaires</h3>
+        <div>
+            <div>
+                <div class="dashMachine leftCol">
+                    <span>Aujourd&#039;hui</span>
+                    <span>195 006 $</span>
+                </div>
+            </div>
+            <div>
+                <div class="dashMachine rightCol">
+                    <span>Hier</span>
+                    <span>270 411 $</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Bénéfices des vols</h3>
+        <div>
+            <div>
+                <div class="dashMachine leftCol">
+                    <span>Aujourd&#039;hui</span>
+                    <span>570 920 $</span>
+                </div>
+            </div>
+            <div>
+                <div class="dashMachine rightCol">
+                    <span>Hier</span>
+                    <span>785 818 $</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>Coût des incidents</h3>
+        <div>
+            <div>
+                <div class="dashMachine leftCol">
+                    <span>Aujourd&#039;hui</span>
+                    <span>0 $</span>
+                </div>
+            </div>
+            <div>
+                <div class="dashMachine rightCol">
+                    <span>Hier</span>
+                    <span>1 193 $</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chooseDay bold">
+        <input type="radio" id="todayResults" name="dayResults" checked/>
+        <label for="todayResults" >Aujourd&#039;hui</label>
+
+        <input type="radio" id="yesterdayResults" name="dayResults"/>
+        <label for="yesterdayResults" >Hier</label>
+
+        <div>
+            <a href='/marketing/pricing/14280982' class="gradientButton gradientButtonPurple">
+                <img class='gradientButtonImg' src='/images/icons30/marketing_linePricing.png?v1.6.11'>
+                <span>Tarifs de la ligne</span>
+            </a>
+        </div>
+    </div>
+
+        <table id="resultTable">
+      <thead>
+        <tr>
+            <th></th>
+            <th>CLASSE ÉCONOMIQUE</th>
+            <th>CLASSE AFFAIRES</th>
+            <th>PREMIÈRE CLASSE</th>
+                    </tr>
+      </thead>
+
+            
+                                            <tbody id="todayResultsBody" class="bold">
+            
+            <tr>
+                <td class="tableString">Demande :</td>
+                <td class="tableNumeric">
+                                            3049
+                                    </td>
+                <td>
+                                            125
+                                    </td>
+                <td>
+                                            17
+                                    </td>
+                            </tr>
+                        <tr class="offer ">
+                <td class="tableString" >Offre :</td>
+                <td class="tableNumeric">2240</td>
+                <td class="tableNumeric">0</td>
+                <td class="tableNumeric">0</td>
+
+                            </tr>
+
+            <tr>
+                <td class="tableString">Prix Moyen :</td>
+                <td class="tableNumeric">236 $</td>
+                <td class="tableNumeric">0 $</td>
+                <td class="tableNumeric">0 $</td>
+
+                            </tr>
+
+            <tr>
+                <td class="tableString">Revenus auxiliaires :</td>
+                <td class="tableNumeric">195 006 $</td>
+                <td class="tableNumeric">0 $</td>
+                <td class="tableNumeric">0 $</td>
+
+                            </tr>
+
+            <tr>
+                <td class="tableString">Chiffre d&#039;affaires :</td>
+                <td class="tableNumeric">723 646 $</td>
+                <td class="tableNumeric">0 $</td>
+                <td class="tableNumeric">0 $</td>
+
+                            </tr>
+          </tbody>
+      
+                                            <tbody id="yesterdayResultsBody" class="bold hidden">
+            
+            <tr>
+                <td class="tableString">Demande :</td>
+                <td class="tableNumeric">
+                                            3031
+                                    </td>
+                <td>
+                                            125
+                                    </td>
+                <td>
+                                            17
+                                    </td>
+                            </tr>
+                        <tr class="offer ">
+                <td class="tableString" >Offre :</td>
+                <td class="tableNumeric">2972</td>
+                <td class="tableNumeric">48</td>
+                <td class="tableNumeric">17</td>
+
+                            </tr>
+
+            <tr>
+                <td class="tableString">Prix Moyen :</td>
+                <td class="tableNumeric">236 $</td>
+                <td class="tableNumeric">313 $</td>
+                <td class="tableNumeric">542 $</td>
+
+                            </tr>
+
+            <tr>
+                <td class="tableString">Revenus auxiliaires :</td>
+                <td class="tableNumeric">262 850 $</td>
+                <td class="tableNumeric">5 307 $</td>
+                <td class="tableNumeric">2 256 $</td>
+
+                            </tr>
+
+            <tr>
+                <td class="tableString">Chiffre d&#039;affaires :</td>
+                <td class="tableNumeric">964 242 $</td>
+                <td class="tableNumeric">20 331 $</td>
+                <td class="tableNumeric">11 470 $</td>
+
+                            </tr>
+          </tbody>
+      
+    </table>
+
+    
+    <div id="table2">
+        <img src="/images/icons20/amPlus.png?v1.6.11" alt="Mode AM+"/>
+        <table class="statsTable bold">
+            <thead>
+                <tr>
+                    <th class="tableString uppercase italic underlineMe"> Total </th>
+
+                                            <th class="underlineMe"><div class="blueText">J-5</div><div>23/01/2019</div></th>
+                                            <th class="underlineMe"><div class="blueText">J-4</div><div>24/01/2019</div></th>
+                                            <th class="underlineMe"><div class="blueText">J-3</div><div>25/01/2019</div></th>
+                                            <th class="underlineMe"><div class="blueText">J-2</div><div>26/01/2019</div></th>
+                    
+                    <th class="underlineMe"><div class="blueText">HIER</div><div>27/01/2019</div></th>
+                    <th class="underlineMe"><div class="blueText">AUJOURD&#039;HUI</div><div>28/01/2019</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                            <tr>
+                    <th class="tableString">Demande :</th>
+                    <th class="tableNumeric">0</th>
+                    <td class="tableNumeric">0</td>
+                    <td class="tableNumeric">3159</td>
+                    <td class="tableNumeric">3159</td>
+                    <td class="tableNumeric">3173</td>
+                    <td class="tableNumeric">
+                                                    3191
+                                            </td>
+                </tr>
+                <tr>
+                    <th class="tableString">Offre :</th>
+                                            <td class="tableNumeric">
+                                                        0
+                                                    </td>
+                                            <td class="tableNumeric">
+                                                        0
+                                                    </td>
+                                            <td class="tableNumeric">
+                                                        797
+                                                    </td>
+                                            <td class="tableNumeric">
+                                                        3037
+                                                    </td>
+                                            <td class="tableNumeric">
+                                                        3037
+                                                    </td>
+                                            <td class="tableNumeric">
+                                                        2240
+                                                    </td>
+                                    </tr>
+                <tr>
+                    <th class="tableString">Prix Moyen :</th>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">247 $</td>
+                                            <td class="tableNumeric">239 $</td>
+                                            <td class="tableNumeric">239 $</td>
+                                            <td class="tableNumeric">236 $</td>
+                                    </tr>
+                <tr>
+                    <th class="tableString">Billetterie :</th>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">196 990 $</td>
+                                            <td class="tableNumeric">725 630 $</td>
+                                            <td class="tableNumeric">725 630 $</td>
+                                            <td class="tableNumeric">528 640 $</td>
+                                    </tr>
+
+                
+                <tr>
+                    <th class="tableString">Revenus auxiliaires :</th>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">75 405 $</td>
+                                            <td class="tableNumeric">270 411 $</td>
+                                            <td class="tableNumeric">270 411 $</td>
+                                            <td class="tableNumeric">195 006 $</td>
+                                    </tr>
+                <tr>
+                    <th class="tableString">Chiffre d&#039;affaires :</th>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">272 395 $</td>
+                                            <td class="tableNumeric">996 041 $</td>
+                                            <td class="tableNumeric">996 041 $</td>
+                                            <td class="tableNumeric">723 646 $</td>
+                                    </tr>
+                <tr>
+                    <th class="tableString">Coût :</th>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">57 497 $</td>
+                                            <td class="tableNumeric">210 223 $</td>
+                                            <td class="tableNumeric">210 223 $</td>
+                                            <td class="tableNumeric">152 726 $</td>
+                                    </tr>
+                        </tbody>
+            
+            <tfoot>
+                                <tr class="empty"></tr>
+                <tr class="sum">
+                    <th class="tableString">Résultat :</th>
+
+                                            <th>
+                            <span class="">
+                            0 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="">
+                            0 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="greenBonus">
+                            214 898 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="greenBonus">
+                            785 818 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="greenBonus">
+                            785 818 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="greenBonus">
+                            570 920 $
+                            </span>
+                        </th>
+                                    </tr>
+                <tr class="empty"></tr>
+                <tr class="sum">
+                    <th class="tableString">Coût des incidents :</th>
+                                            <th>
+                            <span class="">
+                                0 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="">
+                                0 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="">
+                                0 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="redBonus">
+                                - 16 165 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="redBonus">
+                                - 1 193 $
+                            </span>
+                        </th>
+                                            <th>
+                            <span class="">
+                                0 $
+                            </span>
+                        </th>
+                                    </tr>
+                                <tr class="empty"></tr>
+                <tr>
+                    <th class="tableString uppercase italic underlineMe"> Prévisions </th>
+
+                                            <th class="underlineMe">
+                            <div class="blueText">AUJOURD&#039;HUI</div>
+                            <div>28/01/2019</div>
+                        </th>
+                                            <th class="underlineMe">
+                            <div class="blueText">J+1</div>
+                            <div>29/01/2019</div>
+                        </th>
+                                            <th class="underlineMe">
+                            <div class="blueText">J+2</div>
+                            <div>30/01/2019</div>
+                        </th>
+                                            <th class="underlineMe">
+                            <div class="blueText">J+3</div>
+                            <div>31/01/2019</div>
+                        </th>
+                                            <th class="underlineMe">
+                            <div class="blueText">J+4</div>
+                            <div>01/02/2019</div>
+                        </th>
+                                            <th class="underlineMe">
+                            <div class="blueText">J+5</div>
+                            <div>02/02/2019</div>
+                        </th>
+                                    </tr>
+                <tr class="ca">
+                    <th class="tableString">Chiffre d&#039;affaires :</th>
+
+                                            <td class="tableNumeric">996 041 $</td>
+                                            <td class="tableNumeric">996 041 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">0 $</td>
+                                            <td class="tableNumeric">272 395 $</td>
+                                            <td class="tableNumeric">996 041 $</td>
+                                    </tr>
+            </tfoot>
+            
+        </table>
+    </div>
+
+    <h2 class="picto_dl grayscale">
+        <span class="opacity1">Résumé financier sur 7 jours</span>
+        <a href='/finances/accounting/line?lineId=14280982' class="gradientButton gradientButtonYellow">
+            <img class='gradientButtonImg' src='/images/icons30/finances_lineAccounting.png?v1.6.11'>
+            <span>Détail comptable</span>
+        </a>
+    </h2>
+
+    <div class="leftCol fll width50">
+        <h3 class="leftCol">Détails financiers</h3>
+
+        <div class="dashMachine leftCol">
+            <span>Chiffre d&#039;affaires</span>
+            <span class="bold">2 988 123 $</span>
+        </div>
+
+        <div class="dashMachine italic leftCol">
+            <span class="alinea15">dont chiffre d&#039;affaires billetterie</span>
+            <span>2 176 890 $</span>
+        </div>
+
+        <div class="dashMachine italic leftCol">
+            <span class="alinea15">dont revenus auxiliaires</span>
+            <span>811 233 $</span>
+        </div>
+
+        <div class="dashMachine leftCol">
+            <span>Coût des vols</span>
+            <span class="bold redBonus">- 630 669 $</span>
+        </div>
+
+        <div class="dashMachine leftCol">
+            <span class="alinea15">dont frais de kérosène</span>
+            <span class="redBonus">- 106 449 $</span>
+        </div>
+        <div class="dashMachine leftCol">
+            <span class="alinea15">dont frais d&#039;aéroport</span>
+            <span class="redBonus">- 346 560 $</span>
+        </div>
+        <div class="dashMachine leftCol">
+            <span class="alinea15">dont autres charges</span>
+            <span class="redBonus">- 177 660 $</span>
+        </div>
+
+    </div>
+
+    <div class="rightCol flr width50">
+        <h3 class="rightCol">Nombre de passagers</h3>
+
+        <div class="dashMachine rightCol">
+            <span>Classe économique</span>
+            <span>8 916 Pax</span>
+        </div>
+
+        <div class="dashMachine rightCol">
+            <span>Classe affaires</span>
+            <span>144 Pax</span>
+        </div>
+
+        <div class="dashMachine rightCol">
+            <span>Première classe</span>
+            <span>51 Pax</span>
+        </div>
+
+            </div>
+    
+    <div class="defloat"></div>
+
+    <div>
+        <div class="dashMachine leftCol borderTop">
+            <span>Résultat des vols</span>
+                        <span class="bold ">2 357 454 $</span>
+        </div>
+        
+        <div class="dashMachine rightCol">
+            <span>Coût des incidents</span>
+            <span class="bold redBonus">- 17 358 $</span>
+        </div>
+        <div class="defloat"></div>
+    </div>
+
+    <h2 class="picto_dl grayscale"><span class="opacity1">Avions sur cette ligne</span></h2>
+        
+<div class="aircraftListView">
+                    <div class="aircraftListBox aircraftListBoxWhite">
+
+                <div class="title">
+                    
+                    
+                        
+    <img src="/images/icons20/cat4.png?v1.6.11" alt="cat4"/>
+    
+
+                    <span>
+                        737-600 /
+                        <span title="Editer le nom" id="editAircraftName23912172" class="editAircraftName" data-url="/aircraft/edit/23912172"><span>VA-ALL1</span></span>
+    <b> - </b>
+                        </span>
+                    <a href='/aircraft/show/23912172' class="gradientButton gradientButtonGreen BtnDetailAvion">
+                        <img src='/images/icons30/aircraft_show.png?v1.6.11'>
+                        <span>Détail de l&#039;avion</span>
+                    </a>
+                </div>
+
+                <div class="content">
+                    <img class="mini-aircraft" src="/common/images/Aircrafts/skins/medium/b737-600.png" alt="737-600" data-big="/common/images/Aircrafts/skins/superBig/b737-600.png"/>
+                    
+                    <div id="aircraftInfos">
+                        <span class="listBoxInfo">
+                                &#149; Rayon d&#039;action : <b>5 976 km</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Utilisation : <b> 98%</b>
+                        </span>
+                                                <span class="listBoxInfo">
+                            &#149; Sièges : <b>80 (46/24/10)</b>
+                        </span>
+                        <span class="listBoxInfo" > &#149; <span class="hubBtn">Hub</span> <b>HYD</b> / <img src="/images/flags/in.png" alt="in"/></span>
+                        <span class="listBoxInfo" title="Sur 7 jours">
+                            &#149; Résultat :
+                            <b>
+                                                                    1 361 343 $
+                                                            </b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Usure : <b>            
+                
+    <span class="aircraftWear1">
+        10 %
+    </span>
+</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Ancienneté : <b>1.9/5</b>
+                        </span>
+                                            </div>
+                    
+                </div>
+
+            </div>
+                                <div class="aircraftListBox ">
+
+                <div class="title">
+                    
+                    
+                        
+    <img src="/images/icons20/cat2.png?v1.6.11" alt="cat2"/>
+    
+
+                    <span>
+                        Q-400 /
+                        <span title="Editer le nom" id="editAircraftName23499748" class="editAircraftName" data-url="/aircraft/edit/23499748"><span>VA-BLR3</span></span>
+    <b> - </b>
+                        </span>
+                    <a href='/aircraft/show/23499748' class="gradientButton gradientButtonGreen BtnDetailAvion">
+                        <img src='/images/icons30/aircraft_show.png?v1.6.11'>
+                        <span>Détail de l&#039;avion</span>
+                    </a>
+                </div>
+
+                <div class="content">
+                    <img class="mini-aircraft" src="/common/images/Aircrafts/skins/medium/q-400.png" alt="Q-400" data-big="/common/images/Aircrafts/skins/superBig/q-400.png"/>
+                    
+                    <div id="aircraftInfos">
+                        <span class="listBoxInfo">
+                                &#149; Rayon d&#039;action : <b>2 400 km</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Utilisation : <b> 87%</b>
+                        </span>
+                                                <span class="listBoxInfo">
+                            &#149; Sièges : <b>80 (80/0/0)</b>
+                        </span>
+                        <span class="listBoxInfo" > &#149; <span class="hubBtn">Hub</span> <b>HYD</b> / <img src="/images/flags/in.png" alt="in"/></span>
+                        <span class="listBoxInfo" title="Sur 7 jours">
+                            &#149; Résultat :
+                            <b>
+                                                                    734 040 $
+                                                            </b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Usure : <b>            
+    
+    <span class="">
+        0 %
+    </span>
+</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Ancienneté : <b>2.27/5</b>
+                        </span>
+                                            </div>
+                    
+                </div>
+
+            </div>
+                                <div class="aircraftListBox aircraftListBoxWhite">
+
+                <div class="title">
+                    
+                    
+                        
+    <img src="/images/icons20/cat2.png?v1.6.11" alt="cat2"/>
+    
+
+                    <span>
+                        Q-400 /
+                        <span title="Editer le nom" id="editAircraftName23499747" class="editAircraftName" data-url="/aircraft/edit/23499747"><span>VA-BLR2</span></span>
+    <b> Transition</b>
+                        </span>
+                    <a href='/aircraft/show/23499747' class="gradientButton gradientButtonGreen BtnDetailAvion">
+                        <img src='/images/icons30/aircraft_show.png?v1.6.11'>
+                        <span>Détail de l&#039;avion</span>
+                    </a>
+                </div>
+
+                <div class="content">
+                    <img class="mini-aircraft" src="/common/images/Aircrafts/skins/medium/q-400.png" alt="Q-400" data-big="/common/images/Aircrafts/skins/superBig/q-400.png"/>
+                    
+                    <div id="aircraftInfos">
+                        <span class="listBoxInfo">
+                                &#149; Rayon d&#039;action : <b>2 400 km</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Utilisation : <b> 87%</b>
+                        </span>
+                                                <span class="listBoxInfo">
+                            &#149; Sièges : <b>80 (80/0/0)</b>
+                        </span>
+                        <span class="listBoxInfo" > &#149; <span class="hubBtn">Hub</span> <b>HYD</b> / <img src="/images/flags/in.png" alt="in"/></span>
+                        <span class="listBoxInfo" title="Sur 7 jours">
+                            &#149; Résultat :
+                            <b>
+                                                                    734 040 $
+                                                            </b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Usure : <b>            
+    
+    <span class="">
+        0 %
+    </span>
+</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Ancienneté : <b>2.27/5</b>
+                        </span>
+                                            </div>
+                    
+                </div>
+
+            </div>
+                                <div class="aircraftListBox ">
+
+                <div class="title">
+                    
+                    
+                        
+    <img src="/images/icons20/cat2.png?v1.6.11" alt="cat2"/>
+    
+
+                    <span>
+                        Q-400 /
+                        <span title="Editer le nom" id="editAircraftName23499746" class="editAircraftName" data-url="/aircraft/edit/23499746"><span>VA-BLR1</span></span>
+    <img src="/images/icons/symbol_flying_grey.png?v1.6.11" alt="En vol" title="En vol"/>
+                        </span>
+                    <a href='/aircraft/show/23499746' class="gradientButton gradientButtonGreen BtnDetailAvion">
+                        <img src='/images/icons30/aircraft_show.png?v1.6.11'>
+                        <span>Détail de l&#039;avion</span>
+                    </a>
+                </div>
+
+                <div class="content">
+                    <img class="mini-aircraft" src="/common/images/Aircrafts/skins/medium/q-400.png" alt="Q-400" data-big="/common/images/Aircrafts/skins/superBig/q-400.png"/>
+                    
+                    <div id="aircraftInfos">
+                        <span class="listBoxInfo">
+                                &#149; Rayon d&#039;action : <b>2 400 km</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Utilisation : <b> 87%</b>
+                        </span>
+                                                <span class="listBoxInfo">
+                            &#149; Sièges : <b>80 (80/0/0)</b>
+                        </span>
+                        <span class="listBoxInfo" > &#149; <span class="hubBtn">Hub</span> <b>HYD</b> / <img src="/images/flags/in.png" alt="in"/></span>
+                        <span class="listBoxInfo" title="Sur 7 jours">
+                            &#149; Résultat :
+                            <b>
+                                                                    734 040 $
+                                                            </b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Usure : <b>            
+    
+    <span class="">
+        0 %
+    </span>
+</b>
+                        </span>
+                        <span class="listBoxInfo">
+                            &#149; Ancienneté : <b>2.27/5</b>
+                        </span>
+                                            </div>
+                    
+                </div>
+
+            </div>
+            </div>        </div>
+
+                                
+                            </div>
+                        </div>
+                        <div id="pageBottom"></div>
+                        <div id="offers-special-list" class="hidden">
+                            {&quot;1&quot;:{&quot;id&quot;:1,&quot;playerId&quot;:7,&quot;nom&quot;:&quot;pack_starter&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/7.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/cockpit.airlines-manager.com\/shop?origin=pub_starter&quot;,&quot;startDate&quot;:1366588800,&quot;endDate&quot;:1366934400},&quot;2&quot;:{&quot;id&quot;:2,&quot;playerId&quot;:11,&quot;nom&quot;:&quot;AM+ Vacances&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/11.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/www.airlines-manager.com\/amplus\/?origin=pub_vacances&quot;,&quot;startDate&quot;:1375315200,&quot;endDate&quot;:1375574400},&quot;3&quot;:{&quot;id&quot;:3,&quot;playerId&quot;:12,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 2&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381968000},&quot;4&quot;:{&quot;id&quot;:4,&quot;playerId&quot;:13,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 2&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381881600},&quot;5&quot;:{&quot;id&quot;:5,&quot;playerId&quot;:14,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 2&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381881600},&quot;6&quot;:{&quot;id&quot;:6,&quot;playerId&quot;:15,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 3&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381881600},&quot;7&quot;:{&quot;id&quot;:7,&quot;playerId&quot;:10,&quot;nom&quot;:&quot;Nouveaux classics&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/10.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/10QBl2h&quot;,&quot;startDate&quot;:1384214400,&quot;endDate&quot;:1384473600},&quot;8&quot;:{&quot;id&quot;:8,&quot;playerId&quot;:16,&quot;nom&quot;:&quot;AM+ Carte des vols&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/16.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:1,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/presentation_AMPlus&quot;,&quot;startDate&quot;:1389830400,&quot;endDate&quot;:1390003200},&quot;9&quot;:{&quot;id&quot;:9,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es&quot;,&quot;url&quot;:&quot;http:\/\/blog2.airlines-manager.com\/wp-content\/uploads\/2014\/06\/new-paints.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1405969080,&quot;endDate&quot;:1406246340},&quot;10&quot;:{&quot;id&quot;:10,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.2&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1430330400,&quot;endDate&quot;:1430611200},&quot;11&quot;:{&quot;id&quot;:11,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.4&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1437681600,&quot;endDate&quot;:1437955140},&quot;13&quot;:{&quot;id&quot;:13,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;Black Friday&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_blackfriday2.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/1YxJnJd&quot;,&quot;startDate&quot;:1448582400,&quot;endDate&quot;:1448668800},&quot;14&quot;:{&quot;id&quot;:14,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;Black Friday&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/BLACK_FRIDAY_prolonge.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/1YxJnJd&quot;,&quot;startDate&quot;:1448668800,&quot;endDate&quot;:1448841600},&quot;12&quot;:{&quot;id&quot;:12,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.8&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1449705600,&quot;endDate&quot;:1442098740},&quot;15&quot;:{&quot;id&quot;:15,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.9&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1453937400,&quot;endDate&quot;:1454284799},&quot;16&quot;:{&quot;id&quot;:16,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.11&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_droite_v11_mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1459517400,&quot;endDate&quot;:1459776600},&quot;17&quot;:{&quot;id&quot;:17,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;PlayrionShow&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/playrionshow_droite.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/playrionshow_teaser&quot;,&quot;startDate&quot;:1479841200,&quot;endDate&quot;:1480100400},&quot;18&quot;:{&quot;id&quot;:18,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;PlayrionShow2&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/suivre_direct_playrionshow.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/PlayrionShowLive&quot;,&quot;startDate&quot;:1481065200,&quot;endDate&quot;:1481140800},&quot;19&quot;:{&quot;id&quot;:19,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;PlayrionShow2&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/playrionshow_droite_replay.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/PlayrionShowLive&quot;,&quot;startDate&quot;:1481155200,&quot;endDate&quot;:1481400000},&quot;20&quot;:{&quot;id&quot;:20,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;RoueTC&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_droite_rouetc.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/TCWheelAM2&quot;,&quot;startDate&quot;:1486478700,&quot;endDate&quot;:1486857600}}                        </div>
+
+                    </div>
+                    <div class="clearer">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+               <div id="fb-root"></div>
+        <script>
+            window.fbAsyncInit = function() {
+                // init the FB JS SDK
+                FB.init({
+                  appId      : "417203745032800",                // App ID from the app dashboard
+                  version    : 'v2.0',
+                  status     : true,                                 // Check Facebook Login status
+                  xfbml      : true                                  // Look for social plugins on the page
+                });
+                // Additional initialization code such as adding Event Listeners goes here
+              };
+
+              // Load the SDK asynchronously
+            (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/fr_FR/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+       <div id="mainFooter">
+            <div id="mainFooter-left">
+                <img class="logoPlayrion" src="/images/interface/logo_playrion.png?v1.6.11" alt="Playrion" title="Nous faisons des jeux, et nous les faisons bien !" />
+                <p>Version d&#039;Airlines Manager 1.11 (FR) <br></p>
+                <p>Heure du serveur :
+                                        <span id="footer_dateTime"></span>
+                </p>
+                            </div>
+
+            <div id="mainFooter-middle">
+                <div id="mainFooter-middle-box1">
+                    <h4>LIENS</h4>
+                    <a href="http://blog2.airlines-manager.com/" title="Suivez les actualités d&#039;Airlines Manager">Actualité</a><br>
+                    <a href="/shop" title="Besoin d&#039;AM Coins ? C&#039;est par ici !">Boutique</a><br>
+                    <a href="http://forum.airlines-manager.com/" title="Participez et devenez membre de la communauté d&#039;Airlines Manager">Forum</a><br>
+                    <a href="/cgu" class="cguLink" title="Conditions Générales d&#039;Utilisation">CGU</a>
+                </div>
+
+                <div id="mainFooter-middle-box2">
+                    <h4>CONTACT</h4>
+                    <a href="http://forum.airlines-manager.com/viewforum.php?f=99" title="En cas de bug concernant le jeu, merci de passer par le forum">Support</a><br>
+                    <a href="http://www.playrion.com/" title="Pour toute prise de contact avec Playrion, Société éditrice de jeu de gestion en ligne">Playrion</a><br>
+                    <a href="http://www.facebook.com/AirlinesManager" title="Suivez-nous sur Facebook !"><img src="/images/showcase/interface/logo_facebook.png?v1.6.11" alt="FB" />Facebook</a><br>
+                    <a href="https://twitter.com/AirlinesManager" title="Nous sommes également sur Twitter :)"><img src="/images/showcase/interface/logo_twitter.png?v1.6.11" alt="T"/>Twitter</a>
+                </div>
+            </div>
+
+            <div id="mainFooter-right">
+                <div class="fb-like-box"
+                     data-href="https://www.facebook.com/AirlinesManager"
+                     data-width="300"
+                     data-height="170"
+                     data-colorscheme="dark"
+                     data-show-faces="true"
+                     data-stream="false"
+                     data-header="false"
+                     data-border-color="#333333"
+                     >
+                </div>
+            </div>
+       </div>
+
+              <div id="popupContainer">
+                                        </div>
+
+                <div id="popupWaitingList" class="hidden">
+                             </div>
+
+              <div id="overlay"></div>
+
+
+                <div id="financePanel" style="display:none">
+                        <span title="Fermer" class="closeBtn"></span>
+            <div class="title"><span></span><span>Prévision de flux de trésorerie</span></div>
+            <table>
+                <tr>
+                    <th width="9%"></th>
+                    <th width="13%">Chiffre d&#039;affaires</th>
+                    <th width="13%">Coût des vols</th>
+                    <th width="13%">Marketing</th>
+                    <th width="13%">Emprunt</th>
+                    <th width="13%">Achats / ventes</th>
+                    <th width="13%">Autre</th>
+                    <th width="13%">Total</th>
+                </tr>
+                <tr class="yesterday">
+                    <td>
+                        <span class="blueBtn">Hier</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="today">
+                    <td>
+                        <span class="blueBtn">Aujourd&#039;hui</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="tomorrow">
+                    <td>
+                        <span class="blueBtn">Demain</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td class="popTooltip" title="Ces informations ne sont pas prévisibles"> ? </td>
+                    <td>999 900 000 $</td>
+                </tr>
+            </table>
+            <img src="/images/icons/ajax-loader2.gif?v1.6.11" alt="Loading"/>
+        </div>
+
+              <div id="guidedTour" class="hidden">
+
+            
+       </div>
+
+
+       <div id="dataForJs" class="hidden"
+            data-gameversion="normalgame"
+            data-amcountdownparameters="{&quot;intervalUpdate&quot;:1000,&quot;intervalDelta&quot;:1}"
+            data-irltimestamp="1548694342"
+            data-ingametimestamp="1548694342"
+            data-timezone="UTC"
+            data-airlineid="113256"
+            data-airlinestars="1"
+            data-playeremail="sbdh75@gmail.com"
+            data-playerlocale="fr"></div>
+
+                                                         <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+               integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+               crossorigin=""></script>
+           <script src="/bundles/amgame/js/maps/Leaflet.Geodesic.js?v1.6.11"></script>
+
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+                        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.1.1/tinysort.min.js" ></script>
+
+                        <script type="text/javascript">
+                var jokerly_id = "1ea5d093ebe7d77e";
+                var jokerly_editor_id = "1ea5d093ebe7d77e";
+            </script>
+
+            <script src="https://iframe.sponsorpay.com/javascripts/widget/v1/widgets.js" charset="utf-8"></script>
+
+                <script src="/js/am-201901171435.js?v1.6.11"></script>
+            
+            
+                        <script type="text/javascript">
+                setTimeout(function(){var a=document.createElement("script");
+                var b=document.getElementsByTagName("script")[0];
+                a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0019/6444.js?"+Math.floor(new Date().getTime()/3600000);
+                a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+
+                function CE_READY() {
+                    CE2.set(1, "114");
+                    CE2.set(2, "AM+");
+                }
+            </script>
+
+                        
+            <script>
+                /* On récupère les data du template */
+                var locale  = $('#mainContainer').data('locale');
+                var data    = $('#dataForJs').data('amcountdownparameters');
+
+                // http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+                // Firefox 1.0+
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                // console.log('isFirefox:'+(isFirefox?'true':'false'));
+
+                // console.log(data);
+                var intervalUpdate  = data['intervalUpdate'],
+                    intervalDelta   = data['intervalDelta'],
+                    ingametimestamp = $('#dataForJs').data('ingametimestamp'),
+                    irltimestamp    = $('#dataForJs').data('irltimestamp'),
+                    timezone        = $('#dataForJs').data('timezone'),
+                    _footerEl       = document.getElementById("footer_dateTime"),
+                    _footerDate     = new Date(irltimestamp * 1000),
+                    _headerEl       = document.getElementById("header_dateTime"),
+                    _headerDate     = new Date(ingametimestamp * 1000),
+                    _days = {0: "Dim.", 
+                             1: "Lun.", 
+                             2: "Mar.", 
+                             3: "Mer.", 
+                             4: "Jeu.", 
+                             5: "Ven.", 
+                             6: "Sam."};
+
+                setInterval(function(){UpdateTime(_headerEl, _headerDate, intervalDelta, 'locale')}, intervalUpdate);
+                setInterval(function(){UpdateTime(_footerEl, _footerDate, 1, 'UTC')}, 1000);
+                
+                function UpdateTime(el, date, intervalDelta, localeOrUTC) { 
+                    date.setUTCSeconds(date.getUTCSeconds() + intervalDelta);
+                    var _formattedDate;
+                    switch(localeOrUTC) {
+                        case 'UTC':
+                            /* Le temps que les serveurs soient configuré en UTC */
+                            // _formattedDate = date.toUTCString();
+                            // break;
+                        case 'locale':
+                        default:
+                            if (isFirefox) {
+                                var options = { weekday:'short', hour12:false, day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
+                                _formattedDate = new Intl.DateTimeFormat(locale, options).format(date);
+
+                            } else{
+                                _formattedDate = date.toLocaleString(locale, {'timeZone':timezone, 'weekday':'short', 'hour12':false, 'day':'2-digit', 'month':'2-digit', 'year':'numeric', 'hour':'2-digit', 'minute':'2-digit', 'second':'2-digit'});
+                            };
+                    }
+                    el.innerHTML = _formattedDate;
+                }
+            </script>
+       
+    <script>
+        $(document).ready(function(){
+            $('div#incidentList').on('click', 'a.buttonIncidentDetails', function(e){
+                e.preventDefault();
+                $(this).closest('div.aircraftIncident').addClass('withDetails');
+            });
+
+            $('div#incidentList').on('click', 'div.withDetails a.buttonIncidentDetails', function(e){
+                e.preventDefault();
+                $(this).closest('div.aircraftIncident').removeClass('withDetails');
+            });
+        });
+    </script>
+        <div id="cgu" class="hidden"></div>
+        <div id="adselectormodal-container">
+            <div id="adselector-modal-content"></div>
+        </div>
+
+
+                
+                <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+        <script>
+            window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+              "palette": {
+                "popup": {
+                  "background": "#edeff5",
+                  "text": "#838391"
+                },
+                "button": {
+                  "background": "#4b81e8"
+                }
+              },
+              "content": {
+                "message": "Les cookies nous permettent de personnaliser le contenu et les annonces, d’offrir des fonctionnalités relatives aux médias sociaux et d&#039;analyser notre trafic. Nous partageons également des informations sur l&#039;utilisation de notre site avec nos partenaires de médias sociaux, de publicité et d&#039;analyse, qui peuvent combiner celles-ci avec d&#039;autres informations que vous leur avez fournies ou qu&#039;ils ont collectées lors de votre utilisation de leurs services.",
+                "dismiss": "Compris !",
+                "link": "En savoir plus"
+              }
+            })});
+        </script>
+
+    </body>
+</html>

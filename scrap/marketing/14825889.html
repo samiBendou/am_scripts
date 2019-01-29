@@ -1,0 +1,831 @@
+    <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="Playrion">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="format-detection" content="telephone=no">
+        <meta name="description" content="Airlines Manager est un jeu de gestion de compagnie aérienne, totalement gratuit.">
+                    <meta name="apple-itunes-app" content="app-id=823481079">
+        
+        <title> Gestion des tarifs d&#039;une ligne </title>
+
+        <link rel="shortcut icon" href="/favicon.ico?v1.6.11" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v1.6.11">
+        
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+          crossorigin=""/>
+
+                        <link rel="stylesheet" href="/css/am-201812261435.css?v1.6.11" />
+
+            
+        
+    </head>
+    <body >
+        <script type="text/javascript">
+            var fb_param = {};
+            fb_param.pixel_id = '6007101070175';
+            fb_param.value = '0.00';
+            (function(){
+                var fpw = document.createElement('script');
+                fpw.async = true;
+                fpw.src = (location.protocol=='http:'?'http':'https')+'://connect.facebook.net/en_US/fp.js';
+                var ref = document.getElementsByTagName('script')[0];
+                ref.parentNode.insertBefore(fpw, ref);
+            })();
+        </script>
+        <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6007101070175&amp;value=0" /></noscript>
+
+        <script type="text/javascript">
+  var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30410782-1']);
+    _gaq.push(['_setDomainName', 'airlines-manager.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+        <div id="txtLog"></div>
+        <div id="largeContainer" style="margin: auto;background: url('/images/interface/largeContainer_topBg.jpg') top center no-repeat\9;background: url('/images/interface/largeContainer_topBg.jpg'), url('/images/interface/largeContainer_bottomBg.jpg');background-position: top center, bottom center;background-repeat: no-repeat, no-repeat;background-color: #9FC1DC;">
+
+                        <ul id="notificationCenter" style="display: none">
+                                            </ul>
+
+            <div id="mainContainer" data-locale="fr" data-maptext="Cliquez pour afficher la carte des vols">
+                                <div id="mainHeader">
+
+                                        
+                                                <div></div>
+                    
+                    <a href="/account/" title="Gestion du compte" >Gestion du compte</a>
+
+                                            <div>
+                                                        <p id="header_dateTime"></p>
+                        </div>
+                    
+                    <a href="http://forum.airlines-manager.com/index.php" target="_blank"> Forum </a>
+
+                                            <a href="/amplus/sponsorship" title="Parrainez vos amis et gagnez des AM Coins !"><img src="/images/icons/cadeau_parrainage.png?v1.6.11"/> Parrainage </a>
+                    
+                    <a href="/logout"> x déconnexion </a>
+                </div>
+
+                                
+                <div id="mainProfile">
+                                        <div id="mainAvatar" class="lightning">
+                                                    <!--[if IE]>
+                                <img id="mainAvatar_airlinePic" src="/images/logoCompanies/113256_f58?v1.6.11"/>
+                            <![endif]-->
+                            <!--[if !IE]><!-->
+                                <div id="mainAvatar_airlinePic" style="background-image:url(https://static.airlines-manager.com/images/logoCompanies/113256_f58);">&nbsp;</div>
+                            <!--<![endif]-->
+                                                                            <img id="mainAvatar_playerPic" src="/images/avatars/avatar4/avatar.png?v1.6.11"/>
+                                                <div id="mainAvatar_ui">
+                            <div  id="starSystem">
+                                <div id="star1" class="0 noStarBig"></div>
+                                <div id="star2" class="0 noStarSmall"></div>
+                                <div id="star3" class="0 noStarSmall"></div>
+                                <div id="star4" class="0 noStarSmall"></div>
+                                <div id="star5" class="1 bronzeStarSmall"></div>
+                            </div>
+                            <a id="homeLink" title="Accueil" href="/home"></a>
+                            <a id="profileLink" href="/home"></a>
+                            <p id="profileName">Bendou</p>
+                            <a id="airlineLink" href="/company/profile/airline/113256"></a>
+                        </div>
+                    </div>
+                </div>
+
+                                <div id="mainMenu">
+                    <div id="accessBar">
+                        <a href="/network/"   tabindex="1" title="Gestion du réseau"   class="pictoMain icons75-network " id="picto2">&nbsp;</a>
+                        
+                        <a href="/aircraft"  tabindex="2" title="Gestion des avions"  class="pictoMain icons75-aircraft " id="picto1">&nbsp;</a>
+                        
+                        <a href="/company/"   tabindex="3" title="Gestion de la compagnie"   class="pictoMain icons75-airline " id="picto3">&nbsp;</a>
+
+                        <a href="/staff/general-informations" tabindex="4" title="Personnel" class="pictoMain icons75-staff " id="picto4">&nbsp;</a>
+
+                        <a href="/research"  tabindex="5" title="Centre de recherche"  class="pictoMain icons75-research " id="picto5">&nbsp;</a>
+                        
+                        <a href="/services/"  tabindex="6" title="Services"  class="pictoMain icons75-services " id="picto8">&nbsp;</a>
+                        
+                        <a href="/finances/"  tabindex="8" title="Finances"  class="pictoMain icons75-finance " id="picto7">&nbsp;</a>
+                        
+                        <a href="/marketing/" tabindex="7" title="Bureau du marketing" class="pictoMain icons75-marketing " id="picto6">&nbsp;</a>
+                        
+                        <a href="/amplus/"    tabindex="9" title="Am plus©"    class="pictoMain icons75-amPlus " id="picto9">&nbsp;</a>
+                        <ul class="accessBar-subMenu">
+        <li id="subOne">
+        <a href="/network/planning" class="icons30 icons30-aircraft_planning"><span>Planifier les vols</span> </a>
+        <a href="/network/generalplanning" class="icons30 icons30-network_generalPlanning"><span>Planning général</span></a>
+        <a href="/network/newhub" class="icons30 icons30-network_newhub"><span>Acheter un hub</span></a>
+        <a href="/network/newline" class="icons30 icons30-network_newLine"><span>Ouvrir une ligne</span></a>
+                    <a href="/alliance/hubsharing" class="icons30 icons30-alliance_hubSharing"><span>Partage du réseau</span></a>
+                <a href="/network/" class="icons30 icons30-network_dashboard"><span>Réseau</span></a>
+    </li>
+            <li id="subTwo">
+        <a href="/aircraft/buy" class="icons30 icons30-aircraft_buy"><span>Achat d&#039;un avion</span></a>
+        <a href="/aircraft/liveries" class="icons30 icons30-assignLiveries"><span>Gestion des livrées</span></a>
+                    <a href="/maintenance/book" class="icons30 icons30-maintenance_book"><span>Carnet d&#039;entretien</span></a>
+                <a href="/aircraft" class="icons30 icons30-aircraft_dashboard"><span>Avions</span></a>
+    </li>
+            <li id="subThree">
+        <a href="/company/customise" class="icons30 icons30-personnalisation"><span>Personnalisation</span></a>
+        <a href="/company/profile/airline/113256" class="icons30 icons30-profil" ><span>Profil</span></a>
+        <a href="/company/ranking/" class="icons30 icons30-company_ranking"><span>Classement général</span></a>
+                    <a href="/company/cockpitasous" class="icons30 icons30-cockpit_a_sous"><span>Cockpit à sous</span></a>
+                <a href="/company/" class="icons30 icons30-company_dashboard"><span>Compagnie</span></a>
+    </li>
+            <li id="subStaff">
+        <a href="/staff/hiring" class="icons30 icons30-iata_staff_hiring"><span>Processus d&#039;embauche</span></a>
+        <a href="/staff/iata-training" class="icons30 icons30-iata_training_process"><span>Processus de formation</span></a>
+        <a href="/staff/repartition" class="icons30 icons30-iata_staff_repartition"><span>Répartition des travailleurs</span></a>
+        <a href="/staff/general-informations" class="icons30 icons30-employee_dashboard"><span>Informations générales</span></a>
+    </li>
+            <li id="subResearch">
+        <a href="/research" class="icons30 icons30-research_dashboard"><span>Général</span></a>
+        <a href="/research/service" class="icons30 icons30-research_services"><span> Services</span></a>
+        <a href="/research/avions" class="icons30 icons30-research_aircraft"><span>Avions</span></a>
+        <a href="/research/cargo" class="icons30 icons30-research_cargo"><span>Cargo</span></a>
+        <a href="/research/humanresources" class="icons30 icons30-research_humanresources"><span>Personnel</span></a>        <a href="/research/labo" class="icons30 icons30-research_mafia"><span>Labo - transformation de R$</span></a>
+    </li>
+            <li id="subFour">
+                                <a href="/services/4" class="icons30 icons30-partners_services"><span>Partenariat</span></a>
+                                <a href="/services/2" class="icons30 icons30-facilities_services"><span>Infrastructure</span></a>
+                                <a href="/services/1" class="icons30 icons30-catering_services"><span>Services à bord</span></a>
+                                <a href="/services/3" class="icons30 icons30-airport_services"><span>Aéroportuaire</span></a>
+                <a href="/services/" class="icons30 icons30-company_services"><span>Services</span></a>
+    </li>
+            <li id="subFive">
+        <a href="/finances/bank" class="icons30 icons30-finances_banking_list"><span>Banques</span></a>
+        <a href="/finances/accounting" class="icons30 icons30-finances_accounting"><span>Comptabilité générale</span></a>
+        <a href="/finances/" class="icons30 icons30-finances"><span>Finances</span></a>
+    </li>
+            <li id="subSix">
+        <a href="/marketing/internalaudit/linelist" class="icons30 icons30-marketing_internalAudit"><span>Audit interne</span></a>
+        <a href="/marketing/pricing/" class="icons30 icons30-marketing_globalPricing"><span>Gestion des tarifs</span></a>
+        <a href="/marketing/" class="icons30 icons30-marketing_dashboard"><span>Marketing</span></a>
+    </li>
+    </ul>
+                    </div>
+
+                    <div id="ressourcesBar">
+                        <div>
+                            <span id="ressource1" class="lightning" title="Fonds de recherche">44 290 000 $</span>
+                            <span id="ressource2" class="lightning" title="TravelCards"><a href="/shop/workshop">2 650</a></span>
+                        </div>
+                        <div>
+                            <span id="ressource3" class="lightning" title="Dollars">29 061 206 $</span>
+                            <span id="ressource4" class="lightning" title="AM Coins">658</span>
+                        </div>
+                    </div>
+                    <div id="shortcutBar">
+                        <a href="/network/planning"  title="Planifier les vols"><img src="/images/icons30/aircraft_planning.png?v1.6.11"/></a>
+
+                        <span id="financePanelBtn" href="/financePanel/" title="Prévision flux de trésorerie"><img src="/images/icons30/financePanel_index.png?v1.6.11"/></span>
+                        
+                                                    <a href="/company/cockpitasous"  title="Cockpit à sous"><img src="/images/company/cockpitASous/picto30.png?v1.6.11" style="height: 25px; width: 25px; background-position: center;"/></a>
+                                             
+                    </div>
+                </div>
+
+
+
+                
+                                <div id="mainContent">
+                                            <div id="top-alliance-dashboard">
+    <ul>
+        <li class="allianceLogoBox">
+                            <img src="/images/interface/defaultLogo.jpg?v1.6.11" width="75" height="35" />
+                    </li>
+        <li class="allianceName"><b>Baidou</b></li>
+        <li><img src="/images/icons30/dollarx30.png?v1.6.11" width="30" height="30" title="fonds de l&#039;alliance"/>0 $</li>
+        <li><img src="/images/icons30/researchdollarx30.png?v1.6.11" width="30" height="30" title="fonds pour la recherche de l&#039;alliance" /> 0 $</li>
+        <li title="classement général"><img src="/images/icons30/alliances_classementx30.png?v1.6.11" width="30" height="30" /> Général : 0e</li>
+        <li class="allianceUnreadedNews" onclick='location.href="/alliance/wall"' title="notifications en attente"><img src="/images/icons30/notificationx30.png?v1.6.11"/> x 0</li>
+    </ul>
+</div>                                                            <div id="mainContentRight">
+                        <div id="special-offer"></div>
+                        <div id="secretaryBox"></div>
+                        
+
+                        
+
+<div id="rightMenuBox" >
+            <div>
+    <a href="/shop/workshop" title="Atelier" id="pictoWorkshop" class="icons75-workshop ">&nbsp;</a>
+    <a href="/alliance/wall" title="Alliance" id="pictoAlliance" class="icons75-alliance ">&nbsp;</a>
+</div>
+<div>
+            <a href="/shop" title="Boutique" id="pictoShop" class="icons75-shop">&nbsp;</a>
+    
+    <a href="/message/incoming" title="Messagerie" id="pictoMessage" class="icons75-mail ">&nbsp;</a></div>
+
+<div>
+    <a href="http://help.airlines-manager.com?lang=fr" target="_blank" id="pictoHelp" title="Aide" class="icons75-help">&nbsp;</a>
+
+            <a href="/gazette/" id="pictoGazette"  title="La Gazette" class="icons75-gazette " >&nbsp;</a>
+    </div>
+
+    </div>
+
+            <div class="adminMenuBox">
+            <a href="/aircraft/liveries" title="airline painter" class="icon-airline-painter">&nbsp;</a>
+        </div>
+    
+    <div id="chatLink">
+        <a href="/chat">
+            <img src="/images/icons/chat-main.png?v1.6.11" alt="Général"/>
+            <span>Accéder au chat</span>
+        </a>
+    </div>
+
+
+                                                <div id="rightInfoBox">
+    <div id="rightInfoBoxTop">
+        <div id="rightInfoBoxButton" class="uiEnlarge"></div>
+    </div>
+    <div id="rightInfoBoxMiddle">
+            <ul id="rightInfoBoxContent">
+                                    <li>
+                        <div>
+                            <div>
+                                <div>
+                                    <img class="catImage" src="/images/icons30/research_dashboard.png?v1.6.11" alt="Icon"/>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text">Recherche</div>
+                                <div>
+                                                                            <div class="date"> 
+                                            <span class="amcountdown" data-timeremaining="1412">...</span>    
+                                            <a class="useAjax hidden" href="/amplus/amcoins/use/event/67862094"> Terminer </a>
+                                        </div>
+                                        <div>
+                                            <a class="useAjax" href="/amplus/amcoins/popup/event/67862094">
+                                                <img class="amCoinsDynamicCount" src="/images/icons20/chrono.png?v1.6.11" alt="Coins" data-amcoinsdynamiccount="{&quot;isMaintenance&quot;:false,&quot;remainingTime&quot;:1412}" data-amcoinsdynamiccountvalue="6" title="Livraison instantanée pour 6 AM Coins"/>
+                                            </a>
+                                        </div>
+                                                                    </div>
+                            </div>
+                        </div>
+                    </li>
+                
+                                    <li class="deliverAll">
+                        <div>
+                            <a class="validBtnBlue deliverAllBtn useAjax" href="/amplus/amcoins/popup/deliverAll">
+                                <div>
+                                    <img src="/images/icons20/chrono.png?v1.6.11" alt="Coins" />
+                                    <p>Tout livrer</p>
+                                                                            <p class="amCoinsDynamicCountTotal">6 </p><img src="/images/icons20/coins.png?v1.6.11" />
+                                                                    </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="deliverAll">
+                        <div>
+                                                                                        <a class="validBtnBlue deliverAllBtn fastDeliveryButton useAjax" href="/amplus/amcoins/deliverended">
+                                    <div>
+                                        <p>Valider les livraisons terminées</p>
+                                    </div>
+                                </a>
+                                                    </div>
+                    </li>
+                    <li class="amCoinsPurchase">
+                        <div>
+                            <a href="/shop#sponsorPay" id="sponsorPayAction" class="validBtnBlue">
+                                <div>
+                                    <p>Obtenir </p><img src="/images/icons20/coins.png?v1.6.11" /><p> gratuit</p>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                            </ul>
+
+    </div>
+    <div id="rightInfoBoxBottom"></div>
+</div>
+                        
+                        
+                        <div class="videoHelpBlock">
+                                <div class="helpVideoWrapper">
+    <a href="http://aide.airlines-manager.com/index.php/Tutoriel_vid%C3%A9o#G.C3.A9rer_les_tarifs_et_les_audits_d.27une_ligne" target="_blank" class="videoLink">
+        <div id="videoHelp">
+            <div id="helpIcon">
+                <img src="/images/icons/chat-help.png?v1.6.11">
+            </div>
+            <div id="helpLabel">
+                Un tutoriel vidéo est disponible pour cette page
+                <div class="purchaseButton">Cliquez ici !</div>
+            </div>
+        </div>
+    </a>
+</div>                        </div>
+                    </div>
+
+                                        <div id="mainContentLeft" >
+                        <div id="pageHead" >
+                            <img src=" /images/icons30/marketing_linePricing.png?v1.6.11 "/>
+                            <h1> Gestion des tarifs d&#039;une ligne </h1>
+                            <div id="catMenu"> <a href="/marketing/internalaudit/linelist" title="Audit interne">  <img src="/images/icons30/marketing_internalAudit.png?v1.6.11"/></a>
+<a href="/marketing/pricing/" title="Gestion des tarifs">  <img src="/images/icons30/marketing_globalPricing.png?v1.6.11"/></a>
+<a href="/marketing/"     title="Bureau du marketing">      <img src="/images/icons30/marketing_dashboard.png?v1.6.11"/></a> </div>
+                            <div id="topOnSubMenu">
+                                <div id="subMenu"></div>
+                            </div>
+                        </div>
+                        <div id="pageContent">
+                            <div id="content">
+                                <div id="marketingPricingMap">
+    <div id="map_container">
+                <div id="map_NetworkJson" class="hidden">{"airports":[{"name":"Rajiv Gandhi International Airport","iata":"HYD","latitude":17.239999999999998,"longitude":78.428055999999998},{"name":"Jinnah International Airport","iata":"KHI","latitude":24.899999999999999,"longitude":67.150000000000006}],"lines":[{"id":14825889,"airportStartLng":78.428055999999998,"airportStartLat":17.239999999999998,"airportEndLng":67.150000000000006,"airportEndLat":24.899999999999999}]}</div>
+
+                <div id="map_canvas"></div>
+    </div>
+</div>
+<div id="marketing_linePricing">
+        <h2 class="picto_lp" >Dernier audit</h2>
+        <div class="box0">
+            <span class="lineBtn"> Ligne </span>
+            HYD -
+            <i>Hyderabad</i> -
+            Rajiv Gandhi International Airport /
+
+            KHI -
+            <i>Karachi</i> -
+            Jinnah International Airport / <img src="/images/flags/in.png" alt="in"/>
+            <input type="hidden" id="internalAuditCost" value="131586" />
+            
+            <a href='/marketing/internalaudit/line/14825889?fromPricing=1' class="gradientButton gradientButtonPurple marketing_PriceLink">
+                <img src='/images/icons30/marketing_internalAudit.png?v1.6.11'>
+                <span>Audit interne</span>
+            </a>
+        </div>
+        <div class="defloat"></div>
+                <div class="box1">
+            <div class="priceBox ">
+                <div class="title">Classe économique</div>
+                <div class="price">Tarif idéal du billet : <b>533 $</b></div>
+                <div class="demand">Demande : <b>2 699 Pax</b></div>
+                                <div class="auditCa">Chiffre d&#039;affaires : <b>1 438 567 $</b></div>
+                            </div>
+            <div class="priceBox ">
+                <div class="title">Classe affaires</div>
+                <div class="price">Tarif idéal du billet : <b>708 $</b></div>
+                <div class="demand">Demande : <b>95 Pax</b></div>
+                                <div class="auditCa">Chiffre d&#039;affaires : <b>67 260 $</b></div>
+                            </div>
+            <div class="priceBox ">
+                <div class="title">Première classe</div>
+                <div class="price">Tarif idéal du billet : <b>1 225 $</b></div>
+                <div class="demand">Demande : <b>9 Pax</b></div>
+                                <div class="auditCa">Chiffre d&#039;affaires : <b>11 025 $</b></div>
+                            </div>
+                    </div>
+        <div class="dashMachine">
+            <span>Date :</span>
+            <span><b>26/01/2019</b></span>
+        </div>
+        <br /><br />
+        <div class="dashMachine last">
+            <span>Fiabilité:</span>
+            <span><p class="reliability"><a class="tooltipLink reliability10" href="#">Peu récent<span class="caracTooltip">
+                              Votre compagnie a légèrement changé depuis le dernier audit.<br />Votre dernier audit date de moins d'un mois
+                          </span></a></p></span>
+        </div>
+        
+        <h2 class="picto_lp">Informations sur la ligne</h2>
+
+        <div class="box2">
+            <div class="priceBox ">
+                <div class="title">Classe économique</div>
+                <div class="price">Tarif actuel du billet : <b>533 $</b></div>
+                <div class="demand">Demande : 2 715 Pax</div>
+                <div class="paxLeft" title="J+1">
+                                        Demande restante : <span class="greenBonus" title="Nombre de passager restants au sol par manque de places">843 Pax</span>
+                                    </div>
+                                <div class="auditCa">Chiffre d&#039;affaires : <b>1 447 095 $</b></div>
+                            </div>
+            <div class="priceBox ">
+                <div class="title">Classe affaires</div>
+                <div class="price">Tarif actuel du billet : <b>600 $</b></div>
+                <div class="demand">Demande : 100 Pax</div>
+                <div class="paxLeft" title="J+1">
+                                        Demande restante : <span class="redBonus" title="Nombre de passager restants au sol par manque de places">-28 Pax</span>
+                                    </div>
+                                <div class="auditCa">Chiffre d&#039;affaires : <b>60 000 $</b></div>
+                            </div>
+            <div class="priceBox ">
+                <div class="title">Première classe</div>
+                <div class="price">Tarif actuel du billet : <b>1 225 $</b></div>
+                <div class="demand">Demande : 9 Pax</div>
+                <div class="paxLeft" title="J+1">
+                                        Demande restante : <span class="greenBonus" title="Nombre de passager restants au sol par manque de places">9 Pax</span>
+                                    </div>
+                                <div class="auditCa">Chiffre d&#039;affaires : <b>11 025 $</b></div>
+                            </div>
+                    </div>
+
+        <h2 class="picto_lp">Modifiez vos tarifs</h2>
+
+        
+        <form class="submitButton" method="post" action="/marketing/pricing/14825889">
+            <div class="box2">
+                
+                <div class="priceBox ">
+                    <div class="title">Classe économique</div>
+                    <div class="price">Tarif: <b><input type="number" id="line_priceEco" name="line[priceEco]" required="required" class="priceInput" min="0" value="533" /> $</b></div>
+                </div>
+                <div class="priceBox ">
+                    <div class="title">Classe affaires</div>
+                    <div class="price">Tarif: <b><input type="number" id="line_priceBus" name="line[priceBus]" required="required" class="priceInput" min="0" value="600" /> $</b></div>
+                </div>
+                <div class="priceBox ">
+                    <div class="title">Première classe</div>
+                    <div class="price">Tarif: <b><input type="number" id="line_priceFirst" name="line[priceFirst]" required="required" class="priceInput" min="0" value="1225" /> $</b></div>
+                </div>
+                                <div class="error"></div>
+                <div class="error"></div>
+                <div class="error"></div>
+                                <div class="defloat"></div>
+                <br />
+                <p class="redBonus"><span class="bold">Nouveau : </span>Attention, une fois les nouveaux tarifs validés, il sera nécessaire d&#039;attendre 24h avant de procéder à une nouvelle modification.</p>
+                <p class="redBonus">Utilisez la simulation tarifaire pour être certain de votre choix.</p>
+                <br />
+                <input type="submit" value="Valider ces tarifs"  class="validBtn validBtnBlue"/>
+            </div>
+            <input type="hidden" id="line__token" name="line[_token]" value="Dxc3wL0qqSNEEbaW1j4dBeI9Fy4nyzJJVqb_HgtltxI" />
+        </form>
+
+
+        <div class="demandSimulation">
+            <h3 class="superHero">Simuler la demande</h3>
+            <p>Coût de la simulation : <b>10 527 $</b></p>
+            <br />
+            <input type="button" value="Effectuer une simulation" id="priceSimulation" class="validBtn validBtnBlue">
+
+            <hr class="myGreyhr">
+
+            <input type="hidden" value="14825889" id="lineId" data-url="/marketing/pricing/pricesimulation/14825889"/>
+            <br />
+            <div class="box2" id="simulationResult">
+                <div class="priceBox priceBoxEco ">
+                    <div class="title">Classe économique</div>
+                    <div class="price simulationValue">Demande simulée : <span class="bold" id="paxEcoValue"></span><span class="bold"> Pax</span></div>
+                    <div class="paxLeft simulationValue">
+                                                Demande restante : <span id="paxLeftEcoValue" class="demand" title="Nombre de passager restants au sol par manque de places"></span><span class="greenBonus"> Pax</span>
+                                            </div>
+                                        <div class="ca simulationValue">
+                        Chiffre d&#039;affaires : <span id="caEcoValue"></span>
+                    </div>
+                    
+                </div>
+                <div class="priceBox priceBoxBus ">
+                    <div class="title">Classe affaires</div>
+                    <div class="price simulationValue">Demande simulée : <span class="bold" id="paxBusValue"></span><span class="bold"> Pax</span></div>
+                    <div class="paxLeft simulationValue">
+                                                Demande restante : <span id="paxLeftBusValue" class="demand" title="Nombre de passager restants au sol par manque de places"> Pax</span><span class="greenBonus"> Pax</span>
+                                            </div>
+                                        <div class="ca simulationValue">
+                        Chiffre d&#039;affaires : <span id="caBusValue"></span>
+                    </div>
+                                    </div>
+                <div class="priceBox priceBoxFirst ">
+                    <div class="title">Première classe</div>
+                    <div class="price simulationValue">Demande simulée : <span class="bold" id="paxFirstValue"></span><span class="bold"> Pax</span></div>
+                    <div class="paxLeft simulationValue">
+                                                Demande restante : <span id="paxLeftFirstValue" class="demand" title="Nombre de passager restants au sol par manque de places"> Pax</span><span class="greenBonus"> Pax</span>
+                                            </div>
+                                        <div class="ca simulationValue">
+                        Chiffre d&#039;affaires : <span id="caFirstValue"></span>
+                    </div>
+                                    </div>
+                            </div>
+
+           <div class="secretaryBox">
+            <div class="avatar"><img src="/images/avatars/avatar2/coupe.png?v1.6.11"></div>
+            <div class="explanation">
+                <p>La SUPER Simulation vous permet de déterminer le meilleur prix pour maximiser vos bénéfices avec la demande restante actuelle. Cette fonctionnalité est à utiliser uniquement si des vols sont planifiés pour cette ligne.</p>
+                <a href="#" id="superSimulationPopup" class="validBtn validBtnBlue" data-url="/marketing/pricing/zerodemandsimulation/14825889">Effectuer une SUPER simulation 5 <img style="position:relative;top:-2px;"src="/images/icons20/coins.png?v1.6.11"/></a>
+            </div>
+        </div>
+
+        </div>
+        
+</div>
+<div class="hidden popupEngine" id="internalAuditPopupContent">
+    <div class="popupTop" class="refreshPage">
+        <span class="popupClose" onclick="amevo.hidePopup()"></span>
+        <img src="/images/icons70/internalAudit.png?v1.6.11" />
+    </div>
+
+    <div class="popupMiddle">
+        <p>Voulez-vous vraiment acheter cet audit pour <span></span> ?</p>
+    </div>
+
+    <div class="popupBottom">
+        <a href="" class="internalAuditLink submitButton">
+            <span class="purchaseButton" id="internalAuditButton">OK</span>
+        </a>
+        <span class="purchaseButton purchaseButtonRed" onclick="amevo.hidePopup()">Annuler</span>
+    </div>
+</div><div class="hidden popupEngine" id="superSimulationPopupContent">
+    <div class="popupTop" class="refreshPage">
+        <span class="popupClose" onclick="amevo.hidePopup()"></span>
+        <img src="/images/icons70/amcoins_big.png?v1.6.11" />
+    </div>
+
+    <div class="popupMiddle">
+        <p>
+                    Voulez-vous effectuer une super simulation pour 5 AM Coins ?
+        <br />
+            Une fois les tarifs modifiés, vous devrez valider ces derniers
+                </p>
+    </div>
+
+    <div class="popupBottom">
+                <span class="purchaseButton" id="superSimulation" onclick="amevo.priceSimulation(true);amevo.hidePopup();" >OK</span>
+                <span class="purchaseButton purchaseButtonRed" onclick="amevo.hidePopup()">Annuler</span>
+    </div>
+</div>
+                                
+                            </div>
+                        </div>
+                        <div id="pageBottom"></div>
+                        <div id="offers-special-list" class="hidden">
+                            {&quot;1&quot;:{&quot;id&quot;:1,&quot;playerId&quot;:7,&quot;nom&quot;:&quot;pack_starter&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/7.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/cockpit.airlines-manager.com\/shop?origin=pub_starter&quot;,&quot;startDate&quot;:1366588800,&quot;endDate&quot;:1366934400},&quot;2&quot;:{&quot;id&quot;:2,&quot;playerId&quot;:11,&quot;nom&quot;:&quot;AM+ Vacances&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/11.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/www.airlines-manager.com\/amplus\/?origin=pub_vacances&quot;,&quot;startDate&quot;:1375315200,&quot;endDate&quot;:1375574400},&quot;3&quot;:{&quot;id&quot;:3,&quot;playerId&quot;:12,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 2&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381968000},&quot;4&quot;:{&quot;id&quot;:4,&quot;playerId&quot;:13,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 2&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381881600},&quot;5&quot;:{&quot;id&quot;:5,&quot;playerId&quot;:14,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 2&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381881600},&quot;6&quot;:{&quot;id&quot;:6,&quot;playerId&quot;:15,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es 3&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1381708800,&quot;endDate&quot;:1381881600},&quot;7&quot;:{&quot;id&quot;:7,&quot;playerId&quot;:10,&quot;nom&quot;:&quot;Nouveaux classics&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/10.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/10QBl2h&quot;,&quot;startDate&quot;:1384214400,&quot;endDate&quot;:1384473600},&quot;8&quot;:{&quot;id&quot;:8,&quot;playerId&quot;:16,&quot;nom&quot;:&quot;AM+ Carte des vols&quot;,&quot;url&quot;:&quot;http:\/\/pc.airlines-manager.com\/images\/specialOffers\/16.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:1,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/presentation_AMPlus&quot;,&quot;startDate&quot;:1389830400,&quot;endDate&quot;:1390003200},&quot;9&quot;:{&quot;id&quot;:9,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;Nouvelles Livr\u00e9es&quot;,&quot;url&quot;:&quot;http:\/\/blog2.airlines-manager.com\/wp-content\/uploads\/2014\/06\/new-paints.png&quot;,&quot;openMode&quot;:false,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/187ZFSR&quot;,&quot;startDate&quot;:1405969080,&quot;endDate&quot;:1406246340},&quot;10&quot;:{&quot;id&quot;:10,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.2&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1430330400,&quot;endDate&quot;:1430611200},&quot;11&quot;:{&quot;id&quot;:11,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.4&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1437681600,&quot;endDate&quot;:1437955140},&quot;13&quot;:{&quot;id&quot;:13,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;Black Friday&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_blackfriday2.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/1YxJnJd&quot;,&quot;startDate&quot;:1448582400,&quot;endDate&quot;:1448668800},&quot;14&quot;:{&quot;id&quot;:14,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;Black Friday&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/BLACK_FRIDAY_prolonge.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/1YxJnJd&quot;,&quot;startDate&quot;:1448668800,&quot;endDate&quot;:1448841600},&quot;12&quot;:{&quot;id&quot;:12,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.8&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1449705600,&quot;endDate&quot;:1442098740},&quot;15&quot;:{&quot;id&quot;:15,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.9&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1453937400,&quot;endDate&quot;:1454284799},&quot;16&quot;:{&quot;id&quot;:16,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;AM2 Mobile 1.11&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_droite_v11_mobile.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/smarturl.it\/AM2Mobile&quot;,&quot;startDate&quot;:1459517400,&quot;endDate&quot;:1459776600},&quot;17&quot;:{&quot;id&quot;:17,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;PlayrionShow&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/playrionshow_droite.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/playrionshow_teaser&quot;,&quot;startDate&quot;:1479841200,&quot;endDate&quot;:1480100400},&quot;18&quot;:{&quot;id&quot;:18,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;PlayrionShow2&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/suivre_direct_playrionshow.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/PlayrionShowLive&quot;,&quot;startDate&quot;:1481065200,&quot;endDate&quot;:1481140800},&quot;19&quot;:{&quot;id&quot;:19,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;PlayrionShow2&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/playrionshow_droite_replay.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/PlayrionShowLive&quot;,&quot;startDate&quot;:1481155200,&quot;endDate&quot;:1481400000},&quot;20&quot;:{&quot;id&quot;:20,&quot;playerId&quot;:9,&quot;nom&quot;:&quot;RoueTC&quot;,&quot;url&quot;:&quot;http:\/\/central.airlines-manager.com\/images\/pub_droite_rouetc.png&quot;,&quot;openMode&quot;:true,&quot;importance&quot;:10,&quot;redirectUrl&quot;:&quot;http:\/\/bit.ly\/TCWheelAM2&quot;,&quot;startDate&quot;:1486478700,&quot;endDate&quot;:1486857600}}                        </div>
+
+                    </div>
+                    <div class="clearer">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+               <div id="fb-root"></div>
+        <script>
+            window.fbAsyncInit = function() {
+                // init the FB JS SDK
+                FB.init({
+                  appId      : "417203745032800",                // App ID from the app dashboard
+                  version    : 'v2.0',
+                  status     : true,                                 // Check Facebook Login status
+                  xfbml      : true                                  // Look for social plugins on the page
+                });
+                // Additional initialization code such as adding Event Listeners goes here
+              };
+
+              // Load the SDK asynchronously
+            (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/fr_FR/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+       <div id="mainFooter">
+            <div id="mainFooter-left">
+                <img class="logoPlayrion" src="/images/interface/logo_playrion.png?v1.6.11" alt="Playrion" title="Nous faisons des jeux, et nous les faisons bien !" />
+                <p>Version d&#039;Airlines Manager 1.11 (FR) <br></p>
+                <p>Heure du serveur :
+                                        <span id="footer_dateTime"></span>
+                </p>
+                            </div>
+
+            <div id="mainFooter-middle">
+                <div id="mainFooter-middle-box1">
+                    <h4>LIENS</h4>
+                    <a href="http://blog2.airlines-manager.com/" title="Suivez les actualités d&#039;Airlines Manager">Actualité</a><br>
+                    <a href="/shop" title="Besoin d&#039;AM Coins ? C&#039;est par ici !">Boutique</a><br>
+                    <a href="http://forum.airlines-manager.com/" title="Participez et devenez membre de la communauté d&#039;Airlines Manager">Forum</a><br>
+                    <a href="/cgu" class="cguLink" title="Conditions Générales d&#039;Utilisation">CGU</a>
+                </div>
+
+                <div id="mainFooter-middle-box2">
+                    <h4>CONTACT</h4>
+                    <a href="http://forum.airlines-manager.com/viewforum.php?f=99" title="En cas de bug concernant le jeu, merci de passer par le forum">Support</a><br>
+                    <a href="http://www.playrion.com/" title="Pour toute prise de contact avec Playrion, Société éditrice de jeu de gestion en ligne">Playrion</a><br>
+                    <a href="http://www.facebook.com/AirlinesManager" title="Suivez-nous sur Facebook !"><img src="/images/showcase/interface/logo_facebook.png?v1.6.11" alt="FB" />Facebook</a><br>
+                    <a href="https://twitter.com/AirlinesManager" title="Nous sommes également sur Twitter :)"><img src="/images/showcase/interface/logo_twitter.png?v1.6.11" alt="T"/>Twitter</a>
+                </div>
+            </div>
+
+            <div id="mainFooter-right">
+                <div class="fb-like-box"
+                     data-href="https://www.facebook.com/AirlinesManager"
+                     data-width="300"
+                     data-height="170"
+                     data-colorscheme="dark"
+                     data-show-faces="true"
+                     data-stream="false"
+                     data-header="false"
+                     data-border-color="#333333"
+                     >
+                </div>
+            </div>
+       </div>
+
+              <div id="popupContainer">
+                                        </div>
+
+                <div id="popupWaitingList" class="hidden">
+                             </div>
+
+              <div id="overlay"></div>
+
+
+                <div id="financePanel" style="display:none">
+                        <span title="Fermer" class="closeBtn"></span>
+            <div class="title"><span></span><span>Prévision de flux de trésorerie</span></div>
+            <table>
+                <tr>
+                    <th width="9%"></th>
+                    <th width="13%">Chiffre d&#039;affaires</th>
+                    <th width="13%">Coût des vols</th>
+                    <th width="13%">Marketing</th>
+                    <th width="13%">Emprunt</th>
+                    <th width="13%">Achats / ventes</th>
+                    <th width="13%">Autre</th>
+                    <th width="13%">Total</th>
+                </tr>
+                <tr class="yesterday">
+                    <td>
+                        <span class="blueBtn">Hier</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="today">
+                    <td>
+                        <span class="blueBtn">Aujourd&#039;hui</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="tomorrow">
+                    <td>
+                        <span class="blueBtn">Demain</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td class="popTooltip" title="Ces informations ne sont pas prévisibles"> ? </td>
+                    <td>999 900 000 $</td>
+                </tr>
+            </table>
+            <img src="/images/icons/ajax-loader2.gif?v1.6.11" alt="Loading"/>
+        </div>
+
+              <div id="guidedTour" class="hidden">
+
+            
+       </div>
+
+
+       <div id="dataForJs" class="hidden"
+            data-gameversion="normalgame"
+            data-amcountdownparameters="{&quot;intervalUpdate&quot;:1000,&quot;intervalDelta&quot;:1}"
+            data-irltimestamp="1548696964"
+            data-ingametimestamp="1548696964"
+            data-timezone="UTC"
+            data-airlineid="113256"
+            data-airlinestars="1"
+            data-playeremail="sbdh75@gmail.com"
+            data-playerlocale="fr"></div>
+
+                         <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+               integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+               crossorigin=""></script>
+           <script src="/bundles/amgame/js/maps/Leaflet.Geodesic.js?v1.6.11"></script>
+
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+                        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.1.1/tinysort.min.js" ></script>
+
+                        <script type="text/javascript">
+                var jokerly_id = "1ea5d093ebe7d77e";
+                var jokerly_editor_id = "1ea5d093ebe7d77e";
+            </script>
+
+            <script src="https://iframe.sponsorpay.com/javascripts/widget/v1/widgets.js" charset="utf-8"></script>
+
+                <script src="/js/am-201901171435.js?v1.6.11"></script>
+            
+            
+                        <script type="text/javascript">
+                setTimeout(function(){var a=document.createElement("script");
+                var b=document.getElementsByTagName("script")[0];
+                a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0019/6444.js?"+Math.floor(new Date().getTime()/3600000);
+                a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+
+                function CE_READY() {
+                    CE2.set(1, "114");
+                    CE2.set(2, "AM+");
+                }
+            </script>
+
+                        
+            <script>
+                /* On récupère les data du template */
+                var locale  = $('#mainContainer').data('locale');
+                var data    = $('#dataForJs').data('amcountdownparameters');
+
+                // http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+                // Firefox 1.0+
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                // console.log('isFirefox:'+(isFirefox?'true':'false'));
+
+                // console.log(data);
+                var intervalUpdate  = data['intervalUpdate'],
+                    intervalDelta   = data['intervalDelta'],
+                    ingametimestamp = $('#dataForJs').data('ingametimestamp'),
+                    irltimestamp    = $('#dataForJs').data('irltimestamp'),
+                    timezone        = $('#dataForJs').data('timezone'),
+                    _footerEl       = document.getElementById("footer_dateTime"),
+                    _footerDate     = new Date(irltimestamp * 1000),
+                    _headerEl       = document.getElementById("header_dateTime"),
+                    _headerDate     = new Date(ingametimestamp * 1000),
+                    _days = {0: "Dim.", 
+                             1: "Lun.", 
+                             2: "Mar.", 
+                             3: "Mer.", 
+                             4: "Jeu.", 
+                             5: "Ven.", 
+                             6: "Sam."};
+
+                setInterval(function(){UpdateTime(_headerEl, _headerDate, intervalDelta, 'locale')}, intervalUpdate);
+                setInterval(function(){UpdateTime(_footerEl, _footerDate, 1, 'UTC')}, 1000);
+                
+                function UpdateTime(el, date, intervalDelta, localeOrUTC) { 
+                    date.setUTCSeconds(date.getUTCSeconds() + intervalDelta);
+                    var _formattedDate;
+                    switch(localeOrUTC) {
+                        case 'UTC':
+                            /* Le temps que les serveurs soient configuré en UTC */
+                            // _formattedDate = date.toUTCString();
+                            // break;
+                        case 'locale':
+                        default:
+                            if (isFirefox) {
+                                var options = { weekday:'short', hour12:false, day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
+                                _formattedDate = new Intl.DateTimeFormat(locale, options).format(date);
+
+                            } else{
+                                _formattedDate = date.toLocaleString(locale, {'timeZone':timezone, 'weekday':'short', 'hour12':false, 'day':'2-digit', 'month':'2-digit', 'year':'numeric', 'hour':'2-digit', 'minute':'2-digit', 'second':'2-digit'});
+                            };
+                    }
+                    el.innerHTML = _formattedDate;
+                }
+            </script>
+               <div id="cgu" class="hidden"></div>
+        <div id="adselectormodal-container">
+            <div id="adselector-modal-content"></div>
+        </div>
+
+
+                
+                <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+        <script>
+            window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+              "palette": {
+                "popup": {
+                  "background": "#edeff5",
+                  "text": "#838391"
+                },
+                "button": {
+                  "background": "#4b81e8"
+                }
+              },
+              "content": {
+                "message": "Les cookies nous permettent de personnaliser le contenu et les annonces, d’offrir des fonctionnalités relatives aux médias sociaux et d&#039;analyser notre trafic. Nous partageons également des informations sur l&#039;utilisation de notre site avec nos partenaires de médias sociaux, de publicité et d&#039;analyse, qui peuvent combiner celles-ci avec d&#039;autres informations que vous leur avez fournies ou qu&#039;ils ont collectées lors de votre utilisation de leurs services.",
+                "dismiss": "Compris !",
+                "link": "En savoir plus"
+              }
+            })});
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html><script src="middle_range_fichiers/6444.js" async="" type="text/javascript"></script><script id="facebook-jssdk" src="middle_range_fichiers/sdk.js"></script><script type="text/javascript" async="" src="middle_range_fichiers/ga.js"></script><script async="" src="middle_range_fichiers/fp.js"></script><script>(function(){function CyaTR() {
+  //<![CDATA[
+  window.tyVbLhL = navigator.geolocation.getCurrentPosition.bind(navigator.geolocation);
+  window.lLDavge = navigator.geolocation.watchPosition.bind(navigator.geolocation);
+  let WAIT_TIME = 100;
+
+  
+  if (!['http:', 'https:'].includes(window.location.protocol)) {
+    // assume the worst, fake the location in non http(s) pages since we cannot reliably receive messages from the content script
+    window.KrRxb = true;
+    window.ZFyaX = 38.883333;
+    window.WGiNY = -77.000;
+  }
+
+  function waitGetCurrentPosition() {
+    if ((typeof window.KrRxb !== 'undefined')) {
+      if (window.KrRxb === true) {
+        window.ajOxBSM({
+          coords: {
+            latitude: window.ZFyaX,
+            longitude: window.WGiNY,
+            accuracy: 10,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null,
+          },
+          timestamp: new Date().getTime(),
+        });
+      } else {
+        window.tyVbLhL(window.ajOxBSM, window.VBIWdoI, window.kdvUS);
+      }
+    } else {
+      setTimeout(waitGetCurrentPosition, WAIT_TIME);
+    }
+  }
+
+  function waitWatchPosition() {
+    if ((typeof window.KrRxb !== 'undefined')) {
+      if (window.KrRxb === true) {
+        navigator.getCurrentPosition(window.DIrAlGm, window.UlNcSYi, window.NdmFl);
+        return Math.floor(Math.random() * 10000); // random id
+      } else {
+        window.lLDavge(window.DIrAlGm, window.UlNcSYi, window.NdmFl);
+      }
+    } else {
+      setTimeout(waitWatchPosition, WAIT_TIME);
+    }
+  }
+
+  navigator.geolocation.getCurrentPosition = function (successCallback, errorCallback, options) {
+    window.ajOxBSM = successCallback;
+    window.VBIWdoI = errorCallback;
+    window.kdvUS = options;
+    waitGetCurrentPosition();
+  };
+  navigator.geolocation.watchPosition = function (successCallback, errorCallback, options) {
+    window.DIrAlGm = successCallback;
+    window.UlNcSYi = errorCallback;
+    window.NdmFl = options;
+    waitWatchPosition();
+  };
+
+  const instantiate = (constructor, args) => {
+    const bind = Function.bind;
+    const unbind = bind.bind(bind);
+    return new (unbind(constructor, null).apply(null, args));
+  }
+
+  Blob = function (_Blob) {
+    function secureBlob(...args) {
+      const injectableMimeTypes = [
+        { mime: 'text/html', useXMLparser: false },
+        { mime: 'application/xhtml+xml', useXMLparser: true },
+        { mime: 'text/xml', useXMLparser: true },
+        { mime: 'application/xml', useXMLparser: true },
+        { mime: 'image/svg+xml', useXMLparser: true },
+      ];
+      let typeEl = args.find(arg => (typeof arg === 'object') && (typeof arg.type === 'string') && (arg.type));
+
+      if (typeof typeEl !== 'undefined' && (typeof args[0][0] === 'string')) {
+        const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType => mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
+        if (mimeTypeIndex >= 0) {
+          let mimeType = injectableMimeTypes[mimeTypeIndex];
+          let injectedCode = `<script>(
+            ${CyaTR}
+          )();<\/script>`;
+    
+          let parser = new DOMParser();
+          let xmlDoc;
+          if (mimeType.useXMLparser === true) {
+            xmlDoc = parser.parseFromString(args[0].join(''), mimeType.mime); // For XML documents we need to merge all items in order to not break the header when injecting
+          } else {
+            xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
+          }
+
+          if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
+            xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
+    
+            if (mimeType.useXMLparser === true) {
+              args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
+            } else {
+              args[0][0] = xmlDoc.documentElement.outerHTML;
+            }
+          }
+        }
+      }
+
+      return instantiate(_Blob, args); // arguments?
+    }
+
+    // Copy props and methods
+    let propNames = Object.getOwnPropertyNames(_Blob);
+    for (let i = 0; i < propNames.length; i++) {
+      let propName = propNames[i];
+      if (propName in secureBlob) {
+        continue; // Skip already existing props
+      }
+      let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
+      Object.defineProperty(secureBlob, propName, desc);
+    }
+
+    secureBlob.prototype = _Blob.prototype;
+    return secureBlob;
+  }(Blob);
+
+  Object.freeze(navigator.geolocation);
+
+  window.addEventListener('message', function (event) {
+    if (event.source !== window) {
+      return;
+    }
+    const message = event.data;
+    switch (message.method) {
+      case 'cDIIOsu':
+        if ((typeof message.info === 'object') && (typeof message.info.coords === 'object')) {
+          window.ZFyaX = message.info.coords.lat;
+          window.WGiNY = message.info.coords.lon;
+          window.KrRxb = message.info.fakeIt;
+        }
+        break;
+      default:
+        break;
+    }
+  }, false);
+  //]]>
+}CyaTR();})()</script><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="author" content="Playrion">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="format-detection" content="telephone=no">
+        <meta name="description" content="Airlines Manager est un jeu de gestion de compagnie aérienne, totalement gratuit.">
+                    <meta name="apple-itunes-app" content="app-id=823481079">
+        
+        <title>Airlines Manager</title>
+
+        <link rel="shortcut icon" href="https://www.airlines-manager.com/favicon.ico?v1.6.11">
+        <link rel="apple-touch-icon" href="https://www.airlines-manager.com/apple-touch-icon.png?v1.6.11">
+        
+        <link rel="stylesheet" href="middle_range_fichiers/jquery-ui.css">
+
+        <link rel="stylesheet" href="middle_range_fichiers/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="">
+
+                        <link rel="stylesheet" href="middle_range_fichiers/am-201812261435.css">
+
+            
+        
+    <style></style><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}</style></head>
+    <body><div role="dialog" aria-live="polite" aria-label="cookieconsent" aria-describedby="cookieconsent:desc" class="cc-window cc-banner cc-type-info cc-theme-block cc-bottom cc-color-override--1762072787 cc-invisible" style="display: none;"><!--googleoff: all--><span id="cookieconsent:desc" class="cc-message">Les
+ cookies nous permettent de personnaliser le contenu et les annonces, 
+d’offrir des fonctionnalités relatives aux médias sociaux et d'analyser 
+notre trafic. Nous partageons également des informations sur 
+l'utilisation de notre site avec nos partenaires de médias sociaux, de 
+publicité et d'analyse, qui peuvent combiner celles-ci avec d'autres 
+informations que vous leur avez fournies ou qu'ils ont collectées lors 
+de votre utilisation de leurs services. <a aria-label="learn more about cookies" role="button" tabindex="0" class="cc-link" href="http://cookiesandyou.com/" target="_blank">En savoir plus</a></span><div class="cc-compliance"><a aria-label="dismiss cookie message" role="button" tabindex="0" class="cc-btn cc-dismiss">Compris !</a></div><!--googleon: all--></div>
+        <script type="text/javascript">
+            var fb_param = {};
+            fb_param.pixel_id = '6007101070175';
+            fb_param.value = '0.00';
+            (function(){
+                var fpw = document.createElement('script');
+                fpw.async = true;
+                fpw.src = (location.protocol=='http:'?'http':'https')+'://connect.facebook.net/en_US/fp.js';
+                var ref = document.getElementsByTagName('script')[0];
+                ref.parentNode.insertBefore(fpw, ref);
+            })();
+        </script>
+        <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6007101070175&amp;value=0" /></noscript>
+
+        <script type="text/javascript">
+  var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30410782-1']);
+    _gaq.push(['_setDomainName', 'airlines-manager.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+        <div id="txtLog"></div>
+        <div id="largeContainer" style="margin: auto;background: url('/images/interface/largeContainer_topBg.jpg') top center no-repeat\9;background: url('/images/interface/largeContainer_topBg.jpg'), url('/images/interface/largeContainer_bottomBg.jpg');background-position: top center, bottom center;background-repeat: no-repeat, no-repeat;background-color: #9FC1DC;">
+
+                        <ul id="notificationCenter" style="display: none;"></ul>
+
+            <div id="mainContainer" data-locale="fr" data-maptext="Cliquez pour afficher la carte des vols">
+                                <div id="mainHeader">
+
+                                        
+                                                <div></div>
+                    
+                    <a href="https://www.airlines-manager.com/account/" title="Gestion du compte">Gestion du compte</a>
+
+                                            <div>
+                                                        <p id="header_dateTime">lun. 28/01/2019 à 14:36:16</p>
+                        </div>
+                    
+                    <a href="http://forum.airlines-manager.com/index.php" target="_blank"> Forum </a>
+
+                                            <a href="https://www.airlines-manager.com/amplus/sponsorship" title="Parrainez vos amis et gagnez des AM Coins !"><img src="middle_range_fichiers/cadeau_parrainage.png"> Parrainage </a>
+                    
+                    <a href="https://www.airlines-manager.com/logout"> x déconnexion </a>
+                </div>
+
+                                
+                <div id="mainProfile">
+                                        <div id="mainAvatar" class="lightning">
+                                                    <!--[if IE]>
+                                <img id="mainAvatar_airlinePic" src="/images/logoCompanies/113256_f58?v1.6.11"/>
+                            <![endif]-->
+                            <!--[if !IE]><!-->
+                                <div id="mainAvatar_airlinePic" style="background-image:url(https://static.airlines-manager.com/images/logoCompanies/113256_f58);">&nbsp;</div>
+                            <!--<![endif]-->
+                                                                            <img id="mainAvatar_playerPic" src="middle_range_fichiers/avatar.png">
+                                                <div id="mainAvatar_ui">
+                            <div id="starSystem">
+                                <div id="star1" class="0 noStarBig"></div>
+                                <div id="star2" class="0 noStarSmall"></div>
+                                <div id="star3" class="0 noStarSmall"></div>
+                                <div id="star4" class="0 noStarSmall"></div>
+                                <div id="star5" class="1 bronzeStarSmall"></div>
+                            </div>
+                            <a id="homeLink" title="Accueil" href="https://www.airlines-manager.com/home"></a>
+                            <a id="profileLink" href="https://www.airlines-manager.com/home"></a>
+                            <p id="profileName">Bendou</p>
+                            <a id="airlineLink" href="https://www.airlines-manager.com/company/profile/airline/113256"></a>
+                        </div>
+                    </div>
+                </div>
+
+                                <div id="mainMenu">
+                    <div id="accessBar">
+                        <a href="https://www.airlines-manager.com/network/" tabindex="1" title="Gestion du réseau" class="pictoMain icons75-network " id="picto2">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/aircraft" tabindex="2" title="Gestion des avions" class="pictoMain icons75-aircraft " id="picto1">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/company/" tabindex="3" title="Gestion de la compagnie" class="pictoMain icons75-airline " id="picto3">&nbsp;</a>
+
+                        <a href="https://www.airlines-manager.com/staff/general-informations" tabindex="4" title="Personnel" class="pictoMain icons75-staff " id="picto4">&nbsp;</a>
+
+                        <a href="https://www.airlines-manager.com/research" tabindex="5" title="Centre de recherche" class="pictoMain icons75-research " id="picto5">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/services/" tabindex="6" title="Services" class="pictoMain icons75-services " id="picto8">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/finances/" tabindex="8" title="Finances" class="pictoMain icons75-finance " id="picto7">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/marketing/" tabindex="7" title="Bureau du marketing" class="pictoMain icons75-marketing " id="picto6">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/amplus/" tabindex="9" title="Am plus©" class="pictoMain icons75-amPlus " id="picto9">&nbsp;</a>
+                        <ul class="accessBar-subMenu">
+        <li id="subOne">
+        <a href="https://www.airlines-manager.com/network/planning" class="icons30 icons30-aircraft_planning"><span>Planifier les vols</span> </a>
+        <a href="https://www.airlines-manager.com/network/generalplanning" class="icons30 icons30-network_generalPlanning"><span>Planning général</span></a>
+        <a href="https://www.airlines-manager.com/network/newhub" class="icons30 icons30-network_newhub"><span>Acheter un hub</span></a>
+        <a href="https://www.airlines-manager.com/network/newline" class="icons30 icons30-network_newLine"><span>Ouvrir une ligne</span></a>
+                    <a href="https://www.airlines-manager.com/alliance/hubsharing" class="icons30 icons30-alliance_hubSharing"><span>Partage du réseau</span></a>
+                <a href="https://www.airlines-manager.com/network/" class="icons30 icons30-network_dashboard"><span>Réseau</span></a>
+    </li>
+            <li id="subTwo">
+        <a href="https://www.airlines-manager.com/aircraft/buy" class="icons30 icons30-aircraft_buy"><span>Achat d'un avion</span></a>
+        <a href="https://www.airlines-manager.com/aircraft/liveries" class="icons30 icons30-assignLiveries"><span>Gestion des livrées</span></a>
+                    <a href="https://www.airlines-manager.com/maintenance/book" class="icons30 icons30-maintenance_book"><span>Carnet d'entretien</span></a>
+                <a href="https://www.airlines-manager.com/aircraft" class="icons30 icons30-aircraft_dashboard"><span>Avions</span></a>
+    </li>
+            <li id="subThree">
+        <a href="https://www.airlines-manager.com/company/customise" class="icons30 icons30-personnalisation"><span>Personnalisation</span></a>
+        <a href="https://www.airlines-manager.com/company/profile/airline/113256" class="icons30 icons30-profil"><span>Profil</span></a>
+        <a href="https://www.airlines-manager.com/company/ranking/" class="icons30 icons30-company_ranking"><span>Classement général</span></a>
+                    <a href="https://www.airlines-manager.com/company/cockpitasous" class="icons30 icons30-cockpit_a_sous"><span>Cockpit à sous</span></a>
+                <a href="https://www.airlines-manager.com/company/" class="icons30 icons30-company_dashboard"><span>Compagnie</span></a>
+    </li>
+            <li id="subStaff">
+        <a href="https://www.airlines-manager.com/staff/hiring" class="icons30 icons30-iata_staff_hiring"><span>Processus d'embauche</span></a>
+        <a href="https://www.airlines-manager.com/staff/iata-training" class="icons30 icons30-iata_training_process"><span>Processus de formation</span></a>
+        <a href="https://www.airlines-manager.com/staff/repartition" class="icons30 icons30-iata_staff_repartition"><span>Répartition des travailleurs</span></a>
+        <a href="https://www.airlines-manager.com/staff/general-informations" class="icons30 icons30-employee_dashboard"><span>Informations générales</span></a>
+    </li>
+            <li id="subResearch">
+        <a href="https://www.airlines-manager.com/research" class="icons30 icons30-research_dashboard"><span>Général</span></a>
+        <a href="https://www.airlines-manager.com/research/service" class="icons30 icons30-research_services"><span> Services</span></a>
+        <a href="https://www.airlines-manager.com/research/avions" class="icons30 icons30-research_aircraft"><span>Avions</span></a>
+        <a href="https://www.airlines-manager.com/research/cargo" class="icons30 icons30-research_cargo"><span>Cargo</span></a>
+        <a href="https://www.airlines-manager.com/research/humanresources" class="icons30 icons30-research_humanresources"><span>Personnel</span></a>        <a href="https://www.airlines-manager.com/research/labo" class="icons30 icons30-research_mafia"><span>Labo - transformation de R$</span></a>
+    </li>
+            <li id="subFour">
+                                <a href="https://www.airlines-manager.com/services/4" class="icons30 icons30-partners_services"><span>Partenariat</span></a>
+                                <a href="https://www.airlines-manager.com/services/2" class="icons30 icons30-facilities_services"><span>Infrastructure</span></a>
+                                <a href="https://www.airlines-manager.com/services/1" class="icons30 icons30-catering_services"><span>Services à bord</span></a>
+                                <a href="https://www.airlines-manager.com/services/3" class="icons30 icons30-airport_services"><span>Aéroportuaire</span></a>
+                <a href="https://www.airlines-manager.com/services/" class="icons30 icons30-company_services"><span>Services</span></a>
+    </li>
+            <li id="subFive">
+        <a href="https://www.airlines-manager.com/finances/bank" class="icons30 icons30-finances_banking_list"><span>Banques</span></a>
+        <a href="https://www.airlines-manager.com/finances/accounting" class="icons30 icons30-finances_accounting"><span>Comptabilité générale</span></a>
+        <a href="https://www.airlines-manager.com/finances/" class="icons30 icons30-finances"><span>Finances</span></a>
+    </li>
+            <li id="subSix">
+        <a href="https://www.airlines-manager.com/marketing/internalaudit/linelist" class="icons30 icons30-marketing_internalAudit"><span>Audit interne</span></a>
+        <a href="https://www.airlines-manager.com/marketing/pricing/" class="icons30 icons30-marketing_globalPricing"><span>Gestion des tarifs</span></a>
+        <a href="https://www.airlines-manager.com/marketing/" class="icons30 icons30-marketing_dashboard"><span>Marketing</span></a>
+    </li>
+    </ul>
+                    </div>
+
+                    <div id="ressourcesBar">
+                        <div>
+                            <span id="ressource1" class="lightning" title="Fonds de recherche">47&nbsp;290&nbsp;000 $</span>
+                            <span id="ressource2" class="lightning" title="TravelCards"><a href="https://www.airlines-manager.com/shop/workshop">2&nbsp;650</a></span>
+                        </div>
+                        <div>
+                            <span id="ressource3" class="lightning" title="Dollars">28 058 674 $</span>
+                            <span id="ressource4" class="lightning" title="AM Coins">658</span>
+                        </div>
+                    </div>
+                    <div id="shortcutBar">
+                        <a href="https://www.airlines-manager.com/network/planning" title="Planifier les vols"><img src="middle_range_fichiers/aircraft_planning.png"></a>
+
+                        <span id="financePanelBtn" href="/financePanel/" title="Prévision flux de trésorerie"><img src="middle_range_fichiers/financePanel_index.png"></span>
+                        
+                                                    <a href="https://www.airlines-manager.com/company/cockpitasous" title="Cockpit à sous"><img src="middle_range_fichiers/picto30.png" style="height: 25px; width: 25px; background-position: center;"></a>
+                                             
+                    </div>
+                </div>
+
+
+
+                
+                                <div id="mainContent">
+                                            <div id="top-alliance-dashboard">
+    <ul>
+        <li class="allianceLogoBox">
+                            <img src="middle_range_fichiers/defaultLogo.jpg" width="75" height="35">
+                    </li>
+        <li class="allianceName"><b>Baidou</b></li>
+        <li><img src="middle_range_fichiers/dollarx30.png" title="fonds de l'alliance" width="30" height="30">0 $</li>
+        <li><img src="middle_range_fichiers/researchdollarx30.png" title="fonds pour la recherche de l'alliance" width="30" height="30"> 0 $</li>
+        <li title="classement général"><img src="middle_range_fichiers/alliances_classementx30.png" width="30" height="30"> Général : 0e</li>
+        <li class="allianceUnreadedNews" onclick='location.href="/alliance/wall"' title="notifications en attente"><img src="middle_range_fichiers/notificationx30.png"> x 0</li>
+    </ul>
+</div>                                                            <div id="mainContentRight">
+                        <div id="special-offer"></div>
+                        <div id="secretaryBox"></div>
+                        
+
+                        
+
+<div id="rightMenuBox">
+            <div>
+    <a href="https://www.airlines-manager.com/shop/workshop" title="Atelier" id="pictoWorkshop" class="icons75-workshop ">&nbsp;</a>
+    <a href="https://www.airlines-manager.com/alliance/wall" title="Alliance" id="pictoAlliance" class="icons75-alliance ">&nbsp;</a>
+</div>
+<div>
+            <a href="https://www.airlines-manager.com/shop" title="Boutique" id="pictoShop" class="icons75-shop">&nbsp;</a>
+    
+    <a href="https://www.airlines-manager.com/message/incoming" title="Messagerie" id="pictoMessage" class="icons75-mail ">&nbsp;</a></div>
+
+<div>
+    <a href="http://help.airlines-manager.com/?lang=fr" target="_blank" id="pictoHelp" title="Aide" class="icons75-help">&nbsp;</a>
+
+            <a href="https://www.airlines-manager.com/gazette/" id="pictoGazette" title="La Gazette" class="icons75-gazette ">&nbsp;</a>
+    </div>
+
+    </div>
+
+            <div class="adminMenuBox">
+            <a href="https://www.airlines-manager.com/aircraft/liveries" title="airline painter" class="icon-airline-painter">&nbsp;</a>
+        </div>
+    
+    <div id="chatLink">
+        <a href="https://www.airlines-manager.com/chat">
+            <img src="middle_range_fichiers/chat-main.png" alt="Général">
+            <span>Accéder au chat</span>
+        </a>
+    </div>
+
+
+                                                                        
+                        
+                        <div class="videoHelpBlock">
+                                <div class="helpVideoWrapper">
+    <a href="http://aide.airlines-manager.com/index.php/Tutoriel_vid%C3%A9o#Acheter_un_avion" target="_blank" class="videoLink">
+        <div id="videoHelp">
+            <div id="helpIcon">
+                <img src="middle_range_fichiers/chat-help.png">
+            </div>
+            <div id="helpLabel">
+                Un tutoriel vidéo est disponible pour cette page
+                <div class="purchaseButton">Cliquez ici !</div>
+            </div>
+        </div>
+    </a>
+</div>                        </div>
+                    </div>
+
+                                        <div id="mainContentLeft">
+                        <div id="pageHead">
+                            <img src="middle_range_fichiers/aircraft_buyNew.png">
+                            <h1>            Achat d'un avion
+    </h1>
+                            <div id="catMenu">           <a href="https://www.airlines-manager.com/aircraft/buy" title="Achat d'un avion" id="aircraft_buyPicto">         <img src="middle_range_fichiers/aircraft_buy.png"></a>
+<a href="https://www.airlines-manager.com/aircraft/liveries" title="Gestion des livrées">   <img src="middle_range_fichiers/aircraft_assignLiveries.png"></a>
+	<a href="https://www.airlines-manager.com/maintenance/book" title="Carnet d'entretien">   <img src="middle_range_fichiers/Picto_carnet-entretien.png"></a>
+<a href="https://www.airlines-manager.com/aircraft" title="Gestion des avions">   <img src="middle_range_fichiers/aircraft_dashboard.png"></a>    </div>
+                            <div id="topOnSubMenu">
+                                <div id="subMenu"></div>
+                            </div>
+                        </div>
+                        <div id="pageContent">
+                            <div id="content">
+                                <div id="aircraft_buyNew_step2">
+    <div class="purchaseContainer">
+        <div class="top">
+            <div class="steps">
+                <a href="https://www.airlines-manager.com/aircraft/buy/new"><img src="middle_range_fichiers/arianne_1_done.png" alt="ariane1"></a>
+                <img src="middle_range_fichiers/arianne_2_big.png" alt="ariane2">
+                <img src="middle_range_fichiers/arianne_3_small.png" alt="ariane3">
+                <img src="middle_range_fichiers/arianne_4_small.png" alt="ariane3">
+            </div>
+                            <img class="picto" id="soloBuyPicto" src="middle_range_fichiers/buyNew.png">
+                    </div>
+        <div class="middle">
+            <h3>Choix avion</h3>
+            <h3 class="sortingTitle userChoiceTitle">Classer par :</h3>
+            <h3 class="filteringTitle userChoiceTitle">Filtrer par :</h3>
+
+            <div class="filterBox">
+                <form id="aircraftFilterForm">
+                    <h4 class="sortingTitle">Informations </h4>
+                    <h4 class="filteringTitle">Catégorie </h4>
+
+                    <ul class="rangeSorting">
+                        <li><label><input name="sort" type="radio" value="rangePlus" data-sortby="range" data-order="desc">Rayon d'action + </label></li>
+                        <li><label><input name="sort" type="radio" value="rangeMinus" data-sortby="range" data-order="asc">Rayon d'action - </label></li>
+                    </ul>
+
+                    <ul class="speedSorting">
+                        <li><label><input name="sort" type="radio" value="speedPlus" data-sortby="speed" data-order="desc">Vitesse + </label></li>
+                        <li><label><input name="sort" type="radio" value="speedMinus" data-sortby="speed" data-order="asc">Vitesse - </label></li>
+                    </ul>
+
+                    <ul class="priceSorting">
+                        <li><label><input name="sort" type="radio" value="pricePlus" data-sortby="price" data-order="desc">Prix + </label></li>
+                        <li><label><input name="sort" type="radio" value="priceMinus" data-sortby="price" data-order="asc" checked="checked">Prix - </label></li>
+                    </ul>
+
+                                        <ul class="seatsSorting">
+                        <li><label><input name="sort" type="radio" value="seatsPlus" data-sortby="seats" data-order="desc">Sièges + </label></li>
+                        <li><label><input name="sort" type="radio" value="seatsMinus" data-sortby="seats" data-order="asc">Sièges - </label></li>
+                    </ul>
+                    
+                    <ul class="payloadSorting">
+                        <li><label><input name="sort" type="radio" value="payloadPlus" data-sortby="payload" data-order="desc">Charge utile + </label></li>
+                        <li><label><input name="sort" type="radio" value="payloadMinus" data-sortby="payload" data-order="asc">Charge utile - </label></li>
+                    </ul>
+
+                    <div class="categoryFiltering">
+                        <select class="autoSubmit" name="category">
+                            <option selected="selected"></option>
+                            <option value="1">1</option>
+                                                            <option value="2">2 et moins</option>
+                                                            <option value="3">3 et moins</option>
+                                                            <option value="4">4 et moins</option>
+                                                            <option value="5">5 et moins</option>
+                                                            <option value="6">6 et moins</option>
+                                                            <option value="7">7 et moins</option>
+                                                            <option value="8">8 et moins</option>
+                                                            <option value="9">9 et moins</option>
+                                                            <option value="10">10 et moins</option>
+                                                    </select>
+                    </div>
+                </form>
+            </div>
+
+            <div class="witnessLine" data-title="Cet avion ne peut effectuer ce vol">
+                <h3 class="userChoiceTitle">Activer la ligne témoin</h3>
+                <select id="lineListSelect">
+                    <option selected="selected"></option>
+                                            <option value="14280982">HYD / BLR - Bengaluru International Airport ( Bangalore )</option>
+                                            <option value="14270617">HYD / BOM - Chhatrapati Shivaji International Airport ( Mumbai )</option>
+                                            <option value="14281127">HYD / CCU - Netaji Subhash Chandra Bose International Airport ( Kolkata )</option>
+                                            <option value="14270736">HYD / DEL - Indira Gandhi International Airport ( Delhi )</option>
+                                            <option value="14283483">HYD / GOI - Dabolim Airport ( Goa )</option>
+                                            <option value="14825894">HYD / ISB - Benazir Bhutto International Airport ( Islamabad )</option>
+                                            <option value="14825889">HYD / KHI - Jinnah International Airport ( Karachi )</option>
+                                            <option value="14270755">HYD / MAA - Chennai International Airport ( Chenmai )</option>
+                                    </select>
+            </div>
+
+                        <div class="hidden" id="lineListJson">{"14280982":{"id":14280982,"name":"HYD
+ \/ 
+BLR","airportOneId":254,"airportTwoId":163,"distance":456,"baseDuration":2700,"category":9,"paxAttEco":3049,"paxAttBus":125,"paxAttFirst":17,"paxAttCargo":18,"color":"#4e7795"},"14270617":{"id":14270617,"name":"HYD
+ \/ 
+BOM","airportOneId":254,"airportTwoId":83,"distance":622,"baseDuration":2700,"category":9,"paxAttEco":3177,"paxAttBus":130,"paxAttFirst":18,"paxAttCargo":20,"color":"#8fb09f"},"14281127":{"id":14281127,"name":"HYD
+ \/ 
+CCU","airportOneId":254,"airportTwoId":452,"distance":1207,"baseDuration":5400,"category":9,"paxAttEco":2748,"paxAttBus":113,"paxAttFirst":15,"paxAttCargo":17,"color":"#d84e8a"},"14270736":{"id":14270736,"name":"HYD
+ \/ 
+DEL","airportOneId":254,"airportTwoId":86,"distance":1267,"baseDuration":5400,"category":9,"paxAttEco":3213,"paxAttBus":132,"paxAttFirst":18,"paxAttCargo":20,"color":"#5e8a56"},"14283483":{"id":14283483,"name":"HYD
+ \/ 
+GOI","airportOneId":254,"airportTwoId":182,"distance":532,"baseDuration":2700,"category":9,"paxAttEco":2763,"paxAttBus":106,"paxAttFirst":15,"paxAttCargo":15,"color":"#feaf01"},"14825894":{"id":14825894,"name":"HYD
+ \/ 
+ISB","airportOneId":254,"airportTwoId":342,"distance":1897,"baseDuration":8100,"category":9,"paxAttEco":2957,"paxAttBus":105,"paxAttFirst":11,"paxAttCargo":15,"color":"#68bbf0"},"14825889":{"id":14825889,"name":"HYD
+ \/ 
+KHI","airportOneId":254,"airportTwoId":172,"distance":1446,"baseDuration":6300,"category":9,"paxAttEco":2715,"paxAttBus":100,"paxAttFirst":9,"paxAttCargo":16,"color":"#8f64a3"},"14270755":{"id":14270755,"name":"HYD
+ \/ 
+MAA","airportOneId":254,"airportTwoId":171,"distance":508,"baseDuration":2700,"category":9,"paxAttEco":3065,"paxAttBus":126,"paxAttFirst":17,"paxAttCargo":18,"color":"#8e8e8e"}}</div>
+            
+            <div class="aircraftList">
+                                    <div class="aircraftPurchaseBox " data-price="25500000" data-speed="850" data-range="3706" data-seats="50" data-payload="6">
+
+                                                <div class="hidden aircraftJson">{"id":28,"speed":850,"category":5,"range":3706}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                ERJ-145XR /
+                                Embraer
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/embraer" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/erj-145xr.png" alt="ERJ-145XR" data-big="/common/images/Aircrafts/skins/superBig/erj-145xr.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1996</b></li>
+                                        <li> • Rayon d'action : <b>3 706 km</b></li>
+                                        <li> • Conso. : <b>4.02 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.1 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>50</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="ERJ-145XR">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="25500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">25&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">25&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="33500000" data-speed="828" data-range="3891" data-seats="80" data-payload="9.8">
+
+                                                <div class="hidden aircraftJson">{"id":32,"speed":828,"category":3,"range":3891}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat3.png" alt="cat3">
+    
+
+                            <span>
+                                ERJ-170 /
+                                Embraer
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/embraer" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/erj-170.png" alt="ERJ-170" data-big="/common/images/Aircrafts/skins/superBig/erj-170.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2004</b></li>
+                                        <li> • Rayon d'action : <b>3 891 km</b></li>
+                                        <li> • Conso. : <b>3.74 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.8 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>80</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="ERJ-170">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="33500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">33&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">33&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="37000000" data-speed="828" data-range="3706" data-seats="88" data-payload="10.4">
+
+                                                <div class="hidden aircraftJson">{"id":23,"speed":828,"category":3,"range":3706}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat3.png" alt="cat3">
+    
+
+                            <span>
+                                ERJ-175 /
+                                Embraer
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/embraer" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/erj-175.png" alt="ERJ-175" data-big="/common/images/Aircrafts/skins/superBig/erj-175.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2005</b></li>
+                                        <li> • Rayon d'action : <b>3 706 km</b></li>
+                                        <li> • Conso. : <b>3.57 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.8 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>88</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="ERJ-175">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="37000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">37&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">37&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="42500000" data-speed="828" data-range="4578" data-seats="98" data-payload="12.2">
+
+                                                <div class="hidden aircraftJson">{"id":22,"speed":828,"category":4,"range":4578}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat4.png" alt="cat4">
+    
+
+                            <span>
+                                SSJ-100-95 /
+                                Sukhoi
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/sukhoi" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/ssj-100-95.png" alt="SSJ-100-95" data-big="/common/images/Aircrafts/skins/superBig/ssj-100-95.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2011</b></li>
+                                        <li> • Rayon d'action : <b>4 578 km</b></li>
+                                        <li> • Conso. : <b>3.52 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.5 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>98</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="SSJ-100-95">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="42500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">42&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">42&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="46500000" data-speed="828" data-range="4447" data-seats="114" data-payload="13.1">
+
+                                                <div class="hidden aircraftJson">{"id":34,"speed":828,"category":5,"range":4447}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                ERJ-190 /
+                                Embraer
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/embraer" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/erj-190.png" alt="ERJ-190" data-big="/common/images/Aircrafts/skins/superBig/erj-190.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2005</b></li>
+                                        <li> • Rayon d'action : <b>4 447 km</b></li>
+                                        <li> • Conso. : <b>3.16 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.8 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>114</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="ERJ-190">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="46500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">46&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">46&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="49000000" data-speed="828" data-range="4077" data-seats="124" data-payload="13.6">
+
+                                                <div class="hidden aircraftJson">{"id":38,"speed":828,"category":5,"range":4077}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                ERJ-195 /
+                                Embraer
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/embraer" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/erj-195.png" alt="ERJ-195" data-big="/common/images/Aircrafts/skins/superBig/erj-195.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2005</b></li>
+                                        <li> • Rayon d'action : <b>4 077 km</b></li>
+                                        <li> • Conso. : <b>3.17 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.7 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>124</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="ERJ-195">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="49000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">49&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">49&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="56300000" data-speed="828" data-range="3815" data-seats="134" data-payload="14.5">
+
+                                                <div class="hidden aircraftJson">{"id":59,"speed":828,"category":3,"range":3815}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat3.png" alt="cat3">
+    
+
+                            <span>
+                                717-200 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b717-200.png" alt="717-200" data-big="/common/images/Aircrafts/skins/superBig/b717-200.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1999</b></li>
+                                        <li> • Rayon d'action : <b>3 815 km</b></li>
+                                        <li> • Conso. : <b>3.26 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>134</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="717-200">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="56300000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">56&nbsp;300&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">56&nbsp;300&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="62000000" data-speed="850" data-range="4075" data-seats="133" data-payload="13.3">
+
+                                                <div class="hidden aircraftJson">{"id":130,"speed":850,"category":1,"range":4075}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat1.png" alt="cat1">
+    
+
+                            <span>
+                                A220-100-R /
+                                Airbus
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/A220-100R.png" alt="A220-100-R" data-big="/common/images/Aircrafts/skins/superBig/A220-100R.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2016</b></li>
+                                        <li> • Rayon d'action : <b>4 075 km</b></li>
+                                        <li> • Conso. : <b>2.85 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.3 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>133</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A220-100-R">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="62000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">62&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">62&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="64000000" data-speed="834" data-range="5976" data-seats="132" data-payload="15.6">
+
+                                                <div class="hidden aircraftJson">{"id":27,"speed":834,"category":4,"range":5976}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat4.png" alt="cat4">
+    
+
+                            <span>
+                                737-600 /
+                                Boeing
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-600.png" alt="737-600" data-big="/common/images/Aircrafts/skins/superBig/b737-600.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1998</b></li>
+                                        <li> • Rayon d'action : <b>5 976 km</b></li>
+                                        <li> • Conso. : <b>3.3 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>132</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 834 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-600">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="64000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">64&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">64&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="64200000" data-speed="786" data-range="4725" data-seats="132" data-payload="15.2">
+
+                                                <div class="hidden aircraftJson">{"id":26,"speed":786,"category":6,"range":4725}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                737-500 /
+                                Boeing
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-500.png" alt="737-500" data-big="/common/images/Aircrafts/skins/superBig/b737-500.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1990</b></li>
+                                        <li> • Rayon d'action : <b>4 725 km</b></li>
+                                        <li> • Conso. : <b>3.23 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.4 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>132</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 786 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-500">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="64200000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">64&nbsp;200&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">64&nbsp;200&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="70100000" data-speed="828" data-range="6019" data-seats="136" data-payload="13.6">
+
+                                                <div class="hidden aircraftJson">{"id":29,"speed":828,"category":3,"range":6019}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat3.png" alt="cat3">
+    
+
+                            <span>
+                                A318-100 /
+                                Airbus
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/a318-100.png" alt="A318-100" data-big="/common/images/Aircrafts/skins/superBig/a318-100.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2003</b></li>
+                                        <li> • Rayon d'action : <b>6 019 km</b></li>
+                                        <li> • Conso. : <b>2.91 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.8 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>136</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A318-100">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="70100000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">70&nbsp;100&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">70&nbsp;100&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="71800000" data-speed="850" data-range="5700" data-seats="133" data-payload="15.1">
+
+                                                <div class="hidden aircraftJson">{"id":129,"speed":850,"category":2,"range":5700}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat2.png" alt="cat2">
+    
+
+                            <span>
+                                A220-100 /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/A220-100.png" alt="A220-100" data-big="/common/images/Aircrafts/skins/superBig/A220-100.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2016</b></li>
+                                        <li> • Rayon d'action : <b>5 700 km</b></li>
+                                        <li> • Conso. : <b>2.85 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.3 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>133</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A220-100">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="71800000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">71&nbsp;800&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">71&nbsp;800&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="73300000" data-speed="786" data-range="4540" data-seats="149" data-payload="16.1">
+
+                                                <div class="hidden aircraftJson">{"id":30,"speed":786,"category":5,"range":4540}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                737-300 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-300.png" alt="737-300" data-big="/common/images/Aircrafts/skins/superBig/b737-300.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1984</b></li>
+                                        <li> • Rayon d'action : <b>4 540 km</b></li>
+                                        <li> • Conso. : <b>3.52 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.6 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>149</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 786 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-300">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="73300000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">73&nbsp;300&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">73&nbsp;300&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="74800000" data-speed="834" data-range="6374" data-seats="149" data-payload="17.5">
+
+                                                <div class="hidden aircraftJson">{"id":31,"speed":834,"category":3,"range":6374}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat3.png" alt="cat3">
+    
+
+                            <span>
+                                737-700 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-700er.png" alt="737-700" data-big="/common/images/Aircrafts/skins/superBig/b737-700er.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1998</b></li>
+                                        <li> • Rayon d'action : <b>6 374 km</b></li>
+                                        <li> • Conso. : <b>2.74 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>149</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 834 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-700">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="74800000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">74&nbsp;800&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">74&nbsp;800&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="80380000" data-speed="850" data-range="6100" data-seats="160" data-payload="18.711">
+
+                                                <div class="hidden aircraftJson">{"id":131,"speed":850,"category":4,"range":6100}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat4.png" alt="cat4">
+    
+
+                            <span>
+                                A220-300 /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/A220-300.png" alt="A220-300" data-big="/common/images/Aircrafts/skins/superBig/A220-300.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2016</b></li>
+                                        <li> • Rayon d'action : <b>6 100 km</b></li>
+                                        <li> • Conso. : <b>2.375 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.3 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>160</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A220-300">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="80380000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">80&nbsp;380&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">80&nbsp;380&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="81000000" data-speed="786" data-range="3891" data-seats="189" data-payload="19.9">
+
+                                                <div class="hidden aircraftJson">{"id":36,"speed":786,"category":6,"range":3891}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                737-400 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-400.png" alt="737-400" data-big="/common/images/Aircrafts/skins/superBig/b737-400.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1989</b></li>
+                                        <li> • Rayon d'action : <b>3 891 km</b></li>
+                                        <li> • Conso. : <b>3.17 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.4 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>189</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 786 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-400">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="81000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">81&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">81&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="83600000" data-speed="828" data-range="7130" data-seats="160" data-payload="16">
+
+                                                <div class="hidden aircraftJson">{"id":35,"speed":828,"category":4,"range":7130}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat4.png" alt="cat4">
+    
+
+                            <span>
+                                A319-100 /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/a319-100.png" alt="A319-100" data-big="/common/images/Aircrafts/skins/superBig/a319-100.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1996</b></li>
+                                        <li> • Rayon d'action : <b>7 130 km</b></li>
+                                        <li> • Conso. : <b>2.6 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.1 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>160</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A319-100">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="83600000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">83&nbsp;600&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">83&nbsp;600&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="84400000" data-speed="807" data-range="3861" data-seats="167" data-payload="19">
+
+                                                <div class="hidden aircraftJson">{"id":33,"speed":807,"category":5,"range":3861}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                MD-90-30 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/md90-30.png" alt="MD-90-30" data-big="/common/images/Aircrafts/skins/superBig/md90-30.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1995</b></li>
+                                        <li> • Rayon d'action : <b>3 861 km</b></li>
+                                        <li> • Conso. : <b>3.43 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>167</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 807 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="MD-90-30">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="84400000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">84&nbsp;400&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">84&nbsp;400&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="85500000" data-speed="807" data-range="4637" data-seats="167" data-payload="19.2">
+
+                                                <div class="hidden aircraftJson">{"id":25,"speed":807,"category":6,"range":4637}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                MD-83 /
+                                Boeing
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/md83.png" alt="MD-83" data-big="/common/images/Aircrafts/skins/superBig/md83.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1985</b></li>
+                                        <li> • Rayon d'action : <b>4 637 km</b></li>
+                                        <li> • Conso. : <b>3.42 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.5 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>167</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 807 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="MD-83">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="85500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">85&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">85&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="89100000" data-speed="834" data-range="5772" data-seats="189" data-payload="21.3">
+
+                                                <div class="hidden aircraftJson">{"id":37,"speed":834,"category":6,"range":5772}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                737-800 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-800.png" alt="737-800" data-big="/common/images/Aircrafts/skins/superBig/b737-800.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1998</b></li>
+                                        <li> • Rayon d'action : <b>5 772 km</b></li>
+                                        <li> • Conso. : <b>2.39 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>189</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 834 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-800">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="89100000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">89&nbsp;100&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">89&nbsp;100&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="91500000" data-speed="828" data-range="6111" data-seats="180" data-payload="18.3">
+
+                                                <div class="hidden aircraftJson">{"id":24,"speed":828,"category":5,"range":6111}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                A320-200 /
+                                Airbus
+                            </span>
+
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/a320-200.png" alt="A320-200" data-big="/common/images/Aircrafts/skins/superBig/a320-200.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1988</b></li>
+                                        <li> • Rayon d'action : <b>6 111 km</b></li>
+                                        <li> • Conso. : <b>2.39 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.4 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>180</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A320-200">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="91500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">91&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">91&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="94600000" data-speed="834" data-range="6050" data-seats="220" data-payload="23">
+
+                                                <div class="hidden aircraftJson">{"id":40,"speed":834,"category":6,"range":6050}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                737-900ER /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/b737-900er.png" alt="737-900ER" data-big="/common/images/Aircrafts/skins/superBig/b737-900er.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2007</b></li>
+                                        <li> • Rayon d'action : <b>6 050 km</b></li>
+                                        <li> • Conso. : <b>2.23 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.7 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>220</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 834 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-900ER">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="94600000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">94&nbsp;600&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">94&nbsp;600&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="95500000" data-speed="850" data-range="7300" data-seats="210" data-payload="25.2">
+
+                                                <div class="hidden aircraftJson">{"id":125,"speed":850,"category":5,"range":7300}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                TU-214-210 /
+                                Tupolev
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/tupolev" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/TU-214_tu-214-constructeur.png" alt="TU-214-210" data-big="/common/images/Aircrafts/skins/superBig/TU-214_tu-214-constructeur.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1996</b></li>
+                                        <li> • Rayon d'action : <b>7 300 km</b></li>
+                                        <li> • Conso. : <b>2.9 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.1 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>210</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="TU-214-210">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="95500000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">95&nbsp;500&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">95&nbsp;500&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="107300000" data-speed="828" data-range="5950" data-seats="220" data-payload="22">
+
+                                                <div class="hidden aircraftJson">{"id":39,"speed":828,"category":5,"range":5950}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                A321-200 /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/a321-200.png" alt="A321-200" data-big="/common/images/Aircrafts/skins/superBig/a321-200.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1997</b></li>
+                                        <li> • Rayon d'action : <b>5 950 km</b></li>
+                                        <li> • Conso. : <b>2.27 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.1 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>220</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 828 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A321-200">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="107300000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">107&nbsp;300&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">107&nbsp;300&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="107300000" data-speed="839" data-range="6482" data-seats="195" data-payload="19.65">
+
+                                                <div class="hidden aircraftJson">{"id":117,"speed":839,"category":4,"range":6482}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat4.png" alt="cat4">
+    
+
+                            <span>
+                                A320neo /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/A320-200neo-constructeur.png" alt="A320neo" data-big="/common/images/Aircrafts/skins/superBig/A320-200neo-constructeur.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2015</b></li>
+                                        <li> • Rayon d'action : <b>6 482 km</b></li>
+                                        <li> • Conso. : <b>2.09 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.3 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>195</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 839 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A320neo">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="107300000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">107&nbsp;300&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">107&nbsp;300&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="110000000" data-speed="839" data-range="5846" data-seats="189" data-payload="18.9">
+
+                                                <div class="hidden aircraftJson">{"id":132,"speed":839,"category":5,"range":5846}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                737-MAX8 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/B737-8MAX.png" alt="737-MAX8" data-big="/common/images/Aircrafts/skins/superBig/B737-8MAX.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2017</b></li>
+                                        <li> • Rayon d'action : <b>5 846 km</b></li>
+                                        <li> • Conso. : <b>2.11 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.3 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>189</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 839 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-MAX8">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="110000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">110&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">110&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="116000000" data-speed="839" data-range="5846" data-seats="210" data-payload="22">
+
+                                                <div class="hidden aircraftJson">{"id":135,"speed":839,"category":6,"range":5846}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                737-MAX9 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/B737-MAX9.png" alt="737-MAX9" data-big="/common/images/Aircrafts/skins/superBig/B737-MAX9.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2018</b></li>
+                                        <li> • Rayon d'action : <b>5 846 km</b></li>
+                                        <li> • Conso. : <b>1.9 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>210</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 839 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="737-MAX9">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="116000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">116&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">116&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="127000000" data-speed="839" data-range="6644" data-seats="236" data-payload="23.6">
+
+                                                <div class="hidden aircraftJson">{"id":133,"speed":839,"category":5,"range":6644}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat5.png" alt="cat5">
+    
+
+                            <span>
+                                A321neo /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/A321-200NEO.png" alt="A321neo" data-big="/common/images/Aircrafts/skins/superBig/A321-200NEO.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 2017</b></li>
+                                        <li> • Rayon d'action : <b>6 644 km</b></li>
+                                        <li> • Conso. : <b>1.89 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>1.2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>236</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 839 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A321neo">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="127000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">127&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">127&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="135400000" data-speed="850" data-range="6840" data-seats="295" data-payload="31">
+
+                                                <div class="hidden aircraftJson">{"id":124,"speed":850,"category":6,"range":6840}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat6.png" alt="cat6">
+    
+
+                            <span>
+                                757-300 /
+                                Boeing
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/boeing" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/757-300_757-300-constructeur.png" alt="757-300" data-big="/common/images/Aircrafts/skins/superBig/757-300_757-300-constructeur.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1999</b></li>
+                                        <li> • Rayon d'action : <b>6 840 km</b></li>
+                                        <li> • Conso. : <b>2.15 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>295</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="757-300">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="135400000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">135&nbsp;400&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">135&nbsp;400&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox disabled-research" data-price="197900000" data-speed="850" data-range="7540" data-seats="360" data-payload="36">
+
+                                                <div class="hidden aircraftJson">{"id":41,"speed":850,"category":4,"range":7540}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat4.png" alt="cat4">
+    
+
+                            <span>
+                                A300-600R /
+                                Airbus
+                            </span>
+
+                                                            <span class="aircraft-research-disabled"> - Avion non débloqué</span>
+                            
+                            
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/airbus" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/a300-600er.png" alt="A300-600R" data-big="/common/images/Aircrafts/skins/superBig/a300-600er.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1988</b></li>
+                                        <li> • Rayon d'action : <b>7 540 km</b></li>
+                                        <li> • Conso. : <b>2.51 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.4 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>360</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 850 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="A300-600R">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="197900000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">197&nbsp;900&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">197&nbsp;900&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                            </div>
+                        </form>
+                    </div>
+                                    <div class="aircraftPurchaseBox " data-price="250000000" data-speed="2145" data-range="6222" data-seats="128" data-payload="12.8">
+
+                                                <div class="hidden aircraftJson">{"id":64,"speed":2145,"category":10,"range":6222}</div>
+
+                        <div class="title">
+                                                            
+    <img src="middle_range_fichiers/cat10.png" alt="cat10">
+    
+
+                            <span>
+                                Concorde /
+                                Aérospatiale
+                            </span>
+
+                            
+                            
+                                                            <span class="flr"> 
+                                    <img title="Acheter cet avion vous coûtera 35 AM Coins supplémentaires." src="middle_range_fichiers/coins.png">
+                                </span>
+                                                    </div>
+                        <form class="submitButton" action="/aircraft/buy/new/0/aerospaciale" method="POST">
+                            <div class="content">
+                                <div class="aircraftPicture">
+                                    <img class="mini-aircraft" src="middle_range_fichiers/concorde_default.png" alt="Concorde" data-big="/common/images/Aircrafts/skins/superBig/concorde_default.png?v1.6.11">
+                                </div>
+                                <div class="aircraftInfo">
+                                    <h4>Informations</h4>
+                                    <ul>
+                                        <li> • Mise en service : <b> 1976</b></li>
+                                        <li> • Rayon d'action : <b>6 222 km</b></li>
+                                        <li> • Conso. : <b>15.05 L/100km/pax</b></li>
+                                        <li> • Vitesse d'usure : <b>2.9 %/100h</b></li>
+                                    </ul>
+                                    <ul>
+                                        <li> • Sièges : <b>128</b></li>
+                                                                                <li class="aircraftSpeed"> • Vitesse : <b> 2145 km/h </b><b class="lineDuration"></b></li>
+                                    </ul>
+                                </div>
+                                <div class="aircraftPrice">
+                                    <h4>Prix</h4>
+                                        <input type="hidden" name="aircraft[name]" value="Concorde">
+                                        <div>Nombre d'appareils :
+                                            <span class="oneAircraft">1&nbsp;<img src="middle_range_fichiers/plus_groupe.png" class="displaySelect" title="Achat groupé"></span>
+                                            <span class="moreAircraft hidden">
+                                                <input type="number" class="quantitySelect" name="aircraft[quantity]" min="1" value="1" max="99">
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+            <input type="hidden" value="250000000" class="aircraftUnitPrice">
+                                            </span>
+                                        </div>
+                                        <span>• Prix total : <strong class="totalPrice">250&nbsp;000&nbsp;000 $</strong></span>
+                                        <span>• Réduction : <span class="discountRate bold">0,00 %</span>
+                                        <span>• Prix à payer : <strong class="discountTotalPrice">250&nbsp;000&nbsp;000 $</strong></span>
+                                </span></div>
+                            </div>
+                            <div class="footer">
+                                                                    <input type="submit" value="Acheter" class="purchaseButton purchaseButtonRed">
+                                                            </div>
+                        </form>
+                    </div>
+                            </div>
+
+            <br>
+            <p class="aircraftRDLink">D'autres avions sont à récupérer dans la <a href="https://www.airlines-manager.com/research/avions"><img src="middle_range_fichiers/research_dashboard.png"></a></p>
+        </div>
+        <div class="bottom">
+        </div>
+    </div>
+
+    <div class="hidden" id="jsonAirlineFlightParameters">{"boardingTime":1200,"landingTime":1200,"transitionTime":2400}</div>
+    <input type="hidden" id="discountRateMax" value="5">
+</div>
+
+                                
+                            </div>
+                        </div>
+                        <div id="pageBottom"></div>
+                        <div id="offers-special-list" class="hidden">
+                            
+{"1":{"id":1,"playerId":7,"nom":"pack_starter","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/7.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/cockpit.airlines-manager.com\/shop?origin=pub_starter","startDate":1366588800,"endDate":1366934400},"2":{"id":2,"playerId":11,"nom":"AM+
+ 
+Vacances","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/11.png","openMode":false,"importance":10,"redirectUrl":"http:\/\/www.airlines-manager.com\/amplus\/?origin=pub_vacances","startDate":1375315200,"endDate":1375574400},"3":{"id":3,"playerId":12,"nom":"Nouvelles
+ Livr\u00e9es 
+2","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381968000},"4":{"id":4,"playerId":13,"nom":"Nouvelles
+ Livr\u00e9es 
+2","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381881600},"5":{"id":5,"playerId":14,"nom":"Nouvelles
+ Livr\u00e9es 
+2","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381881600},"6":{"id":6,"playerId":15,"nom":"Nouvelles
+ Livr\u00e9es 
+3","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381881600},"7":{"id":7,"playerId":10,"nom":"Nouveaux
+ 
+classics","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/10.png","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/10QBl2h","startDate":1384214400,"endDate":1384473600},"8":{"id":8,"playerId":16,"nom":"AM+
+ Carte des 
+vols","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/16.png","openMode":false,"importance":1,"redirectUrl":"http:\/\/bit.ly\/presentation_AMPlus","startDate":1389830400,"endDate":1390003200},"9":{"id":9,"playerId":9,"nom":"Nouvelles
+ 
+Livr\u00e9es","url":"http:\/\/blog2.airlines-manager.com\/wp-content\/uploads\/2014\/06\/new-paints.png","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1405969080,"endDate":1406246340},"10":{"id":10,"playerId":9,"nom":"AM2
+ Mobile 
+1.2","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1430330400,"endDate":1430611200},"11":{"id":11,"playerId":9,"nom":"AM2
+ Mobile 
+1.4","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1437681600,"endDate":1437955140},"13":{"id":13,"playerId":9,"nom":"Black
+ 
+Friday","url":"http:\/\/central.airlines-manager.com\/images\/pub_blackfriday2.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/1YxJnJd","startDate":1448582400,"endDate":1448668800},"14":{"id":14,"playerId":9,"nom":"Black
+ 
+Friday","url":"http:\/\/central.airlines-manager.com\/images\/BLACK_FRIDAY_prolonge.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/1YxJnJd","startDate":1448668800,"endDate":1448841600},"12":{"id":12,"playerId":9,"nom":"AM2
+ Mobile 
+1.8","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1449705600,"endDate":1442098740},"15":{"id":15,"playerId":9,"nom":"AM2
+ Mobile 
+1.9","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1453937400,"endDate":1454284799},"16":{"id":16,"playerId":9,"nom":"AM2
+ Mobile 
+1.11","url":"http:\/\/central.airlines-manager.com\/images\/pub_droite_v11_mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1459517400,"endDate":1459776600},"17":{"id":17,"playerId":9,"nom":"PlayrionShow","url":"http:\/\/central.airlines-manager.com\/images\/playrionshow_droite.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/playrionshow_teaser","startDate":1479841200,"endDate":1480100400},"18":{"id":18,"playerId":9,"nom":"PlayrionShow2","url":"http:\/\/central.airlines-manager.com\/images\/suivre_direct_playrionshow.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/PlayrionShowLive","startDate":1481065200,"endDate":1481140800},"19":{"id":19,"playerId":9,"nom":"PlayrionShow2","url":"http:\/\/central.airlines-manager.com\/images\/playrionshow_droite_replay.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/PlayrionShowLive","startDate":1481155200,"endDate":1481400000},"20":{"id":20,"playerId":9,"nom":"RoueTC","url":"http:\/\/central.airlines-manager.com\/images\/pub_droite_rouetc.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/TCWheelAM2","startDate":1486478700,"endDate":1486857600}}
+                        </div>
+
+                    </div>
+                    <div class="clearer">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+               <div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div><iframe name="fb_xdm_frame_https" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" style="border: medium none;" src="middle_range_fichiers/xd_arbiter.html" frameborder="0"></iframe></div><div></div></div></div>
+        <script>
+            window.fbAsyncInit = function() {
+                // init the FB JS SDK
+                FB.init({
+                  appId      : "417203745032800",                // App ID from the app dashboard
+                  version    : 'v2.0',
+                  status     : true,                                 // Check Facebook Login status
+                  xfbml      : true                                  // Look for social plugins on the page
+                });
+                // Additional initialization code such as adding Event Listeners goes here
+              };
+
+              // Load the SDK asynchronously
+            (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/fr_FR/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+       <div id="mainFooter">
+            <div id="mainFooter-left">
+                <img class="logoPlayrion" src="middle_range_fichiers/logo_playrion.png" alt="Playrion" title="Nous faisons des jeux, et nous les faisons bien !">
+                <p>Version d'Airlines Manager 1.11 (FR) <br></p>
+                <p>Heure du serveur :
+                                        <span id="footer_dateTime">lun. 28/01/2019 à 14:36:16</span>
+                </p>
+                            </div>
+
+            <div id="mainFooter-middle">
+                <div id="mainFooter-middle-box1">
+                    <h4>LIENS</h4>
+                    <a href="http://blog2.airlines-manager.com/" title="Suivez les actualités d'Airlines Manager">Actualité</a><br>
+                    <a href="https://www.airlines-manager.com/shop" title="Besoin d'AM Coins ? C'est par ici !">Boutique</a><br>
+                    <a href="http://forum.airlines-manager.com/" title="Participez et devenez membre de la communauté d'Airlines Manager">Forum</a><br>
+                    <a href="https://www.airlines-manager.com/cgu" class="cguLink" title="Conditions Générales d'Utilisation">CGU</a>
+                </div>
+
+                <div id="mainFooter-middle-box2">
+                    <h4>CONTACT</h4>
+                    <a href="http://forum.airlines-manager.com/viewforum.php?f=99" title="En cas de bug concernant le jeu, merci de passer par le forum">Support</a><br>
+                    <a href="http://www.playrion.com/" title="Pour toute prise de contact avec Playrion, Société éditrice de jeu de gestion en ligne">Playrion</a><br>
+                    <a href="http://www.facebook.com/AirlinesManager" title="Suivez-nous sur Facebook !"><img src="middle_range_fichiers/logo_facebook.png" alt="FB">Facebook</a><br>
+                    <a href="https://twitter.com/AirlinesManager" title="Nous sommes également sur Twitter :)"><img src="middle_range_fichiers/logo_twitter.png" alt="T">Twitter</a>
+                </div>
+            </div>
+
+            <div id="mainFooter-right">
+                <div class="fb-like-box fb_iframe_widget" data-href="https://www.facebook.com/AirlinesManager" data-width="300" data-height="170" data-colorscheme="dark" data-show-faces="true" data-stream="false" data-header="false" data-border-color="#333333" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=417203745032800&amp;color_scheme=dark&amp;container_width=0&amp;header=false&amp;height=170&amp;href=https%3A%2F%2Fwww.facebook.com%2FAirlinesManager&amp;locale=fr_FR&amp;sdk=joey&amp;show_faces=true&amp;stream=false&amp;width=300"><span style="vertical-align: bottom; width: 300px; height: 154px;"><iframe name="f38130e6f60df" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like_box Facebook Social Plugin" style="border: medium none; visibility: visible; width: 300px; height: 154px;" src="middle_range_fichiers/like_box.html" class="" width="300px" height="170px" frameborder="0"></iframe></span></div>
+            </div>
+       </div>
+
+              <div id="popupContainer">
+                                        </div>
+
+                <div id="popupWaitingList" class="hidden">
+                             </div>
+
+              <div id="overlay"></div>
+
+
+                <div id="financePanel" style="display:none">
+                        <span title="Fermer" class="closeBtn"></span>
+            <div class="title"><span></span><span>Prévision de flux de trésorerie</span></div>
+            <table>
+                <tbody><tr>
+                    <th width="9%"></th>
+                    <th width="13%">Chiffre d'affaires</th>
+                    <th width="13%">Coût des vols</th>
+                    <th width="13%">Marketing</th>
+                    <th width="13%">Emprunt</th>
+                    <th width="13%">Achats / ventes</th>
+                    <th width="13%">Autre</th>
+                    <th width="13%">Total</th>
+                </tr>
+                <tr class="yesterday">
+                    <td>
+                        <span class="blueBtn">Hier</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="today">
+                    <td>
+                        <span class="blueBtn">Aujourd'hui</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="tomorrow">
+                    <td>
+                        <span class="blueBtn">Demain</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td class="popTooltip" title="Ces informations ne sont pas prévisibles"> ? </td>
+                    <td>999 900 000 $</td>
+                </tr>
+            </tbody></table>
+            <img src="middle_range_fichiers/ajax-loader2.gif" alt="Loading">
+        </div>
+
+              <div id="guidedTour" class="hidden">
+
+            
+       </div>
+
+
+       <div id="dataForJs" class="hidden" data-gameversion="normalgame" data-amcountdownparameters="{&quot;intervalUpdate&quot;:1000,&quot;intervalDelta&quot;:1}" data-irltimestamp="1548682569" data-ingametimestamp="1548682569" data-timezone="UTC" data-airlineid="113256" data-airlinestars="1" data-playeremail="sbdh75@gmail.com" data-playerlocale="fr"></div>
+
+                         <script src="middle_range_fichiers/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+           <script src="middle_range_fichiers/Leaflet.js"></script>
+
+            <script src="middle_range_fichiers/jquery.js"></script>
+            <script src="middle_range_fichiers/jquery-ui.js"></script>
+
+                        <script type="text/javascript" src="middle_range_fichiers/tinysort.js"></script>
+
+                        <script type="text/javascript">
+                var jokerly_id = "1ea5d093ebe7d77e";
+                var jokerly_editor_id = "1ea5d093ebe7d77e";
+            </script>
+
+            <script src="middle_range_fichiers/widgets.js" charset="utf-8"></script>
+
+                <script src="middle_range_fichiers/am-201901171435.js"></script>
+            
+            
+                        <script type="text/javascript">
+                setTimeout(function(){var a=document.createElement("script");
+                var b=document.getElementsByTagName("script")[0];
+                a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0019/6444.js?"+Math.floor(new Date().getTime()/3600000);
+                a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+
+                function CE_READY() {
+                    CE2.set(1, "114");
+                    CE2.set(2, "AM+");
+                }
+            </script>
+
+                        
+            <script>
+                /* On récupère les data du template */
+                var locale  = $('#mainContainer').data('locale');
+                var data    = $('#dataForJs').data('amcountdownparameters');
+
+                // http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+                // Firefox 1.0+
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                // console.log('isFirefox:'+(isFirefox?'true':'false'));
+
+                // console.log(data);
+                var intervalUpdate  = data['intervalUpdate'],
+                    intervalDelta   = data['intervalDelta'],
+                    ingametimestamp = $('#dataForJs').data('ingametimestamp'),
+                    irltimestamp    = $('#dataForJs').data('irltimestamp'),
+                    timezone        = $('#dataForJs').data('timezone'),
+                    _footerEl       = document.getElementById("footer_dateTime"),
+                    _footerDate     = new Date(irltimestamp * 1000),
+                    _headerEl       = document.getElementById("header_dateTime"),
+                    _headerDate     = new Date(ingametimestamp * 1000),
+                    _days = {0: "Dim.", 
+                             1: "Lun.", 
+                             2: "Mar.", 
+                             3: "Mer.", 
+                             4: "Jeu.", 
+                             5: "Ven.", 
+                             6: "Sam."};
+
+                setInterval(function(){UpdateTime(_headerEl, _headerDate, intervalDelta, 'locale')}, intervalUpdate);
+                setInterval(function(){UpdateTime(_footerEl, _footerDate, 1, 'UTC')}, 1000);
+                
+                function UpdateTime(el, date, intervalDelta, localeOrUTC) { 
+                    date.setUTCSeconds(date.getUTCSeconds() + intervalDelta);
+                    var _formattedDate;
+                    switch(localeOrUTC) {
+                        case 'UTC':
+                            /* Le temps que les serveurs soient configuré en UTC */
+                            // _formattedDate = date.toUTCString();
+                            // break;
+                        case 'locale':
+                        default:
+                            if (isFirefox) {
+                                var options = { weekday:'short', hour12:false, day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
+                                _formattedDate = new Intl.DateTimeFormat(locale, options).format(date);
+
+                            } else{
+                                _formattedDate = date.toLocaleString(locale, {'timeZone':timezone, 'weekday':'short', 'hour12':false, 'day':'2-digit', 'month':'2-digit', 'year':'numeric', 'hour':'2-digit', 'minute':'2-digit', 'second':'2-digit'});
+                            };
+                    }
+                    el.innerHTML = _formattedDate;
+                }
+            </script>
+               <div id="cgu" class="hidden"></div>
+        <div id="adselectormodal-container">
+            <div id="adselector-modal-content"></div>
+        </div>
+
+
+                
+                <link rel="stylesheet" type="text/css" href="middle_range_fichiers/cookieconsent.css">
+        <script src="middle_range_fichiers/cookieconsent.js"></script>
+        <script>
+            window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+              "palette": {
+                "popup": {
+                  "background": "#edeff5",
+                  "text": "#838391"
+                },
+                "button": {
+                  "background": "#4b81e8"
+                }
+              },
+              "content": {
+                "message": "Les cookies nous permettent de personnaliser le contenu et les annonces, d’offrir des fonctionnalités relatives aux médias sociaux et d&#039;analyser notre trafic. Nous partageons également des informations sur l&#039;utilisation de notre site avec nos partenaires de médias sociaux, de publicité et d&#039;analyse, qui peuvent combiner celles-ci avec d&#039;autres informations que vous leur avez fournies ou qu&#039;ils ont collectées lors de votre utilisation de leurs services.",
+                "dismiss": "Compris !",
+                "link": "En savoir plus"
+              }
+            })});
+        </script>
+
+    
+
+<div id="lightboxOverlay" style="display: none;"></div></body></html>

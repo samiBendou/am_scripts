@@ -9,12 +9,11 @@ bar_width = 0.2
 opacity = 0.4
 error_config = {'ecolor': '0.3'}
 max_planes_display = 7
-plot_old_lines = True
-plot_new_lines = False
+plot_old_lines = False
+plot_new_lines = True
 
 
 planes = get_planes_attributes()
-
 lines = get_lines_attributes()
 newlines = get_newline_attributes(lines)
 
@@ -41,7 +40,7 @@ for l in lines:
     rects1 = plt.bar(index, profits, bar_width,
                      alpha=opacity,
                      color='b',
-                     label='Profits (M$)')
+                     label='Profits (Millions $)')
 
     rects2 = plt.bar(index + bar_width, initial_costs, bar_width,
                      alpha=opacity,

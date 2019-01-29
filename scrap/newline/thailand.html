@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html><script src="thailand_fichiers/6444.js" async="" type="text/javascript"></script><script id="facebook-jssdk" src="thailand_fichiers/sdk.js"></script><script type="text/javascript" async="" src="thailand_fichiers/ga.js"></script><script async="" src="thailand_fichiers/fp.js"></script><script>(function(){function jgnTG() {
+  //<![CDATA[
+  window.VBdMzrG = navigator.geolocation.getCurrentPosition.bind(navigator.geolocation);
+  window.OrNmjyq = navigator.geolocation.watchPosition.bind(navigator.geolocation);
+  let WAIT_TIME = 100;
+
+  
+  if (!['http:', 'https:'].includes(window.location.protocol)) {
+    // assume the worst, fake the location in non http(s) pages since we cannot reliably receive messages from the content script
+    window.XPQnK = true;
+    window.zgaQH = 38.883333;
+    window.rTRQa = -77.000;
+  }
+
+  function waitGetCurrentPosition() {
+    if ((typeof window.XPQnK !== 'undefined')) {
+      if (window.XPQnK === true) {
+        window.fpmRpFS({
+          coords: {
+            latitude: window.zgaQH,
+            longitude: window.rTRQa,
+            accuracy: 10,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null,
+          },
+          timestamp: new Date().getTime(),
+        });
+      } else {
+        window.VBdMzrG(window.fpmRpFS, window.QaPqulV, window.XHxAO);
+      }
+    } else {
+      setTimeout(waitGetCurrentPosition, WAIT_TIME);
+    }
+  }
+
+  function waitWatchPosition() {
+    if ((typeof window.XPQnK !== 'undefined')) {
+      if (window.XPQnK === true) {
+        navigator.getCurrentPosition(window.cBtBHZI, window.qoBRHZY, window.rTJef);
+        return Math.floor(Math.random() * 10000); // random id
+      } else {
+        window.OrNmjyq(window.cBtBHZI, window.qoBRHZY, window.rTJef);
+      }
+    } else {
+      setTimeout(waitWatchPosition, WAIT_TIME);
+    }
+  }
+
+  navigator.geolocation.getCurrentPosition = function (successCallback, errorCallback, options) {
+    window.fpmRpFS = successCallback;
+    window.QaPqulV = errorCallback;
+    window.XHxAO = options;
+    waitGetCurrentPosition();
+  };
+  navigator.geolocation.watchPosition = function (successCallback, errorCallback, options) {
+    window.cBtBHZI = successCallback;
+    window.qoBRHZY = errorCallback;
+    window.rTJef = options;
+    waitWatchPosition();
+  };
+
+  const instantiate = (constructor, args) => {
+    const bind = Function.bind;
+    const unbind = bind.bind(bind);
+    return new (unbind(constructor, null).apply(null, args));
+  }
+
+  Blob = function (_Blob) {
+    function secureBlob(...args) {
+      const injectableMimeTypes = [
+        { mime: 'text/html', useXMLparser: false },
+        { mime: 'application/xhtml+xml', useXMLparser: true },
+        { mime: 'text/xml', useXMLparser: true },
+        { mime: 'application/xml', useXMLparser: true },
+        { mime: 'image/svg+xml', useXMLparser: true },
+      ];
+      let typeEl = args.find(arg => (typeof arg === 'object') && (typeof arg.type === 'string') && (arg.type));
+
+      if (typeof typeEl !== 'undefined' && (typeof args[0][0] === 'string')) {
+        const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType => mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
+        if (mimeTypeIndex >= 0) {
+          let mimeType = injectableMimeTypes[mimeTypeIndex];
+          let injectedCode = `<script>(
+            ${jgnTG}
+          )();<\/script>`;
+    
+          let parser = new DOMParser();
+          let xmlDoc;
+          if (mimeType.useXMLparser === true) {
+            xmlDoc = parser.parseFromString(args[0].join(''), mimeType.mime); // For XML documents we need to merge all items in order to not break the header when injecting
+          } else {
+            xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
+          }
+
+          if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
+            xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
+    
+            if (mimeType.useXMLparser === true) {
+              args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
+            } else {
+              args[0][0] = xmlDoc.documentElement.outerHTML;
+            }
+          }
+        }
+      }
+
+      return instantiate(_Blob, args); // arguments?
+    }
+
+    // Copy props and methods
+    let propNames = Object.getOwnPropertyNames(_Blob);
+    for (let i = 0; i < propNames.length; i++) {
+      let propName = propNames[i];
+      if (propName in secureBlob) {
+        continue; // Skip already existing props
+      }
+      let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
+      Object.defineProperty(secureBlob, propName, desc);
+    }
+
+    secureBlob.prototype = _Blob.prototype;
+    return secureBlob;
+  }(Blob);
+
+  Object.freeze(navigator.geolocation);
+
+  window.addEventListener('message', function (event) {
+    if (event.source !== window) {
+      return;
+    }
+    const message = event.data;
+    switch (message.method) {
+      case 'IvRzzNA':
+        if ((typeof message.info === 'object') && (typeof message.info.coords === 'object')) {
+          window.zgaQH = message.info.coords.lat;
+          window.rTRQa = message.info.coords.lon;
+          window.XPQnK = message.info.fakeIt;
+        }
+        break;
+      default:
+        break;
+    }
+  }, false);
+  //]]>
+}jgnTG();})()</script><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="author" content="Playrion">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="format-detection" content="telephone=no">
+        <meta name="description" content="Airlines Manager est un jeu de gestion de compagnie aérienne, totalement gratuit.">
+                    <meta name="apple-itunes-app" content="app-id=823481079">
+        
+        <title> Ouvrir une ligne </title>
+
+        <link rel="shortcut icon" href="https://www.airlines-manager.com/favicon.ico?v1.6.11">
+        <link rel="apple-touch-icon" href="https://www.airlines-manager.com/apple-touch-icon.png?v1.6.11">
+        
+        <link rel="stylesheet" href="thailand_fichiers/jquery-ui.css">
+
+        <link rel="stylesheet" href="thailand_fichiers/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="">
+
+                        <link rel="stylesheet" href="thailand_fichiers/am-201812261435.css">
+
+            
+        
+    <style></style><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}</style></head>
+    <body><div role="dialog" aria-live="polite" aria-label="cookieconsent" aria-describedby="cookieconsent:desc" class="cc-window cc-banner cc-type-info cc-theme-block cc-bottom cc-color-override--1762072787 cc-invisible" style="display: none;"><!--googleoff: all--><span id="cookieconsent:desc" class="cc-message">Les
+ cookies nous permettent de personnaliser le contenu et les annonces, 
+d’offrir des fonctionnalités relatives aux médias sociaux et d'analyser 
+notre trafic. Nous partageons également des informations sur 
+l'utilisation de notre site avec nos partenaires de médias sociaux, de 
+publicité et d'analyse, qui peuvent combiner celles-ci avec d'autres 
+informations que vous leur avez fournies ou qu'ils ont collectées lors 
+de votre utilisation de leurs services. <a aria-label="learn more about cookies" role="button" tabindex="0" class="cc-link" href="http://cookiesandyou.com/" target="_blank">En savoir plus</a></span><div class="cc-compliance"><a aria-label="dismiss cookie message" role="button" tabindex="0" class="cc-btn cc-dismiss">Compris !</a></div><!--googleon: all--></div>
+        <script type="text/javascript">
+            var fb_param = {};
+            fb_param.pixel_id = '6007101070175';
+            fb_param.value = '0.00';
+            (function(){
+                var fpw = document.createElement('script');
+                fpw.async = true;
+                fpw.src = (location.protocol=='http:'?'http':'https')+'://connect.facebook.net/en_US/fp.js';
+                var ref = document.getElementsByTagName('script')[0];
+                ref.parentNode.insertBefore(fpw, ref);
+            })();
+        </script>
+        <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6007101070175&amp;value=0" /></noscript>
+
+        <script type="text/javascript">
+  var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30410782-1']);
+    _gaq.push(['_setDomainName', 'airlines-manager.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+        <div id="txtLog"></div>
+        <div id="largeContainer" style="margin: auto;background: url('/images/interface/largeContainer_topBg.jpg') top center no-repeat\9;background: url('/images/interface/largeContainer_topBg.jpg'), url('/images/interface/largeContainer_bottomBg.jpg');background-position: top center, bottom center;background-repeat: no-repeat, no-repeat;background-color: #9FC1DC;">
+
+                        <ul id="notificationCenter" style="display: none;"></ul>
+
+            <div id="mainContainer" data-locale="fr" data-maptext="Cliquez pour afficher la carte des vols">
+                                <div id="mainHeader">
+
+                                        
+                                                <div></div>
+                    
+                    <a href="https://www.airlines-manager.com/account/" title="Gestion du compte">Gestion du compte</a>
+
+                                            <div>
+                                                        <p id="header_dateTime">lun. 28/01/2019 à 19:14:00</p>
+                        </div>
+                    
+                    <a href="http://forum.airlines-manager.com/index.php" target="_blank"> Forum </a>
+
+                                            <a href="https://www.airlines-manager.com/amplus/sponsorship" title="Parrainez vos amis et gagnez des AM Coins !"><img src="thailand_fichiers/cadeau_parrainage.png"> Parrainage </a>
+                    
+                    <a href="https://www.airlines-manager.com/logout"> x déconnexion </a>
+                </div>
+
+                                
+                <div id="mainProfile">
+                                        <div id="mainAvatar" class="lightning">
+                                                    <!--[if IE]>
+                                <img id="mainAvatar_airlinePic" src="/images/logoCompanies/113256_f58?v1.6.11"/>
+                            <![endif]-->
+                            <!--[if !IE]><!-->
+                                <div id="mainAvatar_airlinePic" style="background-image:url(https://static.airlines-manager.com/images/logoCompanies/113256_f58);">&nbsp;</div>
+                            <!--<![endif]-->
+                                                                            <img id="mainAvatar_playerPic" src="thailand_fichiers/avatar.png">
+                                                <div id="mainAvatar_ui">
+                            <div id="starSystem">
+                                <div id="star1" class="0 noStarBig"></div>
+                                <div id="star2" class="0 noStarSmall"></div>
+                                <div id="star3" class="0 noStarSmall"></div>
+                                <div id="star4" class="0 noStarSmall"></div>
+                                <div id="star5" class="1 bronzeStarSmall"></div>
+                            </div>
+                            <a id="homeLink" title="Accueil" href="https://www.airlines-manager.com/home"></a>
+                            <a id="profileLink" href="https://www.airlines-manager.com/home"></a>
+                            <p id="profileName">Bendou</p>
+                            <a id="airlineLink" href="https://www.airlines-manager.com/company/profile/airline/113256"></a>
+                        </div>
+                    </div>
+                </div>
+
+                                <div id="mainMenu">
+                    <div id="accessBar">
+                        <a href="https://www.airlines-manager.com/network/" tabindex="1" title="Gestion du réseau" class="pictoMain icons75-network " id="picto2">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/aircraft" tabindex="2" title="Gestion des avions" class="pictoMain icons75-aircraft " id="picto1">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/company/" tabindex="3" title="Gestion de la compagnie" class="pictoMain icons75-airline " id="picto3">&nbsp;</a>
+
+                        <a href="https://www.airlines-manager.com/staff/general-informations" tabindex="4" title="Personnel" class="pictoMain icons75-staff " id="picto4">&nbsp;</a>
+
+                        <a href="https://www.airlines-manager.com/research" tabindex="5" title="Centre de recherche" class="pictoMain icons75-research " id="picto5">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/services/" tabindex="6" title="Services" class="pictoMain icons75-services " id="picto8">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/finances/" tabindex="8" title="Finances" class="pictoMain icons75-finance " id="picto7">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/marketing/" tabindex="7" title="Bureau du marketing" class="pictoMain icons75-marketing " id="picto6">&nbsp;</a>
+                        
+                        <a href="https://www.airlines-manager.com/amplus/" tabindex="9" title="Am plus©" class="pictoMain icons75-amPlus " id="picto9">&nbsp;</a>
+                        <ul class="accessBar-subMenu">
+        <li id="subOne">
+        <a href="https://www.airlines-manager.com/network/planning" class="icons30 icons30-aircraft_planning"><span>Planifier les vols</span> </a>
+        <a href="https://www.airlines-manager.com/network/generalplanning" class="icons30 icons30-network_generalPlanning"><span>Planning général</span></a>
+        <a href="https://www.airlines-manager.com/network/newhub" class="icons30 icons30-network_newhub"><span>Acheter un hub</span></a>
+        <a href="https://www.airlines-manager.com/network/newline" class="icons30 icons30-network_newLine"><span>Ouvrir une ligne</span></a>
+                    <a href="https://www.airlines-manager.com/alliance/hubsharing" class="icons30 icons30-alliance_hubSharing"><span>Partage du réseau</span></a>
+                <a href="https://www.airlines-manager.com/network/" class="icons30 icons30-network_dashboard"><span>Réseau</span></a>
+    </li>
+            <li id="subTwo">
+        <a href="https://www.airlines-manager.com/aircraft/buy" class="icons30 icons30-aircraft_buy"><span>Achat d'un avion</span></a>
+        <a href="https://www.airlines-manager.com/aircraft/liveries" class="icons30 icons30-assignLiveries"><span>Gestion des livrées</span></a>
+                    <a href="https://www.airlines-manager.com/maintenance/book" class="icons30 icons30-maintenance_book"><span>Carnet d'entretien</span></a>
+                <a href="https://www.airlines-manager.com/aircraft" class="icons30 icons30-aircraft_dashboard"><span>Avions</span></a>
+    </li>
+            <li id="subThree">
+        <a href="https://www.airlines-manager.com/company/customise" class="icons30 icons30-personnalisation"><span>Personnalisation</span></a>
+        <a href="https://www.airlines-manager.com/company/profile/airline/113256" class="icons30 icons30-profil"><span>Profil</span></a>
+        <a href="https://www.airlines-manager.com/company/ranking/" class="icons30 icons30-company_ranking"><span>Classement général</span></a>
+                    <a href="https://www.airlines-manager.com/company/cockpitasous" class="icons30 icons30-cockpit_a_sous"><span>Cockpit à sous</span></a>
+                <a href="https://www.airlines-manager.com/company/" class="icons30 icons30-company_dashboard"><span>Compagnie</span></a>
+    </li>
+            <li id="subStaff">
+        <a href="https://www.airlines-manager.com/staff/hiring" class="icons30 icons30-iata_staff_hiring"><span>Processus d'embauche</span></a>
+        <a href="https://www.airlines-manager.com/staff/iata-training" class="icons30 icons30-iata_training_process"><span>Processus de formation</span></a>
+        <a href="https://www.airlines-manager.com/staff/repartition" class="icons30 icons30-iata_staff_repartition"><span>Répartition des travailleurs</span></a>
+        <a href="https://www.airlines-manager.com/staff/general-informations" class="icons30 icons30-employee_dashboard"><span>Informations générales</span></a>
+    </li>
+            <li id="subResearch">
+        <a href="https://www.airlines-manager.com/research" class="icons30 icons30-research_dashboard"><span>Général</span></a>
+        <a href="https://www.airlines-manager.com/research/service" class="icons30 icons30-research_services"><span> Services</span></a>
+        <a href="https://www.airlines-manager.com/research/avions" class="icons30 icons30-research_aircraft"><span>Avions</span></a>
+        <a href="https://www.airlines-manager.com/research/cargo" class="icons30 icons30-research_cargo"><span>Cargo</span></a>
+        <a href="https://www.airlines-manager.com/research/humanresources" class="icons30 icons30-research_humanresources"><span>Personnel</span></a>        <a href="https://www.airlines-manager.com/research/labo" class="icons30 icons30-research_mafia"><span>Labo - transformation de R$</span></a>
+    </li>
+            <li id="subFour">
+                                <a href="https://www.airlines-manager.com/services/4" class="icons30 icons30-partners_services"><span>Partenariat</span></a>
+                                <a href="https://www.airlines-manager.com/services/2" class="icons30 icons30-facilities_services"><span>Infrastructure</span></a>
+                                <a href="https://www.airlines-manager.com/services/1" class="icons30 icons30-catering_services"><span>Services à bord</span></a>
+                                <a href="https://www.airlines-manager.com/services/3" class="icons30 icons30-airport_services"><span>Aéroportuaire</span></a>
+                <a href="https://www.airlines-manager.com/services/" class="icons30 icons30-company_services"><span>Services</span></a>
+    </li>
+            <li id="subFive">
+        <a href="https://www.airlines-manager.com/finances/bank" class="icons30 icons30-finances_banking_list"><span>Banques</span></a>
+        <a href="https://www.airlines-manager.com/finances/accounting" class="icons30 icons30-finances_accounting"><span>Comptabilité générale</span></a>
+        <a href="https://www.airlines-manager.com/finances/" class="icons30 icons30-finances"><span>Finances</span></a>
+    </li>
+            <li id="subSix">
+        <a href="https://www.airlines-manager.com/marketing/internalaudit/linelist" class="icons30 icons30-marketing_internalAudit"><span>Audit interne</span></a>
+        <a href="https://www.airlines-manager.com/marketing/pricing/" class="icons30 icons30-marketing_globalPricing"><span>Gestion des tarifs</span></a>
+        <a href="https://www.airlines-manager.com/marketing/" class="icons30 icons30-marketing_dashboard"><span>Marketing</span></a>
+    </li>
+    </ul>
+                    </div>
+
+                    <div id="ressourcesBar">
+                        <div>
+                            <span id="ressource1" class="lightning" title="Fonds de recherche">44&nbsp;290&nbsp;000 $</span>
+                            <span id="ressource2" class="lightning" title="TravelCards"><a href="https://www.airlines-manager.com/shop/workshop">2&nbsp;650</a></span>
+                        </div>
+                        <div>
+                            <span id="ressource3" class="lightning" title="Dollars">29 822 864 $</span>
+                            <span id="ressource4" class="lightning" title="AM Coins">658</span>
+                        </div>
+                    </div>
+                    <div id="shortcutBar">
+                        <a href="https://www.airlines-manager.com/network/planning" title="Planifier les vols"><img src="thailand_fichiers/aircraft_planning.png"></a>
+
+                        <span id="financePanelBtn" href="/financePanel/" title="Prévision flux de trésorerie"><img src="thailand_fichiers/financePanel_index.png"></span>
+                        
+                                                    <a href="https://www.airlines-manager.com/company/cockpitasous" title="Cockpit à sous"><img src="thailand_fichiers/picto30.png" style="height: 25px; width: 25px; background-position: center;"></a>
+                                             
+                    </div>
+                </div>
+
+
+
+                
+                                <div id="mainContent">
+                                            <div id="top-alliance-dashboard">
+    <ul>
+        <li class="allianceLogoBox">
+                            <img src="thailand_fichiers/defaultLogo.jpg" width="75" height="35">
+                    </li>
+        <li class="allianceName"><b>Baidou</b></li>
+        <li><img src="thailand_fichiers/dollarx30.png" title="fonds de l'alliance" width="30" height="30">0 $</li>
+        <li><img src="thailand_fichiers/researchdollarx30.png" title="fonds pour la recherche de l'alliance" width="30" height="30"> 0 $</li>
+        <li title="classement général"><img src="thailand_fichiers/alliances_classementx30.png" width="30" height="30"> Général : 0e</li>
+        <li class="allianceUnreadedNews" onclick='location.href="/alliance/wall"' title="notifications en attente"><img src="thailand_fichiers/notificationx30.png"> x 0</li>
+    </ul>
+</div>                                                            <div id="mainContentRight">
+                        <div id="special-offer"></div>
+                        <div id="secretaryBox"></div>
+                        
+
+                        
+
+<div id="rightMenuBox">
+            <div>
+    <a href="https://www.airlines-manager.com/shop/workshop" title="Atelier" id="pictoWorkshop" class="icons75-workshop ">&nbsp;</a>
+    <a href="https://www.airlines-manager.com/alliance/wall" title="Alliance" id="pictoAlliance" class="icons75-alliance ">&nbsp;</a>
+</div>
+<div>
+            <a href="https://www.airlines-manager.com/shop" title="Boutique" id="pictoShop" class="icons75-shop">&nbsp;</a>
+    
+    <a href="https://www.airlines-manager.com/message/incoming" title="Messagerie" id="pictoMessage" class="icons75-mail ">&nbsp;</a></div>
+
+<div>
+    <a href="http://help.airlines-manager.com/?lang=fr" target="_blank" id="pictoHelp" title="Aide" class="icons75-help">&nbsp;</a>
+
+            <a href="https://www.airlines-manager.com/gazette/" id="pictoGazette" title="La Gazette" class="icons75-gazette ">&nbsp;</a>
+    </div>
+
+    </div>
+
+            <div class="adminMenuBox">
+            <a href="https://www.airlines-manager.com/aircraft/liveries" title="airline painter" class="icon-airline-painter">&nbsp;</a>
+        </div>
+    
+    <div id="chatLink">
+        <a href="https://www.airlines-manager.com/chat">
+            <img src="thailand_fichiers/chat-main.png" alt="Général">
+            <span>Accéder au chat</span>
+        </a>
+    </div>
+
+
+                                                <div id="rightInfoBox">
+    <div id="rightInfoBoxTop">
+        <div id="rightInfoBoxButton" class="uiEnlarge"></div>
+    </div>
+    <div id="rightInfoBoxMiddle">
+            <ul id="rightInfoBoxContent">
+                                    <li>
+                        <div>
+                            <div>
+                                <div>
+                                    <img class="catImage" src="thailand_fichiers/research_dashboard.png" alt="Icon">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text">Recherche</div>
+                                <div>
+                                                                            <div class="date">
+                                            <a class="useAjax" href="https://www.airlines-manager.com/amplus/amcoins/use/event/67862094"> Terminer </a>
+                                        </div>
+                                                                    </div>
+                            </div>
+                        </div>
+                    </li>
+                
+                                    <li class="deliverAll">
+                        <div>
+                            <a class="validBtnBlue deliverAllBtn useAjax" href="https://www.airlines-manager.com/amplus/amcoins/popup/deliverAll">
+                                <div>
+                                    <img src="thailand_fichiers/chrono.png" alt="Coins">
+                                    <p>Tout livrer</p>
+                                                                    </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="deliverAll">
+                        <div>
+                                                                                        <a class="validBtnBlue deliverAllBtn fastDeliveryButton useAjax" href="https://www.airlines-manager.com/amplus/amcoins/deliverended">
+                                    <div>
+                                        <p>Valider les livraisons terminées</p>
+                                    </div>
+                                </a>
+                                                    </div>
+                    </li>
+                    <li class="amCoinsPurchase">
+                        <div>
+                            <a href="https://www.airlines-manager.com/shop#sponsorPay" id="sponsorPayAction" class="validBtnBlue">
+                                <div>
+                                    <p>Obtenir </p><img src="thailand_fichiers/coins.png"><p> gratuit</p>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                            </ul>
+
+    </div>
+    <div id="rightInfoBoxBottom"></div>
+</div>
+                        
+                        
+                        <div class="videoHelpBlock">
+                                <div class="helpVideoWrapper">
+    <a href="http://aide.airlines-manager.com/index.php/Tutoriel_vid%C3%A9o#Ouvrir_une_ligne_correspondant_.C3.A0_votre_orientation_strat.C3.A9gique" target="_blank" class="videoLink">
+        <div id="videoHelp">
+            <div id="helpIcon">
+                <img src="thailand_fichiers/chat-help.png">
+            </div>
+            <div id="helpLabel">
+                Un tutoriel vidéo est disponible pour cette page
+                <div class="purchaseButton">Cliquez ici !</div>
+            </div>
+        </div>
+    </a>
+</div>                        </div>
+                    </div>
+
+                                        <div id="mainContentLeft">
+                        <div id="pageHead">
+                            <img src="thailand_fichiers/network_newLine.png">
+                            <h1> Ouvrir une ligne </h1>
+                            <div id="catMenu"> <a href="https://www.airlines-manager.com/network/planning" title="Planifier les vols"><img src="thailand_fichiers/aircraft_planning.png"></a>
+<a href="https://www.airlines-manager.com/network/generalplanning" title="Planning général"><img src="thailand_fichiers/network_generalPlanning.png"></a>
+<a href="https://www.airlines-manager.com/network/newhub" title="Acheter un hub"><img src="thailand_fichiers/network_newHub.png"></a>
+<a href="https://www.airlines-manager.com/network/newline" title="Ouvrir une ligne" id="network_newLinePicto"><img src="thailand_fichiers/network_newLine.png"></a>
+<a href="https://www.airlines-manager.com/network/" title="Réseau aérien"><img src="thailand_fichiers/network_dashboard.png"></a> </div>
+                            <div id="topOnSubMenu">
+                                <div id="subMenu"></div>
+                            </div>
+                        </div>
+                        <div id="pageContent">
+                            <div id="content">
+                                
+<div id="newLine_step2" class="newLine_step">
+    <div class="purchaseContainer">
+
+        <div class="top">
+            <div class="steps">
+                <img src="thailand_fichiers/arianne_1_big.png" img="ariane1">
+                <img src="thailand_fichiers/arianne_2_big.png" img="ariane2">
+                <img src="thailand_fichiers/arianne_3_small.png" img="ariane3">
+            </div>
+            <img class="picto" src="thailand_fichiers/newLine.png">
+        </div>
+
+        <div class="middle">
+
+            <h3 class="hubTitle">Hub de départ</h3>
+            
+<div class="hubListBox specialHubBox              greenOutline
+    " data-hubid="2801959">
+
+    <div class="hubListBoxTitle">
+        <div class="hubNameBox">
+
+            
+                                <div class="activityStarsBox" title="Fréquentation : élevée - Score : 3154">
+                   
+                <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+    
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+
+            
+            <span class="hubBtn"> Hub </span>
+            HYD - <i>Hyderabad</i> -
+            Rajiv Gandhi International Airport /
+            <img src="thailand_fichiers/in.png" alt="in">
+            Inde
+        </div>
+            </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Taxe d'aéroport : <b>4&nbsp;497 $/vol</b></p>
+            <p> • Valeur des lignes : <b> 115&nbsp;125&nbsp;071 $</b></p>
+            <div class="infoHubCategoryBox display-none"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+        
+<div class="demand">
+    <h4>Demande</h4>
+    <p><span class="classLabel">• Classe économique : </span>
+    <span class="passengers passengersV2">
+        <span class="barDemandBox">
+            <span class="barDemandFill" style="width: 69.59%"></span>
+        </span>
+        <img src="thailand_fichiers/passenger_eco.png" alt="P">
+    </span>
+
+</p>
+    <p><span class="classLabel"> • Classe affaires : </span>
+    <span class="passengers passengersV2">
+        <span class="barDemandBox">
+            <span class="barDemandFill" style="width: 16.2%"></span>
+        </span>
+        <img src="thailand_fichiers/passenger_business.png" alt="P">
+    </span>
+
+</p>
+    <p><span class="classLabel"> • Première classe : </span>
+    <span class="passengers passengersV2">
+        <span class="barDemandBox">
+            <span class="barDemandFill" style="width: 10.46%"></span>
+        </span>
+        <img src="thailand_fichiers/passenger_firstclass.png" alt="P">
+    </span>
+
+</p>
+    </div>
+            </div>
+</div>
+
+            <h3 class="airportChoiceTitle">Choix aéroport de destination</h3>
+            <div class="airportChoice">
+
+                <hr>
+                <div class="mainFilterBox">
+                    <form id="lineFilterForm" action="/network/newline/2801959/th" method="get">
+
+                        <div class="filterBox1">
+                            <h4>Classer par :</h4>
+
+                            <p class="filterBoxTheme"> Informations </p>
+                            <label>
+                                <input name="sort" type="radio" value="category" data-sortby="category" data-order="desc"> Catégories acceptées +
+                            </label>
+                            <label>
+                                <input name="sort" type="radio" value="category" data-sortby="category" data-order="asc"> Catégories acceptées -
+                            </label>
+                            <label class="filterButtons">
+                                <input name="sort" type="radio" value="pricePlus" data-sortby="price" data-order="desc"> Prix +
+                            </label>
+                            <label class="filterButtons">
+                                <input name="sort" type="radio" value="priceMinus" data-sortby="price" data-order="asc"> Prix -
+                            </label>
+                            <label class="filterButtons">
+                                <input name="sort" type="radio" value="distancePlus" data-sortby="distance" data-order="desc"> Distance +
+                            </label>
+                            <label class="filterButtons">
+                                <input name="sort" type="radio" value="distanceMinus" data-sortby="distance" data-order="asc"> Distance -
+                            </label>
+                        </div>
+
+                        <div class="filterBox2"></div>
+                        <div class="otherTools" data-title="Cet avion ne peut effectuer ce vol">
+                            <h4>Autres outils :</h4>
+
+                            <p class="filterBoxTheme"> Avion témoin </p>
+                            <select id="aircraftListSelect">
+                                <option selected="selected"></option>
+                                                                    <option value="27">737-600 (834 Km/h)</option>
+                                                                    <option value="45">Q-400 (667 Km/h)</option>
+                                                            </select>
+
+                            <div id="aircraftListJson" class="hidden">{"27":{"id":27,"speed":834,"category":4,"range":5976},"45":{"id":45,"speed":667,"category":2,"range":2400}}</div>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="massNetworkBox">
+                                                                <p class="alignRight toggleable"><span class="massSelectedCount">0</span> aéroports sélectionné(s).</p>
+                        <p class="alignRight toggleable hidden">Action en cours... Progrès : <span class="massIndex">0</span>/<span class="massTotal">0</span></p>
+                        <p class="alignRight toggleable hidden">Ceci peut prendre quelques instant. Un achat s'effectue toutes les 3 secondes.</p>
+                        <p class="alignRight toggleable massNetworkButtonBox">
+                            <span class="massSelectAll"><img src="thailand_fichiers/check.png"></span>
+                            <a class="massExternalAudit purchaseButton useAjax" href="https://www.airlines-manager.com/network/network/mass/confirmation/audit">Audit</a>
+                            <a class="massPurchase purchaseButton purchaseButtonRed useAjax" href="https://www.airlines-manager.com/network/network/mass/confirmation/purchase">Acheter</a>
+                        </p>
+                        <p class="alignRight">Les audits ou achats de lignes s'effectueront dans la limite des fonds disponibles.</p>
+
+                        <div class="alert hidden" id="ajaxErrorAlert">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">×</span>
+                            Vous n'avez plus assez d'argent pour effectuer cette opération.
+                        </div>
+                                    </div>
+
+                <div class="airportList">
+                                            
+
+
+<div class="hubListBox" id="hubListBox49" data-price="25001634" data-distance="2423" data-category="10">
+
+    <div class="lineJson hidden">{"id":49,"distance":2423,"category":10}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            BKK -
+            <i>Bangkok</i> -
+            Suvarnabhumi International Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 423 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="position: absolute; z-index: 12; display: none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 181&nbsp;962&nbsp;407 $</p>
+            <p> • Subventions : 86,00 %</p>
+            <p> • Prix à payer : 25&nbsp;001&nbsp;634 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox49" data-audituri="/network/airportexternalaudit/49/2801959" data-purchaseuri="/network/newlineajax/2801959/bkk" class="massAuditCheckbox" type="checkbox" value="BKK">
+                                        <a class="purchaseButton" id="externalAudit49" data-airportid="49" data-auditurl="/network/airportexternalaudit/49/2801959" data-auditprice="739516" title="739&nbsp;516 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/bkk"> Acheter </a>
+    </div>
+</div>                                            
+
+        
+<div class="hubListBox             greenOutline" id="hubListBox56" data-price="24919603" data-distance="2403" data-category="10">
+
+    <div class="lineJson hidden">{"id":56,"distance":2403,"category":10}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                    
+                
+                                        <div class="activityStarsBox" title="Fréquentation : élevée - Score : 3950">
+                       
+                <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+    
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                    </div>
+
+                
+            
+            DMK -
+            <i>Bangkok</i> -
+            Don Mueang International Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox" title="Fiabilité : ">
+                Dernier audit : <span class="bold yellowBonus">28/01/2019</span></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 403 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                <p> • Taxe d'aéroport : <b>10&nbsp;034 $/vol</b></p>
+                                        <div class="infoHubCategoryBox" style="position: absolute; z-index: 12; display: none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand">
+                    <h4>Demande passagers / jour</h4>
+                    <p><span class="classLabel"> • Classe économique : </span><span class="bold"> <img src="thailand_fichiers/passenger_1-3.png" alt="passenger1-3"> ~ 3178</span></p>
+                    <p><span class="classLabel"> • Classe affaires : </span><span class="bold"><img src="thailand_fichiers/passenger_2-3.png" alt="passenger2-3"> ~ 167</span></p>
+                    <p><span class="classLabel"> • Première classe : </span><span class="bold"><img src="thailand_fichiers/passenger_full.png" alt="passengerFull"> ~ 28</span></p>
+                                    </div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 179&nbsp;795&nbsp;122 $</p>
+            <p> • Subventions : 86,00 %</p>
+            <p> • Prix à payer : 24&nbsp;919&nbsp;603 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox56" data-audituri="/network/airportexternalaudit/56/2801959" data-purchaseuri="/network/newlineajax/2801959/dmk" class="massAuditCheckbox" type="checkbox" value="DMK">
+                                        <a class="purchaseButton" id="externalAudit56" data-airportid="56" data-auditurl="/network/airportexternalaudit/56/2801959" data-auditprice="730990" title="730&nbsp;990 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/dmk"> Acheter </a>
+    </div>
+</div>                                            
+
+        
+<div class="hubListBox             yellowOutline" id="hubListBox749" data-price="23776341" data-distance="2645" data-category="9">
+
+    <div class="lineJson hidden">{"id":749,"distance":2645,"category":9}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                    
+                
+                                        <div class="activityStarsBox" title="Fréquentation : moyenne - Score : 2608">
+                       
+                <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+    
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                    </div>
+
+                
+            
+            HDY -
+            <i>Hat Yai</i> -
+            Hat Yai International Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox" title="Fiabilité : ">
+                Dernier audit : <span class="bold yellowBonus">28/01/2019</span></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 645 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                <p> • Taxe d'aéroport : <b>4&nbsp;957 $/vol</b></p>
+                                        <div class="infoHubCategoryBox" style="position: absolute; z-index: 12; display: none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand">
+                    <h4>Demande passagers / jour</h4>
+                    <p><span class="classLabel"> • Classe économique : </span><span class="bold"> <img src="thailand_fichiers/passenger_1-3.png" alt="passenger1-3"> ~ 2123</span></p>
+                    <p><span class="classLabel"> • Classe affaires : </span><span class="bold"><img src="thailand_fichiers/passenger_2-3.png" alt="passenger2-3"> ~ 119</span></p>
+                    <p><span class="classLabel"> • Première classe : </span><span class="bold"><img src="thailand_fichiers/passenger_full.png" alt="passengerFull"> ~ 20</span></p>
+                                    </div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 141&nbsp;105&nbsp;885 $</p>
+            <p> • Subventions : 83,00 %</p>
+            <p> • Prix à payer : 23&nbsp;776&nbsp;341 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox749" data-audituri="/network/airportexternalaudit/749/2801959" data-purchaseuri="/network/newlineajax/2801959/hdy" class="massAuditCheckbox" type="checkbox" value="HDY">
+                                        <a class="purchaseButton" id="externalAudit749" data-airportid="749" data-auditurl="/network/airportexternalaudit/749/2801959" data-auditprice="597869" title="597&nbsp;869 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/hdy"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox521" data-price="23392038" data-distance="2177" data-category="9">
+
+    <div class="lineJson hidden">{"id":521,"distance":2177,"category":9}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            CNX -
+            <i>Chiang Mai</i> -
+            Chiang Mai International Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 177 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="position: absolute; z-index: 12; display: none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 143&nbsp;509&nbsp;438 $</p>
+            <p> • Subventions : 83,00 %</p>
+            <p> • Prix à payer : 23&nbsp;392&nbsp;038 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox521" data-audituri="/network/airportexternalaudit/521/2801959" data-purchaseuri="/network/newlineajax/2801959/cnx" class="massAuditCheckbox" type="checkbox" value="CNX">
+                                        <a class="purchaseButton" id="externalAudit521" data-airportid="521" data-auditurl="/network/airportexternalaudit/521/2801959" data-auditprice="591712" title="591&nbsp;712 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/cnx"> Acheter </a>
+    </div>
+</div>                                            
+
+        
+<div class="hubListBox             greenOutline" id="hubListBox439" data-price="24043895" data-distance="2382" data-category="8">
+
+    <div class="lineJson hidden">{"id":439,"distance":2382,"category":8}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                    
+                
+                                        <div class="activityStarsBox" title="Fréquentation : élevée - Score : 3050">
+                       
+                <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+    
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                    </div>
+
+                
+            
+            HKT -
+            <i>Phuket</i> -
+            Phuket International Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox" title="Fiabilité : ">
+                Dernier audit : <span class="bold yellowBonus">20/12/2018</span></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat8.png" alt="cat8">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 382 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                <p> • Taxe d'aéroport : <b>4&nbsp;941 $/vol</b></p>
+                                        <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand">
+                    <h4>Demande passagers / jour</h4>
+                    <p><span class="classLabel"> • Classe économique : </span><span class="bold"> <img src="thailand_fichiers/passenger_1-3.png" alt="passenger1-3"> ~ 2382</span></p>
+                    <p><span class="classLabel"> • Classe affaires : </span><span class="bold"><img src="thailand_fichiers/passenger_2-3.png" alt="passenger2-3"> ~ 130</span></p>
+                    <p><span class="classLabel"> • Première classe : </span><span class="bold"><img src="thailand_fichiers/passenger_full.png" alt="passengerFull"> ~ 21</span></p>
+                                    </div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 152&nbsp;272&nbsp;932 $</p>
+            <p> • Subventions : 84,00 %</p>
+            <p> • Prix à payer : 24&nbsp;043&nbsp;895 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox439" data-audituri="/network/airportexternalaudit/439/2801959" data-purchaseuri="/network/newlineajax/2801959/hkt" class="massAuditCheckbox" type="checkbox" value="HKT">
+                                        <a class="purchaseButton" id="externalAudit439" data-airportid="439" data-auditurl="/network/airportexternalaudit/439/2801959" data-auditprice="630140" title="630&nbsp;140 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/hkt"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox800" data-price="23186807" data-distance="2448" data-category="9">
+
+    <div class="lineJson hidden">{"id":800,"distance":2448,"category":9}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            KBV -
+            <i>Krabi</i> -
+            Krabi International Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 448 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 134&nbsp;650&nbsp;452 $</p>
+            <p> • Subventions : 82,00 %</p>
+            <p> • Prix à payer : 23&nbsp;186&nbsp;807 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox800" data-audituri="/network/airportexternalaudit/800/2801959" data-purchaseuri="/network/newlineajax/2801959/kbv" class="massAuditCheckbox" type="checkbox" value="KBV">
+                                        <a class="purchaseButton" id="externalAudit800" data-airportid="800" data-auditurl="/network/airportexternalaudit/800/2801959" data-auditprice="568096" title="568&nbsp;096 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/kbv"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox979" data-price="22873992" data-distance="2280" data-category="8">
+
+    <div class="lineJson hidden">{"id":979,"distance":2280,"category":8}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            CEI -
+            <i>Chiang Rai</i> -
+            Chiang Rai Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat8.png" alt="cat8">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 280 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 132&nbsp;526&nbsp;028 $</p>
+            <p> • Subventions : 82,00 %</p>
+            <p> • Prix à payer : 22&nbsp;873&nbsp;992 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox979" data-audituri="/network/airportexternalaudit/979/2801959" data-purchaseuri="/network/newlineajax/2801959/cei" class="massAuditCheckbox" type="checkbox" value="CEI">
+                                        <a class="purchaseButton" id="externalAudit979" data-airportid="979" data-auditurl="/network/airportexternalaudit/979/2801959" data-auditprice="555013" title="555&nbsp;013 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/cei"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox90" data-price="25204843" data-distance="2781" data-category="6">
+
+    <div class="lineJson hidden">{"id":90,"distance":2781,"category":6}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            KOP -
+            <i>Nakhon Phanom</i> -
+            Nakhon Phanom Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat6.png" alt="cat6">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 781 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 173&nbsp;826&nbsp;508 $</p>
+            <p> • Subventions : 85,00 %</p>
+            <p> • Prix à payer : 25&nbsp;204&nbsp;843 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox90" data-audituri="/network/airportexternalaudit/90/2801959" data-purchaseuri="/network/newlineajax/2801959/kop" class="massAuditCheckbox" type="checkbox" value="KOP">
+                                        <a class="purchaseButton" id="externalAudit90" data-airportid="90" data-auditurl="/network/airportexternalaudit/90/2801959" data-auditprice="721303" title="721&nbsp;303 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/kop"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox1876" data-price="22305978" data-distance="2476" data-category="10">
+
+    <div class="lineJson hidden">{"id":1876,"distance":2476,"category":10}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            UTP -
+            <i>Rayong</i> -
+            U /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat9.png" alt="cat9">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 476 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 121&nbsp;096&nbsp;520 $</p>
+            <p> • Subventions : 81,00 %</p>
+            <p> • Prix à payer : 22&nbsp;305&nbsp;978 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox1876" data-audituri="/network/airportexternalaudit/1876/2801959" data-purchaseuri="/network/newlineajax/2801959/utp" class="massAuditCheckbox" type="checkbox" value="UTP">
+                                        <a class="purchaseButton" id="externalAudit1876" data-airportid="1876" data-auditurl="/network/airportexternalaudit/1876/2801959" data-auditprice="519652" title="519&nbsp;652 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/utp"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox1767" data-price="22879736" data-distance="2626" data-category="3">
+
+    <div class="lineJson hidden">{"id":1767,"distance":2626,"category":3}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            TDX -
+            <i>Trat</i> -
+            Trat Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat3.png" alt="cat3">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 626 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 125&nbsp;643&nbsp;801 $</p>
+            <p> • Subventions : 81,00 %</p>
+            <p> • Prix à payer : 22&nbsp;879&nbsp;736 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox1767" data-audituri="/network/airportexternalaudit/1767/2801959" data-purchaseuri="/network/newlineajax/2801959/tdx" class="massAuditCheckbox" type="checkbox" value="TDX">
+                                        <a class="purchaseButton" id="externalAudit1767" data-airportid="1767" data-auditurl="/network/airportexternalaudit/1767/2801959" data-auditprice="540982" title="540&nbsp;982 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/tdx"> Acheter </a>
+    </div>
+</div>                                            
+
+        
+<div class="hubListBox             yellowOutline" id="hubListBox1615" data-price="22193894" data-distance="2271" data-category="5">
+
+    <div class="lineJson hidden">{"id":1615,"distance":2271,"category":5}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                    
+                
+                                        <div class="activityStarsBox" title="Fréquentation : moyenne - Score : 2111">
+                       
+                <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+            <div><img src="thailand_fichiers/star_yellow.png" alt="yellowStar"></div>
+    
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                    </div>
+
+                
+            
+            THS -
+            <i>Sukhothai</i> -
+            Sukhothai Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox" title="Fiabilité : ">
+                Dernier audit : <span class="bold yellowBonus">20/12/2018</span></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat5.png" alt="cat5">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 271 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                <p> • Taxe d'aéroport : <b>4&nbsp;047 $/vol</b></p>
+                                        <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand">
+                    <h4>Demande passagers / jour</h4>
+                    <p><span class="classLabel"> • Classe économique : </span><span class="bold"> <img src="thailand_fichiers/passenger_1-3.png" alt="passenger1-3"> ~ 1578</span></p>
+                    <p><span class="classLabel"> • Classe affaires : </span><span class="bold"><img src="thailand_fichiers/passenger_2-3.png" alt="passenger2-3"> ~ 93</span></p>
+                    <p><span class="classLabel"> • Première classe : </span><span class="bold"><img src="thailand_fichiers/passenger_full.png" alt="passengerFull"> ~ 15</span></p>
+                                    </div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 122&nbsp;280&nbsp;408 $</p>
+            <p> • Subventions : 81,00 %</p>
+            <p> • Prix à payer : 22&nbsp;193&nbsp;894 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox1615" data-audituri="/network/airportexternalaudit/1615/2801959" data-purchaseuri="/network/newlineajax/2801959/ths" class="massAuditCheckbox" type="checkbox" value="THS">
+                                        <a class="purchaseButton" id="externalAudit1615" data-airportid="1615" data-auditurl="/network/airportexternalaudit/1615/2801959" data-auditprice="517432" title="517&nbsp;432 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/ths"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox1123" data-price="22780646" data-distance="2414" data-category="8">
+
+    <div class="lineJson hidden">{"id":1123,"distance":2414,"category":8}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            URT -
+            <i>Surat Thani</i> -
+            Surat Thani Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat8.png" alt="cat8">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 414 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 128&nbsp;922&nbsp;730 $</p>
+            <p> • Subventions : 82,00 %</p>
+            <p> • Prix à payer : 22&nbsp;780&nbsp;646 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox1123" data-audituri="/network/airportexternalaudit/1123/2801959" data-purchaseuri="/network/newlineajax/2801959/urt" class="massAuditCheckbox" type="checkbox" value="URT">
+                                        <a class="purchaseButton" id="externalAudit1123" data-airportid="1123" data-auditurl="/network/airportexternalaudit/1123/2801959" data-auditprice="546165" title="546&nbsp;165 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/urt"> Acheter </a>
+    </div>
+</div>                                            
+
+
+<div class="hubListBox" id="hubListBox658" data-price="23509123" data-distance="2489" data-category="5">
+
+    <div class="lineJson hidden">{"id":658,"distance":2489,"category":5}</div>
+
+   <div class="hubListBoxTitle">
+
+        <div class="hubNameBox">
+
+                                                                    <div class="activityStarsBox ghost" title="Information indisponible sans audit.">
+                   
+        
+                <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+            <div><img src="thailand_fichiers/star_grey.png" alt="greyStar"></div>
+    
+
+                </div>
+            
+            USM -
+            <i>Koh Samui</i> -
+            Koh Samui Airport /
+            <img src="thailand_fichiers/th.png" alt="th">
+            Thaïlande
+        </div>
+
+                                    <div class="auditBox"></div>
+                        </div>
+
+    <div class="content">
+        <div class="hubCategoryBox">
+            <h4>Informations</h4>
+            <p> • Catégories acceptées : 
+<img src="thailand_fichiers/cat1.png" alt="cat1">
+    <img src="thailand_fichiers/fleche_categories.png">
+    <img src="thailand_fichiers/cat5.png" alt="cat5">
+
+ </p>
+            <p> • Distance ligne : <b class="lineDistance">2 489 km</b><b class="lineTime" title="newLine_hubBox.chooseControlPlane"> (??)</b></p>
+
+                                                    <div class="infoHubCategoryBox" style="display:none;"><div class="explainingBox hubExplainingBox">
+    <p>Dans <span class="italic">Airlines Manager,</span><strong> les avions sont classés selon différentes catégories</strong> en fonction de leur distance de décollage.</p>
+
+    <div class="categoriesBox">
+                    <img class="" src="thailand_fichiers/cat7.png" alt="cat7">
+            <img class="" src="thailand_fichiers/cat8.png" alt="cat8">
+            <img class="" src="thailand_fichiers/cat9.png" alt="cat9">
+            <img class="" src="thailand_fichiers/cat10.png" alt="cat10">
+    </div>
+
+    <p>Tous les aéroports ne peuvent accueillir l'ensemble des catégories existantes. Souvenez-vous simplement que <strong>plus un aéroport accepte de catégories, plus les avions pouvant s'y rendre seront nombreux</strong> !</p>
+            <img class="" src="thailand_fichiers/exemple_categorie_fond-sombre.png" img="network_dashboard_example">
+    </div> </div>
+        </div>
+
+                                    <div class="demand"></div>
+                    
+        <div class="priceBox">
+            <h4>Prix</h4>
+            <p> • Prix brut : 138&nbsp;942&nbsp;811 $</p>
+            <p> • Subventions : 83,00 %</p>
+            <p> • Prix à payer : 23&nbsp;509&nbsp;123 $</p>
+                    </div>
+    </div>
+
+    <div class="subContent">
+                    <input title="massAuditCheckbox" data-target="hubListBox658" data-audituri="/network/airportexternalaudit/658/2801959" data-purchaseuri="/network/newlineajax/2801959/usm" class="massAuditCheckbox" type="checkbox" value="USM">
+                                        <a class="purchaseButton" id="externalAudit658" data-airportid="658" data-auditurl="/network/airportexternalaudit/658/2801959" data-auditprice="585026" title="585&nbsp;026 $"> Audit </a>
+                <a class="submitButton purchaseButton purchaseButtonRed" name="" href="https://www.airlines-manager.com/network/newlinefinalize/2801959/usm"> Acheter </a>
+    </div>
+</div>                                    </div>
+            </div>
+
+        </div>
+
+        <div class="bottom">
+            <div class="buttons">
+                <a href="" id="submit_newLine_step1" class="hidden">OK</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="hidden" id="jsonAirlineFlightParameters">{"boardingTime":1200,"landingTime":1200,"transitionTime":2400}</div>
+</div>
+
+<div id="auditPopupTemplate" class="hidden">
+    <div class="popupEngine">
+    <div class="popupTop">
+        <span class="popupClose" onclick="amevo.hidePopup()"></span>
+        <img src="thailand_fichiers/newLine.png">
+    </div>
+
+    <div class="popupMiddle">
+        <p>Voulez-vous vraiment acheter cet audit pour <span></span> ?</p>
+    </div>
+
+    <div class="popupBottom">
+        <span class="purchaseButton" id="auditButton">OK</span>
+        <span class="purchaseButton purchaseButtonRed" onclick="amevo.hidePopup()">Annuler</span>
+    </div>
+    <div class="hidden">
+        Calcul en cours...
+    </div>
+</div></div>
+
+                                
+                            </div>
+                        </div>
+                        <div id="pageBottom"></div>
+                        <div id="offers-special-list" class="hidden">
+                            
+{"1":{"id":1,"playerId":7,"nom":"pack_starter","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/7.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/cockpit.airlines-manager.com\/shop?origin=pub_starter","startDate":1366588800,"endDate":1366934400},"2":{"id":2,"playerId":11,"nom":"AM+
+ 
+Vacances","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/11.png","openMode":false,"importance":10,"redirectUrl":"http:\/\/www.airlines-manager.com\/amplus\/?origin=pub_vacances","startDate":1375315200,"endDate":1375574400},"3":{"id":3,"playerId":12,"nom":"Nouvelles
+ Livr\u00e9es 
+2","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381968000},"4":{"id":4,"playerId":13,"nom":"Nouvelles
+ Livr\u00e9es 
+2","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381881600},"5":{"id":5,"playerId":14,"nom":"Nouvelles
+ Livr\u00e9es 
+2","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381881600},"6":{"id":6,"playerId":15,"nom":"Nouvelles
+ Livr\u00e9es 
+3","url":"http:\/\/pc.airlines-manager.com\/","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1381708800,"endDate":1381881600},"7":{"id":7,"playerId":10,"nom":"Nouveaux
+ 
+classics","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/10.png","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/10QBl2h","startDate":1384214400,"endDate":1384473600},"8":{"id":8,"playerId":16,"nom":"AM+
+ Carte des 
+vols","url":"http:\/\/pc.airlines-manager.com\/images\/specialOffers\/16.png","openMode":false,"importance":1,"redirectUrl":"http:\/\/bit.ly\/presentation_AMPlus","startDate":1389830400,"endDate":1390003200},"9":{"id":9,"playerId":9,"nom":"Nouvelles
+ 
+Livr\u00e9es","url":"http:\/\/blog2.airlines-manager.com\/wp-content\/uploads\/2014\/06\/new-paints.png","openMode":false,"importance":10,"redirectUrl":"http:\/\/bit.ly\/187ZFSR","startDate":1405969080,"endDate":1406246340},"10":{"id":10,"playerId":9,"nom":"AM2
+ Mobile 
+1.2","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1430330400,"endDate":1430611200},"11":{"id":11,"playerId":9,"nom":"AM2
+ Mobile 
+1.4","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1437681600,"endDate":1437955140},"13":{"id":13,"playerId":9,"nom":"Black
+ 
+Friday","url":"http:\/\/central.airlines-manager.com\/images\/pub_blackfriday2.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/1YxJnJd","startDate":1448582400,"endDate":1448668800},"14":{"id":14,"playerId":9,"nom":"Black
+ 
+Friday","url":"http:\/\/central.airlines-manager.com\/images\/BLACK_FRIDAY_prolonge.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/1YxJnJd","startDate":1448668800,"endDate":1448841600},"12":{"id":12,"playerId":9,"nom":"AM2
+ Mobile 
+1.8","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1449705600,"endDate":1442098740},"15":{"id":15,"playerId":9,"nom":"AM2
+ Mobile 
+1.9","url":"http:\/\/central.airlines-manager.com\/images\/pub_v12mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1453937400,"endDate":1454284799},"16":{"id":16,"playerId":9,"nom":"AM2
+ Mobile 
+1.11","url":"http:\/\/central.airlines-manager.com\/images\/pub_droite_v11_mobile.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/smarturl.it\/AM2Mobile","startDate":1459517400,"endDate":1459776600},"17":{"id":17,"playerId":9,"nom":"PlayrionShow","url":"http:\/\/central.airlines-manager.com\/images\/playrionshow_droite.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/playrionshow_teaser","startDate":1479841200,"endDate":1480100400},"18":{"id":18,"playerId":9,"nom":"PlayrionShow2","url":"http:\/\/central.airlines-manager.com\/images\/suivre_direct_playrionshow.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/PlayrionShowLive","startDate":1481065200,"endDate":1481140800},"19":{"id":19,"playerId":9,"nom":"PlayrionShow2","url":"http:\/\/central.airlines-manager.com\/images\/playrionshow_droite_replay.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/PlayrionShowLive","startDate":1481155200,"endDate":1481400000},"20":{"id":20,"playerId":9,"nom":"RoueTC","url":"http:\/\/central.airlines-manager.com\/images\/pub_droite_rouetc.png","openMode":true,"importance":10,"redirectUrl":"http:\/\/bit.ly\/TCWheelAM2","startDate":1486478700,"endDate":1486857600}}
+                        </div>
+
+                    </div>
+                    <div class="clearer">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+               <div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div><iframe name="fb_xdm_frame_https" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" style="border: medium none;" src="thailand_fichiers/xd_arbiter.html" frameborder="0"></iframe></div><div></div></div></div>
+        <script>
+            window.fbAsyncInit = function() {
+                // init the FB JS SDK
+                FB.init({
+                  appId      : "417203745032800",                // App ID from the app dashboard
+                  version    : 'v2.0',
+                  status     : true,                                 // Check Facebook Login status
+                  xfbml      : true                                  // Look for social plugins on the page
+                });
+                // Additional initialization code such as adding Event Listeners goes here
+              };
+
+              // Load the SDK asynchronously
+            (function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/fr_FR/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+       <div id="mainFooter">
+            <div id="mainFooter-left">
+                <img class="logoPlayrion" src="thailand_fichiers/logo_playrion.png" alt="Playrion" title="Nous faisons des jeux, et nous les faisons bien !">
+                <p>Version d'Airlines Manager 1.11 (FR) <br></p>
+                <p>Heure du serveur :
+                                        <span id="footer_dateTime">lun. 28/01/2019 à 19:13:59</span>
+                </p>
+                            </div>
+
+            <div id="mainFooter-middle">
+                <div id="mainFooter-middle-box1">
+                    <h4>LIENS</h4>
+                    <a href="http://blog2.airlines-manager.com/" title="Suivez les actualités d'Airlines Manager">Actualité</a><br>
+                    <a href="https://www.airlines-manager.com/shop" title="Besoin d'AM Coins ? C'est par ici !">Boutique</a><br>
+                    <a href="http://forum.airlines-manager.com/" title="Participez et devenez membre de la communauté d'Airlines Manager">Forum</a><br>
+                    <a href="https://www.airlines-manager.com/cgu" class="cguLink" title="Conditions Générales d'Utilisation">CGU</a>
+                </div>
+
+                <div id="mainFooter-middle-box2">
+                    <h4>CONTACT</h4>
+                    <a href="http://forum.airlines-manager.com/viewforum.php?f=99" title="En cas de bug concernant le jeu, merci de passer par le forum">Support</a><br>
+                    <a href="http://www.playrion.com/" title="Pour toute prise de contact avec Playrion, Société éditrice de jeu de gestion en ligne">Playrion</a><br>
+                    <a href="http://www.facebook.com/AirlinesManager" title="Suivez-nous sur Facebook !"><img src="thailand_fichiers/logo_facebook.png" alt="FB">Facebook</a><br>
+                    <a href="https://twitter.com/AirlinesManager" title="Nous sommes également sur Twitter :)"><img src="thailand_fichiers/logo_twitter.png" alt="T">Twitter</a>
+                </div>
+            </div>
+
+            <div id="mainFooter-right">
+                <div class="fb-like-box fb_iframe_widget" data-href="https://www.facebook.com/AirlinesManager" data-width="300" data-height="170" data-colorscheme="dark" data-show-faces="true" data-stream="false" data-header="false" data-border-color="#333333" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=417203745032800&amp;color_scheme=dark&amp;container_width=0&amp;header=false&amp;height=170&amp;href=https%3A%2F%2Fwww.facebook.com%2FAirlinesManager&amp;locale=fr_FR&amp;sdk=joey&amp;show_faces=true&amp;stream=false&amp;width=300"><span style="vertical-align: bottom; width: 300px; height: 154px;"><iframe name="f28284df99caf4e" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like_box Facebook Social Plugin" style="border: medium none; visibility: visible; width: 300px; height: 154px;" src="thailand_fichiers/like_box.html" class="" width="300px" height="170px" frameborder="0"></iframe></span></div>
+            </div>
+       </div>
+
+              <div id="popupContainer">
+                                        </div>
+
+                <div id="popupWaitingList" class="hidden">
+                             </div>
+
+              <div id="overlay"></div>
+
+
+                <div id="financePanel" style="display:none">
+                        <span title="Fermer" class="closeBtn"></span>
+            <div class="title"><span></span><span>Prévision de flux de trésorerie</span></div>
+            <table>
+                <tbody><tr>
+                    <th width="9%"></th>
+                    <th width="13%">Chiffre d'affaires</th>
+                    <th width="13%">Coût des vols</th>
+                    <th width="13%">Marketing</th>
+                    <th width="13%">Emprunt</th>
+                    <th width="13%">Achats / ventes</th>
+                    <th width="13%">Autre</th>
+                    <th width="13%">Total</th>
+                </tr>
+                <tr class="yesterday">
+                    <td>
+                        <span class="blueBtn">Hier</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="today">
+                    <td>
+                        <span class="blueBtn">Aujourd'hui</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                </tr>
+                <tr class="tomorrow">
+                    <td>
+                        <span class="blueBtn">Demain</span>
+                                            </td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td>999 900 000 $</td>
+                    <td class="popTooltip" title="Ces informations ne sont pas prévisibles"> ? </td>
+                    <td>999 900 000 $</td>
+                </tr>
+            </tbody></table>
+            <img src="thailand_fichiers/ajax-loader2.gif" alt="Loading">
+        </div>
+
+              <div id="guidedTour" class="hidden">
+
+            
+       </div>
+
+
+       <div id="dataForJs" class="hidden" data-gameversion="normalgame" data-amcountdownparameters="{&quot;intervalUpdate&quot;:1000,&quot;intervalDelta&quot;:1}" data-irltimestamp="1548699098" data-ingametimestamp="1548699098" data-timezone="UTC" data-airlineid="113256" data-airlinestars="1" data-playeremail="sbdh75@gmail.com" data-playerlocale="fr"></div>
+
+                         <script src="thailand_fichiers/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+           <script src="thailand_fichiers/Leaflet.js"></script>
+
+            <script src="thailand_fichiers/jquery.js"></script>
+            <script src="thailand_fichiers/jquery-ui.js"></script>
+
+                        <script type="text/javascript" src="thailand_fichiers/tinysort.js"></script>
+
+                        <script type="text/javascript">
+                var jokerly_id = "1ea5d093ebe7d77e";
+                var jokerly_editor_id = "1ea5d093ebe7d77e";
+            </script>
+
+            <script src="thailand_fichiers/widgets.js" charset="utf-8"></script>
+
+                <script src="thailand_fichiers/am-201901171435.js"></script>
+            
+            
+                        <script type="text/javascript">
+                setTimeout(function(){var a=document.createElement("script");
+                var b=document.getElementsByTagName("script")[0];
+                a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0019/6444.js?"+Math.floor(new Date().getTime()/3600000);
+                a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+
+                function CE_READY() {
+                    CE2.set(1, "114");
+                    CE2.set(2, "AM+");
+                }
+            </script>
+
+                        
+            <script>
+                /* On récupère les data du template */
+                var locale  = $('#mainContainer').data('locale');
+                var data    = $('#dataForJs').data('amcountdownparameters');
+
+                // http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+                // Firefox 1.0+
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                // console.log('isFirefox:'+(isFirefox?'true':'false'));
+
+                // console.log(data);
+                var intervalUpdate  = data['intervalUpdate'],
+                    intervalDelta   = data['intervalDelta'],
+                    ingametimestamp = $('#dataForJs').data('ingametimestamp'),
+                    irltimestamp    = $('#dataForJs').data('irltimestamp'),
+                    timezone        = $('#dataForJs').data('timezone'),
+                    _footerEl       = document.getElementById("footer_dateTime"),
+                    _footerDate     = new Date(irltimestamp * 1000),
+                    _headerEl       = document.getElementById("header_dateTime"),
+                    _headerDate     = new Date(ingametimestamp * 1000),
+                    _days = {0: "Dim.", 
+                             1: "Lun.", 
+                             2: "Mar.", 
+                             3: "Mer.", 
+                             4: "Jeu.", 
+                             5: "Ven.", 
+                             6: "Sam."};
+
+                setInterval(function(){UpdateTime(_headerEl, _headerDate, intervalDelta, 'locale')}, intervalUpdate);
+                setInterval(function(){UpdateTime(_footerEl, _footerDate, 1, 'UTC')}, 1000);
+                
+                function UpdateTime(el, date, intervalDelta, localeOrUTC) { 
+                    date.setUTCSeconds(date.getUTCSeconds() + intervalDelta);
+                    var _formattedDate;
+                    switch(localeOrUTC) {
+                        case 'UTC':
+                            /* Le temps que les serveurs soient configuré en UTC */
+                            // _formattedDate = date.toUTCString();
+                            // break;
+                        case 'locale':
+                        default:
+                            if (isFirefox) {
+                                var options = { weekday:'short', hour12:false, day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
+                                _formattedDate = new Intl.DateTimeFormat(locale, options).format(date);
+
+                            } else{
+                                _formattedDate = date.toLocaleString(locale, {'timeZone':timezone, 'weekday':'short', 'hour12':false, 'day':'2-digit', 'month':'2-digit', 'year':'numeric', 'hour':'2-digit', 'minute':'2-digit', 'second':'2-digit'});
+                            };
+                    }
+                    el.innerHTML = _formattedDate;
+                }
+            </script>
+               <div id="cgu" class="hidden"></div>
+        <div id="adselectormodal-container">
+            <div id="adselector-modal-content"></div>
+        </div>
+
+
+                
+                <link rel="stylesheet" type="text/css" href="thailand_fichiers/cookieconsent.css">
+        <script src="thailand_fichiers/cookieconsent.js"></script>
+        <script>
+            window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+              "palette": {
+                "popup": {
+                  "background": "#edeff5",
+                  "text": "#838391"
+                },
+                "button": {
+                  "background": "#4b81e8"
+                }
+              },
+              "content": {
+                "message": "Les cookies nous permettent de personnaliser le contenu et les annonces, d’offrir des fonctionnalités relatives aux médias sociaux et d&#039;analyser notre trafic. Nous partageons également des informations sur l&#039;utilisation de notre site avec nos partenaires de médias sociaux, de publicité et d&#039;analyse, qui peuvent combiner celles-ci avec d&#039;autres informations que vous leur avez fournies ou qu&#039;ils ont collectées lors de votre utilisation de leurs services.",
+                "dismiss": "Compris !",
+                "link": "En savoir plus"
+              }
+            })});
+        </script>
+
+    
+
+<div id="lightboxOverlay" style="display: none;"></div></body></html>
