@@ -71,18 +71,21 @@ class ExportData:
         try:
             json_data.read_json()
             delta = abs(self.date - json_data.date)
-            additional_day = 1 if self.date.day != json_data.date.day else 0
-            for key, field in json_data.fields.items():
-                try:
-                    len_field = len(self.fields[key]["data"])
-                    sub_field = list(self.fields[key]["data"][(len_field - delta.days - additional_day - 1): len_field])
-                    json_sub_field = list(field["data"][:(len(field["data"]) - delta.days - additional_day)])
-                    self.fields[key]["data"] = list(concatenate([json_sub_field, sub_field]))
-                except TypeError:
-                    continue
-
-            with open(EXPORTS_ROOT + json_filename, "w") as json_file:
-                json.dump(self.fields, json_file, indent=4)
+            if json_data.date < self.date:
+                for key, field in json_data.fields.items():
+                    try:
+                        len_field = len(self.fields[key]["data"])
+                        sub_field = list(self.fields[key]["data"][(len_field - delta.days - 2): len_field])
+                        json_sub_field = list(field["data"][:(len(field["data"]) - delta.days - 2)])
+                        self.fields[key]["data"] = list(concatenate([json_sub_field, sub_field]))
+                    except TypeError:
+                        json_data.date = self.date
+                        continue
+            else:
+                self.fields = json_data.fields
+                self.date = json_data.date
+                with open(EXPORTS_ROOT + json_filename, "w") as json_file:
+                    json.dump(self.fields, json_file, indent=4)
 
         except FileNotFoundError:
             with open(EXPORTS_ROOT + json_filename, "w") as json_file:
@@ -97,8 +100,9 @@ class ExportData:
 
     def get_formated_date_x(self):
         x = []
-        for k in range(0, days_per_week):
-            x.append((self.date - (days_per_week - 1 - k) * day).strftime("%m-%d"))
+        n = len(self.fields["flight"]["data"])
+        for k in range(0, n):
+            x.append((self.date - (n - 1 - k) * day).strftime("%m-%d"))
         return x
 
     def plot_raw_data(self):
@@ -124,9 +128,10 @@ class ExportData:
         for k in range(0, len(subplot_keys)):
             for key in subplot_keys[k]:
                 y = []
-                for t in range(0, len(fields[key]["data"])):
+                for t in range(0, len(x)):
+                    flights_revenue = float(fields["flight"]["data"][t])
                     try:
-                        y.append(100 * abs(fields[key]["data"][t]) / fields["flight"]["data"][t])
+                        y.append((100 * abs(fields[key]["data"][t]) / flights_revenue) if flights_revenue > 0. else 0)
                     except TypeError:
                         continue
                     except ZeroDivisionError:
@@ -141,6 +146,8 @@ class ExportData:
     def plot_cashflow(self):
         x = self.get_formated_date_x()
         y = []
+        y_gain = []
+        y_loss = []
         excluded_keys = [
             "aircraft.purchase",
             "finance.loanAutomaticPayment",
@@ -149,31 +156,39 @@ class ExportData:
             "finances.debitSum",
             "finances.creditSum"
         ]
-        for t in range(0, days_per_week):
+        for t in range(0, len(x)):
             y.append(sum(self.fields["finance.loanAutomaticPayment"]["data"]) / days_per_week / 1.e6)
+            y_gain.append(0)
+            y_loss.append(y[t])
             for key, field in self.fields.items():
 
                 try:
                     if key in excluded_keys:
                         continue
                     else:
-                        y[t] += (field["data"][t]) / 1.e6
+                        field_data = float((field["data"][t])) / 1.e6
+                        y[t] += field_data
+                        if field_data > 0:
+                            y_gain[t] += field_data
+                        else:
+                            y_loss[t] -= field_data
+
                 except TypeError:
                     continue
 
         plt.plot(x, y, label="Cashflow")
+        plt.plot(x, y_gain, label="Gain")
+        plt.plot(x, y_loss, label="Loss")
+        plt.plot(x, [sum(y) / len(x)] * len(x), '--', label="Average cashflow")
+        plt.plot(x, [sum(y_gain) / len(x)] * len(x), '--', label="Average gain")
+        plt.plot(x, [sum(y_loss) / len(x)] * len(x), '--', label="Average loss")
         plt.legend()
         plt.xlabel("Date MM-DD")
         plt.ylabel("Millions $")
         plt.show()
 
 
-export_data = ExportData()
-export_data.read_csv()
-
-days_per_week = 8
-
-export_data.filename = EXPORTS_ROOT + f"export_new.csv"
+export_data = ExportData("export_new.csv")
 export_data.read_csv()
 export_data.write_json()
 print(export_data.str_json())
