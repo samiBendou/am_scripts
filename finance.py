@@ -81,22 +81,40 @@ class FinancialData:
         json_data = FinancialData(filename=self.filename)
         try:
             json_data.read_json()
-            delta = abs(self.date - json_data.date)
-            if json_data.date < self.date:
+            delta = self.date - json_data.date
+
+            # Updating data on read file
+            if self.date > json_data.date:
                 for key, field in json_data.fields.items():
                     try:
-                        len_field = len(self.fields[key]["data"])
-                        sub_field = list(self.fields[key]["data"][(len_field - delta.days - 2): len_field])
-                        json_sub_field = list(field["data"][:(len(field["data"]) - delta.days - 2)])
-                        self.fields[key]["data"] = list(concatenate([json_sub_field, sub_field]))
+                        # When the data contained in self only updates today's values
+                        if self.date.day == json_data.date.day and delta.days == 0:
+                            field["data"][-1] = self.fields[key]["data"][-1]
+
+                        elif delta.days < 8:
+                            shift = self.date.day - json_data.date.day
+                            len_field = len(self.fields[key]["data"])
+                            sub_field = list(self.fields[key]["data"][(len_field - shift - 1): len_field])
+                            json_sub_field = list(field["data"][:-1])
+                            field["data"] = list(concatenate([json_sub_field, sub_field]))
+
+                        else:
+                            raise NotImplementedError
+
                     except TypeError:
-                        json_data.date = self.date
                         continue
-            else:
+
+                # Writing updated datas
+                json_data.date = self.date
+                with open(EXPORTS_ROOT + json_filename, "w") as json_file:
+                    json.dump(json_data.fields, json_file, indent=4)
+
+                # Updating self object with all the exports values contained in the file plus the new values
+                self.fields = json_data.fields
+
+            elif self.date < json_data.date:
                 self.fields = json_data.fields
                 self.date = json_data.date
-                with open(EXPORTS_ROOT + json_filename, "w") as json_file:
-                    json.dump(self.fields, json_file, indent=4)
 
         except FileNotFoundError:
             with open(EXPORTS_ROOT + json_filename, "w") as json_file:
@@ -109,7 +127,7 @@ class FinancialData:
             self.fields = json.load(json_file)
             self.date = datetime.fromisoformat(self.fields["date"])
 
-    def get_formated_date_x(self):
+    def get_date_for_plot(self):
         x = []
         n = len(self.fields["flight"]["data"])
         for k in range(0, n):
@@ -117,7 +135,7 @@ class FinancialData:
         return x
 
     def get_raw_data(self):
-        x = self.get_formated_date_x()
+        x = self.get_date_for_plot()
         y = {}
         fields = self.fields
 
@@ -138,7 +156,7 @@ class FinancialData:
         return y
 
     def get_rel_data(self):
-        x = self.get_formated_date_x()
+        x = self.get_date_for_plot()
         y = {}
         fields = self.fields
 
@@ -148,7 +166,8 @@ class FinancialData:
                 for t in range(0, len(x)):
                     flights_revenue = float(fields["flight"]["data"][t])
                     try:
-                        y[key].append((100 * abs(fields[key]["data"][t]) / flights_revenue) if flights_revenue > 0. else 0)
+                        y[key].append(
+                            (100 * abs(fields[key]["data"][t]) / flights_revenue) if flights_revenue > 0. else 0)
                     except TypeError:
                         continue
                     except ZeroDivisionError:
@@ -169,7 +188,7 @@ class FinancialData:
         return y
 
     def get_cashflow(self):
-        x = self.get_formated_date_x()
+        x = self.get_date_for_plot()
         y = []
         y_gain = []
         y_loss = []
@@ -211,10 +230,14 @@ class FinancialData:
         return y
 
 
-export_data = FinancialData("export_new.csv")
+export_data = FinancialData("export.csv")
 export_data.read_csv()
 export_data.write_json()
-print(export_data.str_json())
+
+export_data.filename = EXPORTS_ROOT + "export_new.csv"
+export_data.read_csv()
+export_data.filename = EXPORTS_ROOT + "export.csv"
+export_data.write_json()
 
 export_data.get_cashflow()
 export_data.get_rel_data()

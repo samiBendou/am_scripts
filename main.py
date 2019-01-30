@@ -2,16 +2,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from scrap import get_lines_attributes
-from scrap import get_planes_attributes
 from scrap import get_newline_attributes
+from scrap import get_planes_attributes
 
 bar_width = 0.2
 opacity = 0.4
 error_config = {'ecolor': '0.3'}
 max_planes_display = 7
-plot_old_lines = False
-plot_new_lines = True
+plot_old_lines = True
+plot_new_lines = False
 
+excluded_planes = ["F-100", "DC8-73", "DC8-55", "DC-3"]
 
 planes = get_planes_attributes()
 lines = get_lines_attributes()
@@ -23,8 +24,9 @@ elif plot_new_lines:
     lines = newlines
 
 for l in lines:
-    sorted_planes = sorted(planes, key=lambda x: x.profitability(l), reverse=True)[:max_planes_display]
-    sorted_planes = list(filter(lambda x: True if x.range > l.distance else False, sorted_planes))
+    sorted_planes = list(filter(lambda x: True if x.range > l.distance and x.name not in excluded_planes else False,
+                                planes))
+    sorted_planes = sorted(sorted_planes, key=lambda x: x.profitability(l), reverse=True)[:max_planes_display]
 
     n_planes = len(sorted_planes)
 

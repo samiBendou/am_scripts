@@ -57,7 +57,7 @@ you a rational evaluation.
 
 Set the constant parameter `plot_{new, old}_lines` on True and visualize which are the most profitable planes and lines.
 
-#### Financial reporting
+####     Financial reporting
 
 Launch the financial.py script, it loads the last export.csv. Modify the filename in the script according to the name of
 the export downloaded file. set `plot_when_get` on True to plot the financial data when getting it.
