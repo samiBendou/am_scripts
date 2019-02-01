@@ -1,5 +1,6 @@
 import csv
 import json
+from enum import Enum
 from datetime import datetime
 from datetime import timedelta
 
@@ -14,33 +15,179 @@ EXPORTS_ROOT = "exports/"
 
 plot_when_get = True
 
-subplot_keys = [
-    ["flight", "aircraft.checkA", "airline.research", "finance.loanAutomaticPayment"],
-    ["staff.iata.hire", "staff.iata.training", "staff.salary"],
-    ["marketing.internalAudit", "marketing.externalAudit", "marketing.superSimulation",
-     "marketing.simulationPurchase"],
-    ["finances.debitSum", "finances.creditSum"]
-]
 
-excluded_keys = [
-    "aircraft.purchase",
-    "finance.loanAutomaticPayment",
-    "aircraft.checkA",
-    "network.linePurchase",
-    "finances.debitSum",
-    "finances.creditSum"
-]
+# Represents the fields name in csv export from AM2-pro
+
+class Key(Enum):
+    __date__ = "date"
+
+    period = "period"
+    flight = "flight"
+    rch = "airline.research"
+    plane = "aircraft.purchase"
+    loan = "finance.loanAutomaticPayment"
+    check = "aircraft.checkA"
+    line = "network.linePurchase"
+    tax = "airline.incomeTax"
+    ict = "incident"
+    success = "achievement.success"
+
+    sfh = "staff.iata.hire"
+    sft = "staff.iata.training"
+    sfs = "staff.salary"
+
+    mia = "marketing.internalAudit"
+    mea = "marketing.externalAudit"
+    mss = "marketing.superSimulation"
+    msp = "marketing.simulationPurchase"
+
+    misc = "divers"
+
+    debit = "finances.debitSum"
+    credit = "finances.creditSum"
 
 
-class FinancialData:
-    def __init__(self, filename="export.csv"):
-        self.filename = EXPORTS_ROOT + filename
-        self.date = datetime.now()
-        self.fields = {"date": self.date.isoformat()}
+class Field(Enum):
+    name = "verbose"
+    data = "data"
 
-    def read_csv(self):
-        with open(self.filename, "r") as csv_export:
-            exports_reader = csv.reader(csv_export, delimiter=';')
+
+def get_enum_value():
+    return lambda e: [list(map(lambda x: x.value, l)) for l in e]
+
+
+enum_value = get_enum_value()
+
+get_data_keys = enum_value([
+    [Key.flight, Key.check, Key.rch, Key.loan],
+    [Key.sfh, Key.sft, Key.sfs],
+    [Key.mia, Key.mea, Key.mss, Key.msp],
+    [Key.debit, Key.credit]
+])
+
+
+class Data:
+    def __init__(self, filename=None):
+        self.filename = filename
+        self.date = None
+        self.covered = 0
+        self.fields = {}
+        if filename is not None:
+            self.read()
+
+    def __str__(self):
+        return json.dumps(self.fields, indent=4)
+
+    def read(self):
+        ext = self.filename.split(".")[1]
+        if ext == "json":
+            self._read_json()
+        elif ext == "csv":
+            self._read_csv()
+        else:
+            print("File format .{} not handled for reading", ext)
+            raise NotImplementedError
+
+    def write(self):
+        ext = self.filename.split(".")[1]
+        if ext == "json":
+            self._write_json()
+        else:
+            print("File format .{} not handled for writing", ext)
+            raise NotImplementedError
+
+    def copy(self, data):
+        self.fields = data.fields
+        self.date = data.date
+        self.covered = data.covered
+
+    """
+        @param data object representing financial data updated from main report
+        @brief Merge two Data objects in self object
+        @details Self data are updated during merge process. If self data are older than data to merge, than self data
+        are erased
+    """
+    def merge(self, data):
+        delta = self.date - data.date
+
+        assert data.covered >= self.covered
+
+        if abs(delta.days) > 8:
+            raise NotImplementedError
+
+        if delta > timedelta(0):
+            shift_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
+            self.covered = data.covered + shift_day + delta.days
+            for key, field in self.fields.items():
+                if key == Key.__date__:
+                    continue
+                try:
+                    new_sub = list(field[Field.data.value][(self.covered - shift_day - delta.days - 1):])
+                    old_sub = list(data.fields[key][Field.data.value][:-1])
+                    field[Field.data.value] = list(concatenate([old_sub, new_sub]))
+
+                except KeyError:
+                    continue
+
+            self.covered = len(self.fields[Key.flight.value][Field.data.value])
+
+        elif delta <= timedelta(0):
+            self.copy(data)
+
+    def raw(self):
+        y = {}
+        fields = self.fields
+
+        for k in range(0, len(get_data_keys)):
+            for key in get_data_keys[k]:
+                y[key] = list(map(lambda t: abs(t), fields[key][Field.data.value]))
+
+        return y
+
+    def rel(self):
+        y = {}
+        fields = self.fields
+
+        for k in range(0, len(get_data_keys)):
+            for key in get_data_keys[k]:
+                if key == Key.__date__:
+                    continue
+
+                y[key] = [0.] * self.covered
+                for t in range(0, self.covered):
+                    flights_revenue = float(fields[Key.flight.value][Field.data.value][t])
+                    try:
+                        y[key][t] = abs(fields[key][Field.data.value][t]) / flights_revenue
+                    except ZeroDivisionError:
+                        continue
+
+        return y
+
+    def flow(self):
+        y = []
+        y_gain = []
+        y_loss = []
+        excluded_keys = enum_value([[Key.plane, Key.loan, Key.check, Key.line, Key.debit, Key.credit]])[0]
+
+        for t in range(0, self.covered):
+            y.append(sum(self.fields[Key.loan.value][Field.data.value]) / days_per_week)
+            y_gain.append(0)
+            y_loss.append(y[t])
+            for key, field in self.fields.items():
+                if key == Key.__date__ or key in excluded_keys:
+                    continue
+                field_data = float((field[Field.data.value][t]))
+                y[t] += field_data
+                if field_data > 0:
+                    y_gain[t] += field_data
+                else:
+                    y_loss[t] -= field_data
+
+        return y, y_gain, y_loss
+
+    def _read_csv(self):
+        with open(EXPORTS_ROOT + self.filename, "r") as csv_export:
+            exports_reader = csv.reader(csv_export, delimiter=";")
             exports_matrix = []
             for row in exports_reader:
                 exports_matrix.append(row)
@@ -52,193 +199,102 @@ class FinancialData:
         export_date = datetime(year=int(date_split[0]), month=int(date_split[1]), day=int(date_split[2]),
                                hour=int(time_split[0]), minute=int(time_split[1]), second=int(time_split[2]))
 
-        fields = {"date": export_date.isoformat()}
+        # Current data are already up to date
+        if self.date is None or self.date < export_date:
+            fields = {Key.__date__: export_date.isoformat()}
 
-        exports_matrix.remove(exports_matrix[1])
-        exports_matrix.remove(exports_matrix[0])
+            exports_matrix.remove(exports_matrix[1])
+            exports_matrix.remove(exports_matrix[0])
 
-        for row in exports_matrix:
-            fields[row[0]] = {
-                "verbose": str(row[1]).replace("\u00e9", "e").replace("\u00f4", "o").replace("\u00ea", "e"),
-                "data": []
-            }
-            for value in row:
-                try:
-                    fields[row[0]]["data"].append(float(value))
-                except ValueError:
-                    continue
-
-        self.fields = fields
-        self.date = export_date
-
-    def str_json(self):
-        return json.dumps(self.fields, indent=4)
-
-    def write_json(self):
-        json_split = self.filename.split("/")
-        json_filename = json_split[-1].replace(".csv", ".json")
-
-        json_data = FinancialData(filename=self.filename)
-        try:
-            json_data.read_json()
-            delta = self.date - json_data.date
-
-            # Updating data on read file
-            if self.date > json_data.date:
-                for key, field in json_data.fields.items():
+            for row in exports_matrix:
+                fields[row[0]] = {
+                    Field.name.value: str(row[1]).replace("\u00e9", "e").replace("\u00f4", "o").replace("\u00ea", "e"),
+                    Field.data.value: []
+                }
+                for value in row:
                     try:
-                        # When the data contained in self only updates today's values
-                        if self.date.day == json_data.date.day and delta.days == 0:
-                            field["data"][-1] = self.fields[key]["data"][-1]
-
-                        elif delta.days < 8:
-                            shift = self.date.day - json_data.date.day
-                            len_field = len(self.fields[key]["data"])
-                            sub_field = list(self.fields[key]["data"][(len_field - shift - 1): len_field])
-                            json_sub_field = list(field["data"][:-1])
-                            field["data"] = list(concatenate([json_sub_field, sub_field]))
-
-                        else:
-                            raise NotImplementedError
-
-                    except TypeError:
+                        fields[row[0]][Field.data.value].append(float(value))
+                    except ValueError:
                         continue
 
-                # Writing updated datas
-                json_data.date = self.date
-                with open(EXPORTS_ROOT + json_filename, "w") as json_file:
-                    json.dump(json_data.fields, json_file, indent=4)
+            self.fields = fields
+            self.date = export_date
+            self.covered = len(self.fields[Key.flight.value][Field.data.value])
 
-                # Updating self object with all the exports values contained in the file plus the new values
-                self.fields = json_data.fields
+    def _write_json(self):
 
-            elif self.date < json_data.date:
-                self.fields = json_data.fields
-                self.date = json_data.date
-
-        except FileNotFoundError:
-            with open(EXPORTS_ROOT + json_filename, "w") as json_file:
+        data = Data(filename=self.filename)
+        try:
+            data._read_json()
+            self.merge(data)
+            with open(EXPORTS_ROOT + self.filename, "w") as json_file:
                 json.dump(self.fields, json_file, indent=4)
 
-    def read_json(self):
-        json_split = self.filename.split("/")
-        json_filename = json_split[-1].replace(".csv", ".json")
+        except FileNotFoundError:
+            with open(EXPORTS_ROOT + self.filename, "w") as json_file:
+                json.dump(self.fields, json_file, indent=4)
+
+    def _read_json(self):
+        json_filename = self.filename.replace(".csv", ".json")
         with open(EXPORTS_ROOT + json_filename, "r") as json_file:
             self.fields = json.load(json_file)
-            self.date = datetime.fromisoformat(self.fields["date"])
+            self.date = datetime.fromisoformat(self.fields[Key.__date__])
+            self.covered = len(self.fields[Key.flight.value][Field.data.value])
 
-    def get_date_for_plot(self):
+
+class Plot:
+
+    @staticmethod
+    def date_ticks(data):
         x = []
-        n = len(self.fields["flight"]["data"])
+        n = data.covered
         for k in range(0, n):
-            x.append((self.date - (n - 1 - k) * day).strftime("%m-%d"))
+            x.append((data.date - (n - 1 - k) * day).strftime("%m-%d"))
         return x
 
-    def get_raw_data(self):
-        x = self.get_date_for_plot()
-        y = {}
-        fields = self.fields
-
-        for k in range(0, len(subplot_keys)):
-            for key in subplot_keys[k]:
-                y[key] = list(map(lambda t: abs(t) / 1.e6, fields[key]["data"]))
-                if not plot_when_get:
-                    continue
-                plt.plot(x, y[key], label=fields[key]["verbose"])
-
-            if not plot_when_get:
-                continue
-            plt.legend()
-            plt.xlabel("Date MM-DD")
-            plt.ylabel("Millions $")
-            plt.show()
-
-        return y
-
-    def get_rel_data(self):
-        x = self.get_date_for_plot()
-        y = {}
-        fields = self.fields
-
-        for k in range(0, len(subplot_keys)):
-            for key in subplot_keys[k]:
-                y[key] = []
-                for t in range(0, len(x)):
-                    flights_revenue = float(fields["flight"]["data"][t])
-                    try:
-                        y[key].append(
-                            (100 * abs(fields[key]["data"][t]) / flights_revenue) if flights_revenue > 0. else 0)
-                    except TypeError:
-                        continue
-                    except ZeroDivisionError:
-                        y[key].append(0)
-
-                if not plot_when_get:
-                    continue
-
-                plt.plot(x, y[key], label=fields[key]["verbose"])
-                plt.legend()
-                plt.xlabel("Date MM-DD")
-                plt.ylabel("Percent %")
-
-            if not plot_when_get:
-                continue
-            plt.show()
-
-        return y
-
-    def get_cashflow(self):
-        x = self.get_date_for_plot()
-        y = []
-        y_gain = []
-        y_loss = []
-
-        for t in range(0, len(x)):
-            y.append(sum(self.fields["finance.loanAutomaticPayment"]["data"]) / days_per_week / 1.e6)
-            y_gain.append(0)
-            y_loss.append(y[t])
-            for key, field in self.fields.items():
-
-                try:
-                    if key in excluded_keys:
-                        continue
-                    else:
-                        field_data = float((field["data"][t])) / 1.e6
-                        y[t] += field_data
-                        if field_data > 0:
-                            y_gain[t] += field_data
-                        else:
-                            y_loss[t] -= field_data
-
-                except TypeError:
-                    continue
-
-        if not plot_when_get:
-            return y
+    @staticmethod
+    def cash_flow(data):
+        x = Plot.date_ticks(data)
+        (y, y_gain, y_loss) = data.flow()
 
         plt.plot(x, y, label="Cashflow")
         plt.plot(x, y_gain, label="Gain")
         plt.plot(x, y_loss, label="Loss")
-        plt.plot(x, [sum(y) / len(x)] * len(x), '--', label="Average cashflow")
-        plt.plot(x, [sum(y_gain) / len(x)] * len(x), '--', label="Average gain")
-        plt.plot(x, [sum(y_loss) / len(x)] * len(x), '--', label="Average loss")
+        plt.plot(x, [sum(y) / len(x)] * len(x), "--", label="Average cashflow")
+        plt.plot(x, [sum(y_gain) / len(x)] * len(x), "--", label="Average gain")
+        plt.plot(x, [sum(y_loss) / len(x)] * len(x), "--", label="Average loss")
         plt.legend()
         plt.xlabel("Date MM-DD")
         plt.ylabel("Millions $")
         plt.show()
 
-        return y
+    @staticmethod
+    def raw(data):
+        x = Plot.date_ticks(data)
+        y = data.raw()
+        Plot.keys(data, x, y, "Date MM-DD", "Millions $")
+
+    @staticmethod
+    def relative(data):
+        x = Plot.date_ticks(data)
+        y = data.rel()
+        Plot.keys(data, x, y, "Date MM-DD", "Percent %")
+
+    @staticmethod
+    def keys(data, x, y, xl, yl):
+        for k in range(0, len(get_data_keys)):
+            for key in get_data_keys[k]:
+                plt.plot(x, y[key], label=data.fields[key][Field.name.value])
+                plt.legend()
+                plt.xlabel(xl)
+                plt.ylabel(yl)
+
+            plt.show()
 
 
-export_data = FinancialData("export.csv")
-export_data.read_csv()
-export_data.write_json()
+export = Data("export_new.csv")
+export.merge(Data("export.csv"))
 
-export_data.filename = EXPORTS_ROOT + "export_new.csv"
-export_data.read_csv()
-export_data.filename = EXPORTS_ROOT + "export.csv"
-export_data.write_json()
-
-export_data.get_cashflow()
-export_data.get_rel_data()
-export_data.get_raw_data()
+Plot.raw(export)
+Plot.relative(export)
+Plot.cash_flow(export)
