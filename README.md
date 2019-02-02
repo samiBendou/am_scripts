@@ -1,4 +1,4 @@
-# AMTools 0.2.0
+# AMTools 0.5.0
 
 ### Introduction 
 General purposes scripts for Airlines-Manager 2 airline management simulation. Theses scripts are designed to help you
