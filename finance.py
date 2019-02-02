@@ -6,6 +6,7 @@ from datetime import timedelta
 
 import matplotlib.pyplot as plt
 from numpy import concatenate
+from numpy import nan
 
 day = timedelta(days=1)
 
@@ -25,12 +26,15 @@ class Key(Enum):
     flight = "flight"
     rch = "airline.research"
     plane = "aircraft.purchase"
-    loan = "finance.loanAutomaticPayment"
+
     check = "aircraft.checkA"
     line = "network.linePurchase"
     tax = "airline.incomeTax"
     ict = "incident"
     success = "achievement.success"
+
+    lap = "finance.loanAutomaticPayment"
+    lpa = "finance.loanPrincipalAmount"
 
     sfh = "staff.iata.hire"
     sft = "staff.iata.training"
@@ -59,7 +63,7 @@ def get_enum_value():
 enum_value = get_enum_value()
 
 get_data_keys = enum_value([
-    [Key.flight, Key.check, Key.rch, Key.loan],
+    [Key.flight, Key.check, Key.rch, Key.lap],
     [Key.sfh, Key.sft, Key.sfs],
     [Key.mia, Key.mea, Key.mss, Key.msp],
     [Key.debit, Key.credit]
@@ -117,7 +121,7 @@ class Data:
 
         if delta > timedelta(0):
             shift_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
-            self.covered = data.covered + shift_day + delta.days
+
             for key, field in self.fields.items():
                 if key == Key.__date__:
                     continue
@@ -127,9 +131,10 @@ class Data:
                     field[Field.data.value] = list(concatenate([old_sub, new_sub]))
 
                 except KeyError:
+                    field[key] = list(concatenate([[0] * data.covered, new_sub]))
                     continue
 
-            self.covered = len(self.fields[Key.flight.value][Field.data.value])
+            self.covered = data.covered + shift_day + delta.days
 
         elif delta <= timedelta(0):
             self.copy(data)
@@ -153,26 +158,32 @@ class Data:
                 if key == Key.__date__:
                     continue
 
-                y[key] = [0.] * self.covered
+                y[key] = list(map(lambda x: abs(x), fields[key][Field.data.value]))
                 for t in range(0, self.covered):
-                    flights_revenue = float(fields[Key.flight.value][Field.data.value][t])
-                    try:
-                        y[key][t] = abs(fields[key][Field.data.value][t]) / flights_revenue
-                    except ZeroDivisionError:
+                    revenue = float(fields[Key.flight.value][Field.data.value][t])
+                    if revenue == 0.:
+                        y[key][t] = 0.
                         continue
+                    y[key][t] /= revenue
 
         return y
 
     def flow(self):
-        y = []
-        y_gain = []
-        y_loss = []
-        excluded_keys = enum_value([[Key.plane, Key.loan, Key.check, Key.line, Key.debit, Key.credit]])[0]
+        y = [0] * self.covered
+        y_gain = [0] * self.covered
+        y_loss = [0] * self.covered
+        excluded_keys = enum_value([[Key.plane,
+                                     Key.lap,
+                                     Key.check,
+                                     Key.line,
+                                     Key.debit,
+                                     Key.credit,
+                                     Key.success,
+                                     Key.lpa]])[0]
 
         for t in range(0, self.covered):
-            y.append(sum(self.fields[Key.loan.value][Field.data.value]) / days_per_week)
-            y_gain.append(0)
-            y_loss.append(y[t])
+            y[t] = sum(self.fields[Key.lap.value][Field.data.value]) / days_per_week
+            y_loss[t] = y[t]
             for key, field in self.fields.items():
                 if key == Key.__date__ or key in excluded_keys:
                     continue
@@ -253,9 +264,20 @@ class Plot:
         return x
 
     @staticmethod
-    def cash_flow(data):
+    def normalize(y, norm):
+        new_y = dict(y)
+        for key in new_y.keys():
+            new_y[key] = list(map(lambda t: t / norm, new_y[key]))
+        return new_y
+
+    @staticmethod
+    def flow(data):
         x = Plot.date_ticks(data)
         (y, y_gain, y_loss) = data.flow()
+
+        y = list(map(lambda t: t / 1.e6, y))
+        y_gain = list(map(lambda t: t / 1.e6, y_gain))
+        y_loss = list(map(lambda t: t / 1.e6, y_loss))
 
         plt.plot(x, y, label="Cashflow")
         plt.plot(x, y_gain, label="Gain")
@@ -271,14 +293,12 @@ class Plot:
     @staticmethod
     def raw(data):
         x = Plot.date_ticks(data)
-        y = data.raw()
-        Plot.keys(data, x, y, "Date MM-DD", "Millions $")
+        Plot.keys(data, x, Plot.normalize(data.raw(), 1.e6), "Date MM-DD", "Millions $")
 
     @staticmethod
     def relative(data):
         x = Plot.date_ticks(data)
-        y = data.rel()
-        Plot.keys(data, x, y, "Date MM-DD", "Percent %")
+        Plot.keys(data, x, Plot.normalize(data.rel(), 1.e-2), "Date MM-DD", "Percent %")
 
     @staticmethod
     def keys(data, x, y, xl, yl):
@@ -297,4 +317,4 @@ export.merge(Data("export.csv"))
 
 Plot.raw(export)
 Plot.relative(export)
-Plot.cash_flow(export)
+Plot.flow(export)
