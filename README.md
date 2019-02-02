@@ -7,8 +7,6 @@ to make rational decision while expanding your airline and accurately visualize 
  They give you many indicators and plots to evaluate impact
 of your decisions.
 
-![Cashflow](img/cashflow.png)
-
 ### Features
 
 - Planes, Hub and Lines object data model
@@ -83,7 +81,10 @@ data = purchase.Data(planes, newlines)
 # Bar plot to evaluate profitability of each plane
 purchase.Plot.sort(data)
 ```
-This code plots you evaluation of planes for the lines you didn't yet buy but 
+This code plots evaluation of the planes for the lines you did not yet open. You must have purchased an external audit
+to evaluate eventual new lines.
+
+![Cashflow](img/purchase.png)
 
 #### Financial reporting
 
@@ -96,6 +97,10 @@ finance.Plot.raw(data) # Plots cash values
 finance.Plot.rel(data) # Plots percents
 finance.Plot.flow(data) # Plots cash flow
 ```
+
+This code plots financial data such as the graph bellow :
+
+![Cashflow](img/cashflow.png)
 
 The financial data are updated and concatenated on a json file `main.json` each time you load new data. 
 It avoid conflicts by write only most recent data and allows storing and processing of long term data (month, year, more). 
