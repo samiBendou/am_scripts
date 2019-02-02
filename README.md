@@ -28,7 +28,7 @@ Follow theses steps:
 
 -   To use helper scripts you have to manually download web pages from Airline-Manager and put theses in specifics directories :
 
-    -   Create three directories inside project root
+    -   Create the following directories inside project root
         ```commandline
         $ mkdir scrap
         $ cd scrap
