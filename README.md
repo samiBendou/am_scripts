@@ -1,13 +1,13 @@
 # AMTools 0.5.0
 
-### Introduction 
+### Introduction
+ 
 General purposes scripts for Airlines-Manager 2 airline management simulation. Theses scripts are designed to help you
 to make rational decision while expanding your airline and accurately visualize the results of your strategy.
  They give you many indicators and plots to evaluate impact
 of your decisions.
 
 ![Cashflow](img/cashflow.png)
-
 
 ### Features
 

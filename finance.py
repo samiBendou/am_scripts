@@ -6,18 +6,17 @@ from datetime import timedelta
 
 import matplotlib.pyplot as plt
 from numpy import concatenate
-from numpy import nan
 
-day = timedelta(days=1)
 
+def get_enum_value():
+    return lambda e: [list(map(lambda x: x.value, l)) for l in e]
+
+
+enum_value = get_enum_value()
 days_per_week = 7
 
-EXPORTS_ROOT = "exports/"
 
-plot_when_get = True
-
-
-# Represents the fields name in csv export from AM2-pro
+# Represents the fields name in csv export from AM2+
 class Key(Enum):
     __date__ = "date"
 
@@ -25,7 +24,9 @@ class Key(Enum):
     rch = "airline.research"
     plane = "aircraft.purchase"
 
-    check = "aircraft.checkA"
+    cka = "aircraft.checkA"
+    ckd = "aircraft.checkD"
+
     line = "network.linePurchase"
     tax = "airline.incomeTax"
     ict = "incident"
@@ -49,29 +50,14 @@ class Key(Enum):
     credit = "finances.creditSum"
 
 
-all_keys = [x.value for x in Key]
-
-
 class Field(Enum):
     name = "verbose"
     data = "data"
 
 
-def get_enum_value():
-    return lambda e: [list(map(lambda x: x.value, l)) for l in e]
-
-
-enum_value = get_enum_value()
-
-get_data_keys = enum_value([
-    [Key.flight, Key.check, Key.rch, Key.lap],
-    [Key.sfh, Key.sft, Key.sfs],
-    [Key.mia, Key.mea, Key.mss, Key.msp],
-    [Key.debit, Key.credit]
-])
-
-
 class Data:
+    EXPORTS_ROOT = "exports/"
+
     def __init__(self, filename=None):
         self.filename = filename
         self.date = None
@@ -84,9 +70,20 @@ class Data:
         return json.dumps(self.fields, indent=4)
 
     """
+    @brief switches files format contained in filename
+    """
+
+    def switch(self):
+        if self.filename.split(".")[1] == "csv":
+            self.filename = self.filename.replace(".csv", ".json")
+        else:
+            self.filename = self.filename.replace(".json", ".csv")
+
+    """
     @brief Reads file located at exports/filename where filename is the current filename of the object
     @details When reading a file, current object state is reset
     """
+
     def read(self):
         ext = self.filename.split(".")[1]
         if ext == "json":
@@ -96,10 +93,12 @@ class Data:
         else:
             print("File format .{} not handled for reading", ext)
             raise NotImplementedError
+
     """
     @brief Writes file located at exports/filename where filename is the current filename of the object
     @details If the file already exists than existing data and self data are merged (see merge function).
     """
+
     def write(self):
         ext = self.filename.split(".")[1]
         if ext == "json":
@@ -114,11 +113,24 @@ class Data:
         self.covered = data.covered
 
     """
+    @brief Updates main financial data json file with self data
+    @details self data is merged with main json file and is renamed to main.json
+    """
+
+    def update(self):
+        filename = self.filename
+        self.merge(Data("main.json"))
+        self.filename = "main.json"
+        self.write()
+        self.filename = filename
+
+    """
     @param data object representing financial data updated from main report
     @brief Merge two Data objects in self object
     @details Self data are updated during merge process. If self data are older than data to merge, the data to merge
     are copied into self data. Else self data are augmented by concatenating older data and newer data
     """
+
     def merge(self, data):
         delta = self.date - data.date
 
@@ -130,10 +142,11 @@ class Data:
         if delta > timedelta(0):
             add_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
             shift_day = self.covered - add_day - delta.days - 1
+            all_keys = Data.all_keys()
+
             for key in all_keys:
                 if key == Key.__date__:
                     continue
-
                 try:
                     new_sub = list(self.fields[key][Field.data.value][shift_day:])
                 except KeyError:
@@ -141,7 +154,6 @@ class Data:
                     if data.fields[key] is None:
                         continue
                     self.fields[key] = {Field.name.value: data.fields[key][Field.name.value]}
-
                 try:
                     old_sub = list(data.fields[key][Field.data.value][:-1])
                 except KeyError:
@@ -158,12 +170,14 @@ class Data:
     @brief Return dictionary of raw financial data sorted by Key enumeration
     @details Values are given in dollars $
     """
+
     def raw(self):
         y = {}
         fields = self.fields
+        data_keys = Data.keys()
 
-        for k in range(0, len(get_data_keys)):
-            for key in get_data_keys[k]:
+        for k in range(0, len(data_keys)):
+            for key in data_keys[k]:
                 y[key] = list(map(lambda t: abs(t), fields[key][Field.data.value]))
 
         return y
@@ -172,12 +186,14 @@ class Data:
     @brief Return dictionary of relative financial data sorted by Key enumeration
     @details Values are given in percent %
     """
+
     def rel(self):
         y = {}
         fields = self.fields
+        data_keys = Data.keys()
 
-        for k in range(0, len(get_data_keys)):
-            for key in get_data_keys[k]:
+        for k in range(0, len(data_keys)):
+            for key in data_keys[k]:
                 if key == Key.__date__:
                     continue
 
@@ -195,13 +211,14 @@ class Data:
     @brief Return the cash flow of the airline
     @details Values are given in dollars $. The planes purchase and loan principal amount are not taken in account.
     """
+
     def flow(self):
         y = [0] * self.covered
         y_gain = [0] * self.covered
         y_loss = [0] * self.covered
         excluded_keys = enum_value([[Key.plane,
                                      Key.lap,
-                                     Key.check,
+                                     Key.cka,
                                      Key.line,
                                      Key.debit,
                                      Key.credit,
@@ -222,8 +239,21 @@ class Data:
 
         return y, y_gain, y_loss
 
+    @classmethod
+    def keys(cls):
+        return enum_value([
+            [Key.flight, Key.cka, Key.rch, Key.lap],
+            [Key.sfh, Key.sft, Key.sfs],
+            [Key.mia, Key.mea, Key.mss, Key.msp],
+            [Key.debit, Key.credit]
+        ])
+
+    @classmethod
+    def all_keys(cls):
+        return [x.value for x in Key]
+
     def _read_csv(self):
-        with open(EXPORTS_ROOT + self.filename, "r") as csv_export:
+        with open(Data.EXPORTS_ROOT + self.filename, "r") as csv_export:
             exports_reader = csv.reader(csv_export, delimiter=";")
             exports_matrix = []
             for row in exports_reader:
@@ -259,21 +289,19 @@ class Data:
             self.covered = len(self.fields[Key.flight.value][Field.data.value])
 
     def _write_json(self):
-
-        data = Data(filename=self.filename)
         try:
-            data._read_json()
+            data = Data(filename=self.filename)
             self.merge(data)
-            with open(EXPORTS_ROOT + self.filename, "w") as json_file:
+            with open(Data.EXPORTS_ROOT + self.filename, "w") as json_file:
                 json.dump(self.fields, json_file, indent=4)
 
         except FileNotFoundError:
-            with open(EXPORTS_ROOT + self.filename, "w") as json_file:
+            with open(Data.EXPORTS_ROOT + self.filename, "w") as json_file:
                 json.dump(self.fields, json_file, indent=4)
 
     def _read_json(self):
         json_filename = self.filename.replace(".csv", ".json")
-        with open(EXPORTS_ROOT + json_filename, "r") as json_file:
+        with open(Data.EXPORTS_ROOT + json_filename, "r") as json_file:
             self.fields = json.load(json_file)
             self.date = datetime.fromisoformat(self.fields[Key.__date__])
             self.covered = len(self.fields[Key.flight.value][Field.data.value])
@@ -285,32 +313,37 @@ class Plot:
     def date_ticks(data):
         x = []
         n = data.covered
+        day = timedelta(days=1)
+
         for k in range(0, n):
             x.append((data.date - (n - 1 - k) * day).strftime("%m-%d"))
         return x
 
     @staticmethod
-    def normalize(y, norm):
-        new_y = dict(y)
-        for key in new_y.keys():
-            new_y[key] = list(map(lambda t: t / norm, new_y[key]))
-        return new_y
+    def scale(y, div=1.e6):
+        if type(y) == dict:
+            new_y = dict(y)
+            for key in new_y.keys():
+                new_y[key] = list(map(lambda t: t / div, new_y[key]))
+            return new_y
+        elif type(y) == list:
+            return list(map(lambda t: t / div, y))
 
     @staticmethod
     def flow(data):
         x = Plot.date_ticks(data)
         (y, y_gain, y_loss) = data.flow()
 
-        y = list(map(lambda t: t / 1.e6, y))
-        y_gain = list(map(lambda t: t / 1.e6, y_gain))
-        y_loss = list(map(lambda t: t / 1.e6, y_loss))
+        y = Plot.scale(y)
+        y_gain = Plot.scale(y_gain)
+        y_loss = Plot.scale(y_loss)
 
-        plt.plot(x, y, label="Cashflow")
-        plt.plot(x, y_gain, label="Gain")
-        plt.plot(x, y_loss, label="Loss")
-        plt.plot(x, [sum(y) / len(x)] * len(x), "--", label="Average cashflow")
-        plt.plot(x, [sum(y_gain) / len(x)] * len(x), "--", label="Average gain")
-        plt.plot(x, [sum(y_loss) / len(x)] * len(x), "--", label="Average loss")
+        plt.plot(x, y, label="Cash flow")
+        plt.plot(x, y_gain, label="Benefits")
+        plt.plot(x, y_loss, label="Costs")
+        plt.plot(x, [sum(y) / len(x)] * len(x), "--", label="Average cash flow")
+        plt.plot(x, [sum(y_gain) / len(x)] * len(x), "--", label="Average benefits")
+        plt.plot(x, [sum(y_loss) / len(x)] * len(x), "--", label="Average costs")
         plt.legend()
         plt.xlabel("Date MM-DD")
         plt.ylabel("Millions $")
@@ -319,17 +352,19 @@ class Plot:
     @staticmethod
     def raw(data):
         x = Plot.date_ticks(data)
-        Plot.keys(data, x, Plot.normalize(data.raw(), 1.e6), "Date MM-DD", "Millions $")
+        Plot.keys(data, x, Plot.scale(data.raw()), "Date MM-DD", "Millions $")
 
     @staticmethod
     def relative(data):
         x = Plot.date_ticks(data)
-        Plot.keys(data, x, Plot.normalize(data.rel(), 1.e-2), "Date MM-DD", "Percent %")
+        Plot.keys(data, x, Plot.scale(data.rel(), 1.e-2), "Date MM-DD", "Percent %")
 
     @staticmethod
     def keys(data, x, y, xl, yl):
-        for k in range(0, len(get_data_keys)):
-            for key in get_data_keys[k]:
+        data_keys = Data.keys()
+
+        for k in range(0, len(data_keys)):
+            for key in data_keys[k]:
                 plt.plot(x, y[key], label=data.fields[key][Field.name.value])
                 plt.legend()
                 plt.xlabel(xl)
@@ -338,9 +373,8 @@ class Plot:
             plt.show()
 
 
-# Common use of Data object : load new data .csv data and merge it with main data file
-export = Data("export_new.csv")
-export.merge(Data("export.csv"))  # Replace .csv with .json to load main data
+export = Data("export.csv")
+export.update()
 
 Plot.raw(export)
 Plot.relative(export)

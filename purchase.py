@@ -9,8 +9,8 @@ bar_width = 0.2
 opacity = 0.4
 error_config = {'ecolor': '0.3'}
 max_planes_display = 7
-plot_old_lines = False
-plot_new_lines = True
+plot_old_lines = True
+plot_new_lines = False
 
 excluded_planes = ["F-100", "DC8-73", "DC8-55", "DC-3"]
 
