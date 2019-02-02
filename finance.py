@@ -148,7 +148,6 @@ class Data:
         if delta > timedelta(0):
             add_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
             shift_day = self.covered - add_day - delta.days - 1
-
             for key in Data.all_keys:
                 if key == Key.__date__:
                     continue
@@ -156,16 +155,15 @@ class Data:
                     new_sub = list(self.fields[key][Field.data.value][shift_day:])
                 except KeyError:
                     new_sub = [0] * (add_day + delta.days + 1)
-                    if data.fields[key] is None:
+                    try:
+                        self.fields[key] = {Field.name.value: data.fields[key][Field.name.value]}
+                    except KeyError:
                         continue
-                    self.fields[key] = {Field.name.value: data.fields[key][Field.name.value]}
                 try:
                     old_sub = list(data.fields[key][Field.data.value][:-1])
                 except KeyError:
                     old_sub = [0] * (data.covered - 1)
-
                 self.fields[key][Field.data.value] = list(concatenate([old_sub, new_sub]))
-
             self.covered = data.covered + add_day + delta.days
 
         elif delta <= timedelta(0):
