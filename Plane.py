@@ -2,15 +2,15 @@ import numpy as np
 
 additional_flight_time = 1.0  # hours
 hours_day = 24  # hours / day
-l_petrol_baril = 159.0  # liters / baril
-petrol_price = 53.53 / l_petrol_baril  # $/L
-fill_ratio = 0.86
+l_petrol_bar = 159.0  # L / barrel
+petrol_price = 53.53 / l_petrol_bar  # $/L
+fill_ratio = 0.86  # expected aircraft filling ratio
 
 market = ["eco", "biz", "pre"]
 
 
 class Plane:
-    def __init__(self, name, pax, speed, cons, max_range=np.infty, price=0., wear_rate=0.):
+    def __init__(self, name, pax, speed, cons, year, max_range=np.infty, price=0., wear_rate=0.):
         self.name = name
         self.pax = pax
         self.speed = speed  # in km/h
@@ -18,6 +18,7 @@ class Plane:
         self.range = max_range
         self.price = price
         self.wear_rate = wear_rate
+        self.year = year
 
     def flights_per_day(self, line):
         return int(np.floor(hours_day / (2 * self.flight_time(line))))
@@ -35,8 +36,8 @@ class Plane:
 
         # number of planes too buy to fulfill the demand for each segment
         count_planes = {}
-        max_pax = sum(self.pax.values())
-        demand_max = sum(line.demand.values())
+        # max_pax = sum(self.pax.values())
+        # demand_max = sum(line.demand.values())
         flight_per_day = self.flights_per_day(line)
 
         for m in market:

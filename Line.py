@@ -8,5 +8,3 @@ class Line:
         self.ticket_price = ticket_price  # in $
         self.price = price  # acquisition price
         self.new = new
-
-

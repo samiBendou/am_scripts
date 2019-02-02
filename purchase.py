@@ -1,12 +1,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Data:
 
     def __init__(self, plane, line):
         self.plane = plane
         self.line = line
 
+    """
+    @brief Sort planes by lines and profitability
+    @details Returns a dictionary which contains planes sorted by lines. For each line the corresponding planes are the
+    planes which have sufficient range to flight to destination. The planes are sorted by decreasing profitability.
+    """
     def sort(self):
         excluded_planes = ["F-100", "DC8-73", "DC8-55", "DC-3"]
         sorted_planes = {}
@@ -21,7 +27,7 @@ class Data:
 class Plot:
     bar_width = 0.2
     opacity = 0.4
-    error_config = {'ecolor': '0.3'}
+    error_config = {"ecolor": "0.3"}
     max = 7
 
     @classmethod
@@ -44,21 +50,21 @@ class Plot:
 
             rects1 = plt.bar(index, profits, Plot.bar_width,
                              alpha=Plot.opacity,
-                             color='b',
-                             label='Profits (Millions $)')
+                             color="b",
+                             label="Profits (Millions $)")
 
             rects2 = plt.bar(index + Plot.bar_width, initial_costs, Plot.bar_width,
                              alpha=Plot.opacity,
-                             color='r',
-                             label='Initial cost (100M$)')
+                             color="r",
+                             label="Initial cost (100M$)")
 
             rects3 = plt.bar(index + 2 * Plot.bar_width, profitability, Plot.bar_width,
                              alpha=Plot.opacity,
-                             color='g',
-                             label='Profitability')
+                             color="g",
+                             label="Profitability")
 
-            plt.xlabel('Planes')
-            plt.title('Repartition profits/initial cost HYD->' + l.name)
+            plt.xlabel("Planes")
+            plt.title("Profits/Initial cost repartition HYD->" + l.name)
             plt.xticks(index + Plot.bar_width / 3, names)
             plt.legend()
 
@@ -67,4 +73,3 @@ class Plot:
             sorted_planes[l.name][0].display_matching_infos(l)
 
         plt.show()
-

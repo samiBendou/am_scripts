@@ -12,10 +12,10 @@ of your decisions.
 ### Features
 
 - Planes, Hub and Lines object data model
+
 - Financial reporting API to visualize financial data and process theses
 - Lines evaluation API to evaluate benefits for your lines and find the planes that matches the best with.
-- Plotting API
-- Player friendly helpers scripts to use theses features
+- User-friendly Plotting API
 
 ### Install
 

@@ -16,8 +16,6 @@ hubs = [
     Hub(tax=4497.0)
 ]
 
-plot_interpolation_data = False
-
 market = ["eco", "biz", "pre"]
 
 SCRAP_ROOT = "scrap/"
@@ -26,10 +24,10 @@ NETWORK_PATH = SCRAP_ROOT + "network/"
 NEwLINE_PATH = SCRAP_ROOT + "newline/"
 MARKETING_PATH = SCRAP_ROOT + "marketing/"
 
-NEWLINES = ["thailand.html", "india.html", "singapour.html", "taiwan.html", "vietnam.html"]
+NEWLINES = ["thailand.html", "india.html", "singapore.html", "taiwan.html", "vietnam.html"]
 
 
-def _base_price_function(lines):
+def _base_price_function(lines, plot_interpolation_data=False):
     sorted_lines = sorted(lines, key=lambda x: x.distance)
 
     x_num = {}
@@ -151,15 +149,11 @@ def planes_data():
             speed = float(list_elem_bis.getChildren()[1].getChildren()[0].innerText.replace("km/h", ""))
             pax = float(list_elem_bis.getChildren()[0].getChildren()[0].innerText)
 
-            release_year = int(list_elem.getChildren()[0].getChildren()[0].innerText)
+            year = int(list_elem.getChildren()[0].getChildren()[0].innerText)
             max_range = float(list_elem.getChildren()[1].getChildren()[0].innerText.replace("km", "").replace(" ", ""))
             cons = float(list_elem.getChildren()[2].getChildren()[0].innerText.replace("L/100km/pax", ""))
             wear_rate = float(list_elem.getChildren()[3].getChildren()[0].innerText.replace("%/100h", "")) / 100.
 
-            planes.append(Plane(name, {"eco": pax, "biz": 0, "pre": 0}, speed, cons, max_range, price, wear_rate))
+            planes.append(Plane(name, {"eco": pax, "biz": 0, "pre": 0}, speed, cons, year, max_range, price, wear_rate))
 
     return planes
-
-planes_data()
-lines = lines_data()
-newlines = newlines_data(lines)
