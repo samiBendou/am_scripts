@@ -28,7 +28,7 @@ class Plot:
     def sort(cls, data):
         sorted_planes = data.sort()
 
-        for l in lines:
+        for l in data.line:
             profits = tuple(
                 map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.name][:Plot.max]))
             initial_costs = tuple(
