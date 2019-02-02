@@ -1,66 +1,70 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from scrap import get_lines_attributes
-from scrap import get_newline_attributes
-from scrap import get_planes_attributes
+class Data:
 
-bar_width = 0.2
-opacity = 0.4
-error_config = {'ecolor': '0.3'}
-max_planes_display = 7
-plot_old_lines = True
-plot_new_lines = False
+    def __init__(self, plane, line):
+        self.plane = plane
+        self.line = line
 
-excluded_planes = ["F-100", "DC8-73", "DC8-55", "DC-3"]
+    def sort(self):
+        excluded_planes = ["F-100", "DC8-73", "DC8-55", "DC-3"]
+        sorted_planes = {}
+        for l in self.line:
+            sorted_planes[l.name] = list(
+                filter(lambda x: True if x.range > l.distance and x.name not in excluded_planes else False, self.plane))
+            sorted_planes[l.name] = sorted(sorted_planes[l.name], key=lambda x: x.profitability(l), reverse=True)
 
-planes = get_planes_attributes()
-lines = get_lines_attributes()
-newlines = get_newline_attributes(lines)
+        return sorted_planes
 
-if plot_old_lines and plot_new_lines:
-    lines = np.concatenate([lines, newlines])
-elif plot_new_lines:
-    lines = newlines
 
-for l in lines:
-    sorted_planes = list(filter(lambda x: True if x.range > l.distance and x.name not in excluded_planes else False,
-                                planes))
-    sorted_planes = sorted(sorted_planes, key=lambda x: x.profitability(l), reverse=True)[:max_planes_display]
+class Plot:
+    bar_width = 0.2
+    opacity = 0.4
+    error_config = {'ecolor': '0.3'}
+    max = 7
 
-    n_planes = len(sorted_planes)
+    @classmethod
+    def sort(cls, data):
+        sorted_planes = data.sort()
 
-    profits = tuple(map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes))
-    initial_costs = tuple(map(lambda x: x.price * x.match_demand(l)["eco"] / 100.e6, sorted_planes))
-    profitability = tuple(map(lambda x: x.profitability(l), sorted_planes))
-    names = tuple(map(lambda x: x.name, sorted_planes))
+        for l in lines:
+            profits = tuple(
+                map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.name][:Plot.max]))
+            initial_costs = tuple(
+                map(lambda x: x.price * x.match_demand(l)["eco"] / 100.e6, sorted_planes[l.name][:Plot.max]))
+            profitability = tuple(
+                map(lambda x: x.profitability(l), sorted_planes[l.name][:Plot.max]))
+            names = tuple(
+                map(lambda x: x.name, sorted_planes[l.name]))
 
-    fig, ax = plt.subplots()
+            fig, ax = plt.subplots()
 
-    index = np.arange(n_planes)
+            index = np.arange(Plot.max)
 
-    rects1 = plt.bar(index, profits, bar_width,
-                     alpha=opacity,
-                     color='b',
-                     label='Profits (Millions $)')
+            rects1 = plt.bar(index, profits, Plot.bar_width,
+                             alpha=Plot.opacity,
+                             color='b',
+                             label='Profits (Millions $)')
 
-    rects2 = plt.bar(index + bar_width, initial_costs, bar_width,
-                     alpha=opacity,
-                     color='r',
-                     label='Initial cost (100M$)')
+            rects2 = plt.bar(index + Plot.bar_width, initial_costs, Plot.bar_width,
+                             alpha=Plot.opacity,
+                             color='r',
+                             label='Initial cost (100M$)')
 
-    rects3 = plt.bar(index + 2 * bar_width, profitability, bar_width,
-                     alpha=opacity,
-                     color='g',
-                     label='Profitability')
+            rects3 = plt.bar(index + 2 * Plot.bar_width, profitability, Plot.bar_width,
+                             alpha=Plot.opacity,
+                             color='g',
+                             label='Profitability')
 
-    plt.xlabel('Planes')
-    plt.title('Repartition profits/initial cost HYD->' + l.name)
-    plt.xticks(index + bar_width / 3, names)
-    plt.legend()
+            plt.xlabel('Planes')
+            plt.title('Repartition profits/initial cost HYD->' + l.name)
+            plt.xticks(index + Plot.bar_width / 3, names)
+            plt.legend()
 
-    plt.tight_layout()
+            plt.tight_layout()
 
-    sorted_planes[0].display_matching_infos(l)
+            sorted_planes[l.name][0].display_matching_infos(l)
 
-plt.show()
+        plt.show()
+

@@ -71,9 +71,7 @@ run purchase.py to visualize performances over your lines and financial.py to yo
 #### Demand prevision for a line
 
 Launch the purchase.py script. It will gives you some bar plot that helps if you often ask yourself 
-how much planes and which types should I buy when opening this new line
-
-Set the constant parameter `plot_{new, old}_lines` on True and visualize which are the most profitable planes and lines.
+how much planes and which types should I buy when opening this new line.
 
 #### Financial reporting
 

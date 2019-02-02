@@ -29,7 +29,7 @@ MARKETING_PATH = SCRAP_ROOT + "marketing/"
 NEWLINES = ["thailand.html", "india.html", "singapour.html", "taiwan.html", "vietnam.html"]
 
 
-def get_base_price_function(lines):
+def _base_price_function(lines):
     sorted_lines = sorted(lines, key=lambda x: x.distance)
 
     x_num = {}
@@ -56,16 +56,16 @@ def get_base_price_function(lines):
     return base_price_function
 
 
-def get_lines_attributes_from_planes_page():
+def _lines_attributes_from_planes_page():
     parser.parseFile(PLANES_PATH + "middle_range.html")
     json_str = str(parser.getElementById("lineListJson").innerHTML) \
         .replace("\n", "").replace("\\/", "").replace(" ", "").replace("HYD", "")
     return json.loads(json_str)
 
 
-def get_lines_attributes():
+def lines_data():
     lines = []
-    plane_page_attributes = get_lines_attributes_from_planes_page()
+    plane_page_attributes = _lines_attributes_from_planes_page()
     for line_key, line_attrib in plane_page_attributes.items():
         parser.parseFile(NETWORK_PATH + line_key + ".html")
         tax = float(
@@ -94,14 +94,14 @@ def get_lines_attributes():
             "pre": line_attrib["paxAttFirst"]
         }
 
-        lines.append(Line(name, distance, tax, hubs[0], demand, ticket_price))
+        lines.append(Line(name, distance, tax, hubs[0], demand, ticket_price, False))
 
     return lines
 
 
-def get_newline_attributes(lines):
+def newlines_data(lines):
     newlines = []
-    base_price_per_km = get_base_price_function(lines)
+    base_price_per_km = _base_price_function(lines)
     for filename in NEWLINES:
         parser.parseFile(NEwLINE_PATH + filename)
         airport_list_elem = parser.getElementsByClassName("airportList")[0]
@@ -126,12 +126,12 @@ def get_newline_attributes(lines):
             for m in market:
                 ticket_price[m] = distance * base_price_per_km[m](distance)
 
-            newlines.append(Line(name, distance, tax, hubs[0], demand, ticket_price))
+            newlines.append(Line(name, distance, tax, hubs[0], demand, ticket_price, True))
 
     return newlines
 
 
-def get_planes_attributes():
+def planes_data():
     filenames = [PLANES_PATH + "short_range.html", PLANES_PATH + "middle_range.html", PLANES_PATH + "long_range.html"]
     planes = []
     for name in filenames:
@@ -160,7 +160,6 @@ def get_planes_attributes():
 
     return planes
 
-
-get_planes_attributes()
-lines = get_lines_attributes()
-newlines = get_newline_attributes(lines)
+planes_data()
+lines = lines_data()
+newlines = newlines_data(lines)

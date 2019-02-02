@@ -13,7 +13,6 @@ def get_enum_value():
 
 
 enum_value = get_enum_value()
-days_per_week = 7
 
 
 # Represents the fields name in csv export from AM2+
@@ -55,6 +54,15 @@ class Field(Enum):
 
 class Data:
     EXPORTS_ROOT = "exports/"
+
+    keys = enum_value([
+        [Key.flight, Key.cka, Key.rch, Key.lap],
+        [Key.sfh, Key.sft, Key.sfs],
+        [Key.mia, Key.mea, Key.mss, Key.msp],
+        [Key.debit, Key.credit]
+    ])
+
+    all_keys = [x.value for x in Key]
 
     def __init__(self, filename=None):
         self.filename = filename
@@ -140,9 +148,8 @@ class Data:
         if delta > timedelta(0):
             add_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
             shift_day = self.covered - add_day - delta.days - 1
-            all_keys = Data.all_keys()
 
-            for key in all_keys:
+            for key in Data.all_keys:
                 if key == Key.__date__:
                     continue
                 try:
@@ -172,10 +179,9 @@ class Data:
     def raw(self):
         y = {}
         fields = self.fields
-        data_keys = Data.keys()
 
-        for k in range(0, len(data_keys)):
-            for key in data_keys[k]:
+        for k in range(0, len(Data.keys)):
+            for key in Data.keys[k]:
                 y[key] = list(map(lambda t: abs(t), fields[key][Field.data.value]))
 
         return y
@@ -188,10 +194,9 @@ class Data:
     def rel(self):
         y = {}
         fields = self.fields
-        data_keys = Data.keys()
 
-        for k in range(0, len(data_keys)):
-            for key in data_keys[k]:
+        for k in range(0, len(Data.keys)):
+            for key in Data.keys[k]:
                 if key == Key.__date__:
                     continue
 
@@ -223,7 +228,7 @@ class Data:
                                      Key.lpa]])[0]
 
         for t in range(0, self.covered):
-            y[t] = sum(self.fields[Key.lap.value][Field.data.value]) / days_per_week
+            y[t] = sum(self.fields[Key.lap.value][Field.data.value]) / 7.
             y_loss[t] = y[t]
             for key, field in self.fields.items():
                 if key == Key.__date__ or key in excluded_keys:
@@ -236,19 +241,6 @@ class Data:
                     y_loss[t] -= field_data
 
         return y, y_gain, y_loss
-
-    @classmethod
-    def keys(cls):
-        return enum_value([
-            [Key.flight, Key.cka, Key.rch, Key.lap],
-            [Key.sfh, Key.sft, Key.sfs],
-            [Key.mia, Key.mea, Key.mss, Key.msp],
-            [Key.debit, Key.credit]
-        ])
-
-    @classmethod
-    def all_keys(cls):
-        return [x.value for x in Key]
 
     def _read_csv(self):
         with open(Data.EXPORTS_ROOT + self.filename, "r") as csv_export:
@@ -359,21 +351,12 @@ class Plot:
 
     @staticmethod
     def keys(data, x, y, xl, yl):
-        data_keys = Data.keys()
 
-        for k in range(0, len(data_keys)):
-            for key in data_keys[k]:
+        for k in range(0, len(Data.keys)):
+            for key in Data.keys[k]:
                 plt.plot(x, y[key], label=data.fields[key][Field.name.value])
                 plt.legend()
                 plt.xlabel(xl)
                 plt.ylabel(yl)
 
             plt.show()
-
-
-export = Data("export.csv")
-export.update()
-
-Plot.raw(export)
-Plot.relative(export)
-Plot.flow(export)
