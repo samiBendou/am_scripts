@@ -68,15 +68,35 @@ After you first complete the install procedure, you only have to keep up to date
 The module contains three scripts : purchase.py, scrap.py and finance.py. After downloaded and installed the module, you can
 run purchase.py to visualize performances over your lines and financial.py to your visualize financial data.
 
-#### Demand prevision for a line
+#### Purchase helper
+If you often ask yourself how much planes and which types should I buy when opening this new line, you can know 
+easily answer to this question :
 
-Launch the purchase.py script. It will gives you some bar plot that helps if you often ask yourself 
-how much planes and which types should I buy when opening this new line.
+```python
+
+# Loads data from HTML pages
+planes = scrap.planes_data()  
+lines = scrap.lines_data()
+newlines = scrap.newlines_data(lines)
+data = purchase.Data(planes, newlines)
+
+# Bar plot to evaluate profitability of each plane
+purchase.Plot.sort(data)
+```
+This code plots you evaluation of planes for the lines you didn't yet buy but 
 
 #### Financial reporting
 
-Launch the financial.py script. It gives you plots of all commons accounting data provided by AM2+ .csv files.
+You can get all commons accounting plots from data provided by AM2+ .csv files :
 
-The financial data can be updated and are concatenated on a json file each time you load new data. It avoid conflicts
-by write only most recent data and allows storing and processing of long term data (month, year, more). 
+```python
+data = finance.Data("export.csv") # Loads data from AM2+ exports
+data.update() # Updating main data file
+finance.Plot.raw(data) # Plots cash values
+finance.Plot.rel(data) # Plots percents
+finance.Plot.flow(data) # Plots cash flow
+```
+
+The financial data are updated and concatenated on a json file `main.json` each time you load new data. 
+It avoid conflicts by write only most recent data and allows storing and processing of long term data (month, year, more). 
 

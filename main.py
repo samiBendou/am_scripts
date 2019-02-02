@@ -6,7 +6,7 @@ import scrap
 finance_data = finance.Data("export.csv")
 finance_data.update()
 finance.Plot.raw(finance_data)
-finance.Plot.relative(finance_data)
+finance.Plot.rel(finance_data)
 finance.Plot.flow(finance_data)
 
 # Plot purchase data from owned lines

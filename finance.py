@@ -1,8 +1,8 @@
 import csv
 import json
-from enum import Enum
 from datetime import datetime
 from datetime import timedelta
+from enum import Enum
 
 import matplotlib.pyplot as plt
 from numpy import concatenate
@@ -345,7 +345,7 @@ class Plot:
         Plot.keys(data, x, Plot.scale(data.raw()), "Date MM-DD", "Millions $")
 
     @staticmethod
-    def relative(data):
+    def rel(data):
         x = Plot.date_ticks(data)
         Plot.keys(data, x, Plot.scale(data.rel(), 1.e-2), "Date MM-DD", "Percent %")
 
