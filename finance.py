@@ -21,16 +21,16 @@ class Key(Enum):
     __date__ = "date"
 
     flight = "flight"
-    rch = "airline.research"
     plane = "aircraft.purchase"
+    line = "network.linePurchase"
+    rch = "airline.research"
+    tax = "airline.incomeTax"
+    success = "achievement.success"
+    ict = "incident"
+    misc = "divers"
 
     cka = "aircraft.checkA"
     ckd = "aircraft.checkD"
-
-    line = "network.linePurchase"
-    tax = "airline.incomeTax"
-    ict = "incident"
-    success = "achievement.success"
 
     lap = "finance.loanAutomaticPayment"
     lpa = "finance.loanPrincipalAmount"
@@ -43,8 +43,6 @@ class Key(Enum):
     mea = "marketing.externalAudit"
     mss = "marketing.superSimulation"
     msp = "marketing.simulationPurchase"
-
-    misc = "divers"
 
     debit = "finances.debitSum"
     credit = "finances.creditSum"
