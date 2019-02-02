@@ -18,11 +18,9 @@ plot_when_get = True
 
 
 # Represents the fields name in csv export from AM2-pro
-
 class Key(Enum):
     __date__ = "date"
 
-    period = "period"
     flight = "flight"
     rch = "airline.research"
     plane = "aircraft.purchase"
@@ -49,6 +47,9 @@ class Key(Enum):
 
     debit = "finances.debitSum"
     credit = "finances.creditSum"
+
+
+all_keys = [x.value for x in Key]
 
 
 class Field(Enum):
@@ -82,6 +83,10 @@ class Data:
     def __str__(self):
         return json.dumps(self.fields, indent=4)
 
+    """
+    @brief Reads file located at exports/filename where filename is the current filename of the object
+    @details When reading a file, current object state is reset
+    """
     def read(self):
         ext = self.filename.split(".")[1]
         if ext == "json":
@@ -91,7 +96,10 @@ class Data:
         else:
             print("File format .{} not handled for reading", ext)
             raise NotImplementedError
-
+    """
+    @brief Writes file located at exports/filename where filename is the current filename of the object
+    @details If the file already exists than existing data and self data are merged (see merge function).
+    """
     def write(self):
         ext = self.filename.split(".")[1]
         if ext == "json":
@@ -106,10 +114,10 @@ class Data:
         self.covered = data.covered
 
     """
-        @param data object representing financial data updated from main report
-        @brief Merge two Data objects in self object
-        @details Self data are updated during merge process. If self data are older than data to merge, than self data
-        are erased
+    @param data object representing financial data updated from main report
+    @brief Merge two Data objects in self object
+    @details Self data are updated during merge process. If self data are older than data to merge, the data to merge
+    are copied into self data. Else self data are augmented by concatenating older data and newer data
     """
     def merge(self, data):
         delta = self.date - data.date
@@ -120,25 +128,36 @@ class Data:
             raise NotImplementedError
 
         if delta > timedelta(0):
-            shift_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
-
-            for key, field in self.fields.items():
+            add_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
+            shift_day = self.covered - add_day - delta.days - 1
+            for key in all_keys:
                 if key == Key.__date__:
                     continue
+
                 try:
-                    new_sub = list(field[Field.data.value][(self.covered - shift_day - delta.days - 1):])
-                    old_sub = list(data.fields[key][Field.data.value][:-1])
-                    field[Field.data.value] = list(concatenate([old_sub, new_sub]))
-
+                    new_sub = list(self.fields[key][Field.data.value][shift_day:])
                 except KeyError:
-                    field[key] = list(concatenate([[0] * data.covered, new_sub]))
-                    continue
+                    new_sub = [0] * (add_day + delta.days + 1)
+                    if data.fields[key] is None:
+                        continue
+                    self.fields[key] = {Field.name.value: data.fields[key][Field.name.value]}
 
-            self.covered = data.covered + shift_day + delta.days
+                try:
+                    old_sub = list(data.fields[key][Field.data.value][:-1])
+                except KeyError:
+                    old_sub = [0] * (data.covered - 1)
+
+                self.fields[key][Field.data.value] = list(concatenate([old_sub, new_sub]))
+
+            self.covered = data.covered + add_day + delta.days
 
         elif delta <= timedelta(0):
             self.copy(data)
 
+    """
+    @brief Return dictionary of raw financial data sorted by Key enumeration
+    @details Values are given in dollars $
+    """
     def raw(self):
         y = {}
         fields = self.fields
@@ -149,6 +168,10 @@ class Data:
 
         return y
 
+    """
+    @brief Return dictionary of relative financial data sorted by Key enumeration
+    @details Values are given in percent %
+    """
     def rel(self):
         y = {}
         fields = self.fields
@@ -168,6 +191,10 @@ class Data:
 
         return y
 
+    """
+    @brief Return the cash flow of the airline
+    @details Values are given in dollars $. The planes purchase and loan principal amount are not taken in account.
+    """
     def flow(self):
         y = [0] * self.covered
         y_gain = [0] * self.covered
@@ -178,7 +205,6 @@ class Data:
                                      Key.line,
                                      Key.debit,
                                      Key.credit,
-                                     Key.success,
                                      Key.lpa]])[0]
 
         for t in range(0, self.covered):
@@ -312,8 +338,9 @@ class Plot:
             plt.show()
 
 
+# Common use of Data object : load new data .csv data and merge it with main data file
 export = Data("export_new.csv")
-export.merge(Data("export.csv"))
+export.merge(Data("export.csv"))  # Replace .csv with .json to load main data
 
 Plot.raw(export)
 Plot.relative(export)
