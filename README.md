@@ -1,4 +1,4 @@
-# AMTools 0.5.0
+# AMTools 0.6.0
 
 ### Introduction
  
@@ -103,5 +103,4 @@ This code plots financial data such as the graph bellow :
 ![Cashflow](img/cashflow.png)
 
 The financial data are updated and concatenated on a json file `main.json` each time you load new data. 
-It avoid conflicts by writing only most recent data and allows storing and processing of long term data (month, year, more). 
-
+It avoid conflicts by writing only most recent data and allows storing and processing of long term data (month, year, more).

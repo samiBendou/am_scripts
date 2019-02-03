@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 from enum import Enum
 from DateBase import DateBase
-
+from matplotlib.colors import rgb2hex
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -335,82 +335,71 @@ class Data:
 
 
 class Plot:
-
     @staticmethod
     def date_ticks(data):
-        day = timedelta(days=1)
-        x = [0] * data.base.range
-        for k in range(0, data.base.range):
-            shift = (k + data.base.offset) * data.base.period - data.base.covered + 1 + data.base.start
-            x[k] = (data.base.date + shift * day).strftime("%m-%d")
-        return x
+        ticks = list(map(lambda t: t.strftime("%m-%d"), data.base.list()))
+        return ticks
 
     @staticmethod
     def scale(y, div=1.e6):
-        if type(y) == dict:
-            new_y = dict(y)
-            for key in list(new_y.keys()):
-                new_y[key] = list(map(lambda t: t / div, new_y[key]))
-            return new_y
-        elif type(y) == list:
-            return list(map(lambda t: t / div, y))
+        new_y = y.copy()
+        for key in list(new_y.keys()):
+            new_y[key] = list(map(lambda t: t / div, new_y[key]))
+        return new_y
 
     @staticmethod
-    def raw(data):
+    def raw(data, average=False):
         x = Plot.date_ticks(data)
-        Plot.keys(data, x, Plot.scale(data.raw()), "Date MM-DD", "Millions $")
+        y = Plot.scale(data.raw())
+        label = {key: data.fields[key][Field.name.value] for key in list(y.keys())}
+        for keys in Data.keys:
+            Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Millions $", label, average)
 
     @staticmethod
-    def rel(data):
+    def rel(data, average=False):
         x = Plot.date_ticks(data)
-        Plot.keys(data, x, Plot.scale(data.rel(), 1.e-2), "Date MM-DD", "Percent %")
+        y = Plot.scale(data.rel(), 1.e-2)
+        label = {key: data.fields[key][Field.name.value] for key in list(y.keys())}
+        for keys in Data.keys:
+            Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Percent %", label, average)
 
     @staticmethod
-    def flow(data):
+    def flow(data, average=False):
         x = Plot.date_ticks(data)
-        y = data.flow()
-
-        y["flow"] = Plot.scale(y["flow"])
-        y["gain"] = Plot.scale(y["gain"])
-        y["loss"] = Plot.scale(y["loss"])
-
-        plt.plot(x, y["flow"], label="Cash flow")
-        plt.plot(x, y["gain"], label="Benefits")
-        plt.plot(x, y["loss"], label="Costs")
-        plt.plot(x, [sum(y["flow"]) / len(x)] * len(x), "--", label="Average cash flow")
-        plt.plot(x, [sum(y["gain"]) / len(x)] * len(x), "--", label="Average benefits")
-        plt.plot(x, [sum(y["loss"]) / len(x)] * len(x), "--", label="Average costs")
-        plt.legend()
-        plt.xlabel("Date MM-DD")
-        plt.ylabel("Millions $")
-        plt.show()
+        y = Plot.scale(data.flow())
+        label = {"flow": "Cash flow", "gain": "Benefits", "loss": "Costs"}
+        Plot.keys(x, y, "Date MM-DD", "Millions $", label, average)
 
     @staticmethod
     def pie(data):
-
         y = data.pie(thd=3.e5)
         size = 0.3
         fig, ax = plt.subplots()
-
         colors = plt.get_cmap("Set3")(np.arange(len(y)))
-
+        title = "Budget repartition : "
+        title += data.base.bound("start").strftime("%m-%d-%y") + " -> " + data.base.bound("end").strftime("%m-%d-%y")
         ax.pie(list(y.values()),
                radius=1,
-               wedgeprops=dict(width=size, edgecolor='w'),
+               wedgeprops=dict(width=size, edgecolor="w"),
                colors=colors,
-               labels=[data.fields[key][Field.name.value] for key in list(y.keys())]
+               labels=[data.fields[key][Field.name.value] for key in list(y.keys())],
+               autopct="%1.1f%%"
                )
-        ax.set(aspect="equal", title='Budget repartition')
+        ax.set(aspect="equal", title=title)
         plt.show()
 
     @staticmethod
-    def keys(data, x, y, xl, yl):
+    def keys(x, y, xl, yl, label, average=False):
+        keys = list(y.keys())
+        n = len(x)
+        colors = plt.get_cmap("Dark2")(np.arange(len(keys)))
+        for k in range(0, len(keys)):
+            plt.plot(x, y[keys[k]], label=label[keys[k]], color=rgb2hex(colors[k][:3]))
+            if average is True:
+                y_avg = [sum(y[keys[k]]) / len(y[keys[k]])] * n
+                plt.plot(x, y_avg, "--", label=None, color=rgb2hex(colors[k][:3]))
+            plt.legend()
+            plt.xlabel(xl)
+            plt.ylabel(yl)
 
-        for k in range(0, len(Data.keys)):
-            for key in Data.keys[k]:
-                plt.plot(x, y[key], label=data.fields[key][Field.name.value])
-                plt.legend()
-                plt.xlabel(xl)
-                plt.ylabel(yl)
-
-            plt.show()
+        plt.show()

@@ -32,6 +32,21 @@ class DateBase:
         (self.period, self.offset, self.start, self.end) = self._unwrap()
         self.range = int((self.end - self.start) / self.period - self.offset) + 1
 
+    def list(self):
+        day = timedelta(days=1)
+        x = [0] * self.range
+        for k in range(0, self.range):
+            shift = (k + self.offset) * self.period - self.covered + 1 + self.start
+            x[k] = (self.date + shift * day)
+        return x
+
+    def bound(self, str):
+        day = timedelta(days=1)
+        if str == "start":
+            return self.start * day + self.raw_start
+        elif str == "end":
+            return self.end * day + self.raw_start
+
     def _unwrap(self):
         assert self.date is not None and self.covered > 0
 
