@@ -57,23 +57,69 @@ class Data:
 
     keys = enum_value([
         [Key.flight, Key.cka, Key.rch, Key.lap],
-        [Key.sfh, Key.sft, Key.sfs],
-        [Key.mia, Key.mea, Key.mss, Key.msp],
-        [Key.debit, Key.credit]
+        [Key.flight, Key.sfh, Key.sft, Key.sfs],
+        [Key.flight, Key.mia, Key.mea, Key.mss, Key.msp],
+        [Key.flight, Key.debit, Key.credit]
     ])
 
     all_keys = [x.value for x in Key]
 
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, period=None, offset=None, start=None, end=None):
         self.filename = filename
+        self.period = None
+        self.offset = None
+        self.start = None
+        self.end = None
+
         self.date = None
         self.covered = 0
         self.fields = {}
         if filename is not None:
             self.read()
 
+        self.range = 0
+        self.set_time_base(period, offset, start, end)
+
     def __str__(self):
         return json.dumps(self.fields, indent=4)
+
+    def _unwrap_time_base(self):
+        raw_start = (self.date - timedelta(days=self.covered - 1))
+        d_start, d_end = datetime.now(), datetime.now()
+        period = 1 if self.period is None else self.period
+        offset = 0 if self.offset is None else self.offset
+
+        ret = [period, offset]
+        if type(self.start) is int:
+            assert type(self.end) is int
+            ret.append(self.start)
+        else:
+            d_start = raw_start if self.start is None else self.start
+            delta = d_start - raw_start
+            add_day = 1 if ((delta - timedelta(days=delta.days)) + raw_start).day != raw_start.day else 0
+            ret.append(int(delta.days + add_day))
+
+        if type(self.end) is int:
+            assert type(self.start) is int
+            ret.append(self.end)
+        else:
+            d_end = self.date if self.end is None else self.end
+            ret.append((d_end - d_start).days + 1)
+
+        assert ret[-1] - ret[-2] <= self.covered
+
+        return tuple(ret)
+
+    def set_time_base(self, period=None, offset=None, start=None, end=None):
+        self.period = period
+        self.offset = offset
+        self.start = start
+        self.end = end
+        (self.period, self.offset, self.start, self.end) = self._unwrap_time_base()
+        self.range = int((self.end - self.start) / self.period - self.offset) + 1
+
+    def reset_time_base(self):
+        self.set_time_base()
 
     """
     @brief switches files format contained in filename
@@ -117,6 +163,7 @@ class Data:
         self.fields = data.fields
         self.date = data.date
         self.covered = data.covered
+        self.set_time_base(data.period, data.offset)
 
     """
     @brief Updates main financial data json file with self data
@@ -164,6 +211,7 @@ class Data:
                     old_sub = [0] * (data.covered - 1)
                 self.fields[key][Field.data.value] = list(np.concatenate([old_sub, new_sub]))
             self.covered = data.covered + add_day + delta.days
+            self.reset_time_base()
 
         else:
             self.copy(data)
@@ -173,40 +221,42 @@ class Data:
     @details Values are given in dollars $
     """
 
-    def raw(self, period=None):
+    def raw(self):
         y = {}
         for k in range(0, len(Data.keys)):
             for key in Data.keys[k]:
                 y[key] = list(map(lambda t: abs(t), self.fields[key][Field.data.value]))
 
-        return y if period is None else self.reduce(y, period)
+        return self.reduce(y)
 
     """
     @brief Return dictionary of relative financial data sorted by Key enumeration
     @details Values are given in percent %
     """
 
-    def rel(self, period=None):
-        y = self.raw()
+    def rel(self):
+        data = self.raw()
+        y = {}
         for k in range(0, len(Data.keys)):
             for key in Data.keys[k]:
                 if key == Key.__date__:
                     continue
-                for t in range(0, self.covered):
-                    revenue = float(self.fields[Key.flight.value][Field.data.value][t])
+                y[key] = data[key].copy()
+                for t in range(0, self.range):
+                    revenue = float(data[Key.flight.value][t])
                     if revenue == 0.:
-                        y[key][t] = 0.
+                        y[key][t] = 0 if key != Key.flight.value else 1
                         continue
                     y[key][t] /= revenue
 
-        return y if period is None else self.reduce(y, period)
+        return y
 
     """
     @brief Return the cash flow of the airline
     @details Values are given in dollars $. The planes purchase and loan principal amount are not taken in account.
     """
 
-    def flow(self, period=None):
+    def flow(self):
         excluded_keys = enum_value([[Key.plane,
                                      Key.lap,
                                      Key.cka,
@@ -229,7 +279,7 @@ class Data:
                 else:
                     y["loss"][t] -= field_data
 
-        return y if period is None else self.reduce(y, period)
+        return self.reduce(y)
 
     """
     @param thd Threshold to exclude data.
@@ -239,32 +289,39 @@ class Data:
     @return a dictionary with the remaining keys and the average value
     """
 
-    def pie(self, thd=0., period=None):
+    def pie(self, thd=0.):
         excluded_keys = enum_value([[Key.debit, Key.credit]])[0]
-        raw = self.raw(period)
 
+        # Filtering keys
+        raw = self.raw()
         for key, field in self.fields.items():
             if key == Key.__date__ or key in excluded_keys:
                 continue
-            if abs(sum(field[Field.data.value])) / self.covered < thd:
+            if abs(sum(field[Field.data.value])) / self.range < thd * self.period:
                 excluded_keys.append(key)
 
         for key in excluded_keys:
             try:
-                raw.pop(key)
+                del raw[key]
             except KeyError:
                 continue
 
+        # Averaging values
         keys = list(filter(lambda x: True if x not in excluded_keys else False, list(raw.keys())))
         values = np.array(list(raw.values())).mean(axis=1)
         return dict(zip(keys, values))
 
-    def reduce(self, y, period):
+    def reduce(self, y):
         y_reduced = {}
         for key, val in y.items():
-            y_reduced[key] = [0] * int(self.covered / period + 1)
-            for t in range(0, self.covered):
-                y_reduced[key][int(t / period)] += y[key][t] / float(period)
+            y_reduced[key] = [0] * self.range
+            for t in range(0, self.range * self.period):
+                try:
+                    shift = self.offset * self.period + self.start
+                    y_reduced[key][int(t / self.period)] += y[key][t + shift]
+                except IndexError:
+                    continue
+
         return y_reduced
 
     def _read_csv(self):
@@ -325,14 +382,12 @@ class Data:
 class Plot:
 
     @staticmethod
-    def date_ticks(data, period=None):
-        scale = 1 if period is None else period
-        n = int(data.covered / scale) + (0 if period is None else 1)
+    def date_ticks(data):
         day = timedelta(days=1)
-
-        x = [0] * n
-        for k in range(0, n):
-            x[k] = (data.date + (k * scale - data.covered + 1) * day).strftime("%m-%d")
+        x = [0] * data.range
+        for k in range(0, data.range):
+            x[k] = (data.date + ((k + data.offset) * data.period - data.covered + 1 + data.start) * day).strftime(
+                "%m-%d")
         return x
 
     @staticmethod
@@ -346,9 +401,19 @@ class Plot:
             return list(map(lambda t: t / div, y))
 
     @staticmethod
-    def flow(data, period=None):
-        x = Plot.date_ticks(data, period)
-        y = data.flow(period)
+    def raw(data):
+        x = Plot.date_ticks(data)
+        Plot.keys(data, x, Plot.scale(data.raw()), "Date MM-DD", "Millions $")
+
+    @staticmethod
+    def rel(data):
+        x = Plot.date_ticks(data)
+        Plot.keys(data, x, Plot.scale(data.rel(), 1.e-2), "Date MM-DD", "Percent %")
+
+    @staticmethod
+    def flow(data):
+        x = Plot.date_ticks(data)
+        y = data.flow()
 
         y["flow"] = Plot.scale(y["flow"])
         y["gain"] = Plot.scale(y["gain"])
@@ -366,31 +431,9 @@ class Plot:
         plt.show()
 
     @staticmethod
-    def raw(data, period=None):
-        x = Plot.date_ticks(data, period)
-        Plot.keys(data, x, Plot.scale(data.raw(period)), "Date MM-DD", "Millions $")
+    def pie(data):
 
-    @staticmethod
-    def rel(data, period=None):
-        x = Plot.date_ticks(data, period)
-        Plot.keys(data, x, Plot.scale(data.rel(period), 1.e-2), "Date MM-DD", "Percent %")
-
-    @staticmethod
-    def keys(data, x, y, xl, yl):
-
-        for k in range(0, len(Data.keys)):
-            for key in Data.keys[k]:
-                plt.plot(x, y[key], label=data.fields[key][Field.name.value])
-                plt.legend()
-                plt.xlabel(xl)
-                plt.ylabel(yl)
-
-            plt.show()
-
-    @staticmethod
-    def pie(data, period=None):
-
-        y = data.pie(thd=3.e5, period=period)
+        y = data.pie(thd=3.e5)
         size = 0.3
         fig, ax = plt.subplots()
 
@@ -404,3 +447,15 @@ class Plot:
                )
         ax.set(aspect="equal", title='Budget repartition')
         plt.show()
+
+    @staticmethod
+    def keys(data, x, y, xl, yl):
+
+        for k in range(0, len(Data.keys)):
+            for key in Data.keys[k]:
+                plt.plot(x, y[key], label=data.fields[key][Field.name.value])
+                plt.legend()
+                plt.xlabel(xl)
+                plt.ylabel(yl)
+
+            plt.show()
