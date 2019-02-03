@@ -5,7 +5,7 @@ from datetime import timedelta
 from enum import Enum
 
 import matplotlib.pyplot as plt
-from numpy import concatenate
+import numpy as np
 
 
 def get_enum_value():
@@ -163,7 +163,7 @@ class Data:
                     old_sub = list(data.fields[key][Field.data.value][:-1])
                 except KeyError:
                     old_sub = [0] * (data.covered - 1)
-                self.fields[key][Field.data.value] = list(concatenate([old_sub, new_sub]))
+                self.fields[key][Field.data.value] = list(np.concatenate([old_sub, new_sub]))
             self.covered = data.covered + add_day + delta.days
 
         elif delta <= timedelta(0):
@@ -239,6 +239,26 @@ class Data:
                     y_loss[t] -= field_data
 
         return y, y_gain, y_loss
+
+    def pie(self, thd=0.):
+        excluded_keys = enum_value([[Key.debit, Key.credit]])[0]
+        raw = self.raw()
+
+        for key, field in self.fields.items():
+            if key == Key.__date__ or key in excluded_keys:
+                continue
+            if abs(sum(field[Field.data.value])) / self.covered < thd:
+                excluded_keys.append(key)
+
+        for key in excluded_keys:
+            try:
+                raw.pop(key)
+            except KeyError:
+                continue
+
+        keys = list(filter(lambda x: True if x not in excluded_keys else False, list(raw.keys())))
+        values = np.array(list(raw.values())).mean(axis=1)
+        return dict(zip(keys, values))
 
     def _read_csv(self):
         with open(Data.EXPORTS_ROOT + self.filename, "r") as csv_export:
@@ -358,3 +378,21 @@ class Plot:
                 plt.ylabel(yl)
 
             plt.show()
+
+    @staticmethod
+    def pie(data):
+
+        y = data.pie(thd=3.e5)
+        size = 0.3
+        fig, ax = plt.subplots()
+
+        colors = plt.get_cmap("Set3")(np.arange(len(y)))
+
+        ax.pie(list(y.values()),
+               radius=1,
+               wedgeprops=dict(width=size, edgecolor='w'),
+               colors=colors,
+               labels=[data.fields[key][Field.name.value] for key in list(y.keys())]
+               )
+        ax.set(aspect="equal", title='Budget repartition')
+        plt.show()
