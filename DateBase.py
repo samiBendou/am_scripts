@@ -25,8 +25,6 @@ class DateBase:
         self.set()
 
     def set(self, period=None, offset=None, start=None, end=None):
-        assert self.date is not None and self.covered > 0
-
         self.period = period
         self.offset = offset
         self.start = start
@@ -35,6 +33,8 @@ class DateBase:
         self.range = int((self.end - self.start) / self.period - self.offset) + 1
 
     def _unwrap(self):
+        assert self.date is not None and self.covered > 0
+
         period = self._unwrap_period()
         offset = self._unwrap_offset()
         start = self._unwrap_start()
