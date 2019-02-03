@@ -166,8 +166,7 @@ class Data:
                     old_sub = [0] * (data.base.covered - 1)
                 self.fields[key][Field.data.value] = list(np.concatenate([old_sub, new_sub]))
 
-            self.base.covered = data.base.covered + add_day + delta.days
-            self.base.set()
+            self.base.reset(covered=data.base.covered + add_day + delta.days)
 
         else:
             self.copy(data)
@@ -313,8 +312,8 @@ class Data:
                         continue
 
             self.fields = fields
-            self.base.date = export_date
-            self.base.covered = len(self.fields[Key.flight.value][Field.data.value])
+            self.base.reset(date=export_date,
+                            covered=len(self.fields[Key.flight.value][Field.data.value]))
 
     def _write_json(self):
         try:
@@ -331,8 +330,8 @@ class Data:
         json_filename = self.filename.replace(".csv", ".json")
         with open(Data.EXPORTS_ROOT + json_filename, "r") as json_file:
             self.fields = json.load(json_file)
-            self.base.date = datetime.fromisoformat(self.fields[Key.__date__])
-            self.base.covered = len(self.fields[Key.flight.value][Field.data.value])
+            self.base.reset(date=datetime.fromisoformat(self.fields[Key.__date__]),
+                            covered=len(self.fields[Key.flight.value][Field.data.value]))
 
 
 class Plot:
@@ -350,7 +349,7 @@ class Plot:
     def scale(y, div=1.e6):
         if type(y) == dict:
             new_y = dict(y)
-            for key in new_y.keys():
+            for key in list(new_y.keys()):
                 new_y[key] = list(map(lambda t: t / div, new_y[key]))
             return new_y
         elif type(y) == list:
