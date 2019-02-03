@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from datetime import timedelta
 from enum import Enum
+from DateBase import DateBase
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -66,60 +67,14 @@ class Data:
 
     def __init__(self, filename=None, period=None, offset=None, start=None, end=None):
         self.filename = filename
-        self.period = None
-        self.offset = None
-        self.start = None
-        self.end = None
-
-        self.date = None
-        self.covered = 0
+        self.base = DateBase()
         self.fields = {}
         if filename is not None:
             self.read()
-
-        self.range = 0
-        self.set_time_base(period, offset, start, end)
+            self.base.set(period, offset, start, end)
 
     def __str__(self):
         return json.dumps(self.fields, indent=4)
-
-    def _unwrap_time_base(self):
-        raw_start = (self.date - timedelta(days=self.covered - 1))
-        d_start, d_end = datetime.now(), datetime.now()
-        period = 1 if self.period is None else self.period
-        offset = 0 if self.offset is None else self.offset
-
-        ret = [period, offset]
-        if type(self.start) is int:
-            assert type(self.end) is int
-            ret.append(self.start)
-        else:
-            d_start = raw_start if self.start is None else self.start
-            delta = d_start - raw_start
-            add_day = 1 if ((delta - timedelta(days=delta.days)) + raw_start).day != raw_start.day else 0
-            ret.append(int(delta.days + add_day))
-
-        if type(self.end) is int:
-            assert type(self.start) is int
-            ret.append(self.end)
-        else:
-            d_end = self.date if self.end is None else self.end
-            ret.append((d_end - d_start).days + 1)
-
-        assert ret[-1] - ret[-2] <= self.covered
-
-        return tuple(ret)
-
-    def set_time_base(self, period=None, offset=None, start=None, end=None):
-        self.period = period
-        self.offset = offset
-        self.start = start
-        self.end = end
-        (self.period, self.offset, self.start, self.end) = self._unwrap_time_base()
-        self.range = int((self.end - self.start) / self.period - self.offset) + 1
-
-    def reset_time_base(self):
-        self.set_time_base()
 
     """
     @brief switches files format contained in filename
@@ -146,6 +101,8 @@ class Data:
             print("File format .{} not handled for reading", ext)
             raise NotImplementedError
 
+        self.base.set()
+
     """
     @brief Writes file located at exports/filename where filename is the current filename of the object
     @details If the file already exists than existing data and self data are merged (see merge function).
@@ -161,9 +118,7 @@ class Data:
 
     def copy(self, data):
         self.fields = data.fields
-        self.date = data.date
-        self.covered = data.covered
-        self.set_time_base(data.period, data.offset)
+        self.base = DateBase(covered=data.base.covered, date=data.base.date)
 
     """
     @brief Updates main financial data json file with self data
@@ -184,16 +139,16 @@ class Data:
     """
 
     def merge(self, data):
-        delta = self.date - data.date
+        delta = self.base.date - data.base.date
 
-        assert data.covered >= self.covered
+        assert data.base.covered >= self.base.covered
 
         if abs(delta.days) > 8:
             raise NotImplementedError
 
         if delta > timedelta(0):
-            add_day = 1 if ((delta - timedelta(days=delta.days)) + data.date).day != data.date.day else 0
-            shift_day = self.covered - add_day - delta.days - 1
+            add_day = 1 if ((delta - timedelta(days=delta.days)) + data.base.date).day != data.base.date.day else 0
+            shift_day = self.base.covered - add_day - delta.days - 1
             for key in Data.all_keys:
                 if key == Key.__date__:
                     continue
@@ -208,10 +163,11 @@ class Data:
                 try:
                     old_sub = list(data.fields[key][Field.data.value][:-1])
                 except KeyError:
-                    old_sub = [0] * (data.covered - 1)
+                    old_sub = [0] * (data.base.covered - 1)
                 self.fields[key][Field.data.value] = list(np.concatenate([old_sub, new_sub]))
-            self.covered = data.covered + add_day + delta.days
-            self.reset_time_base()
+
+            self.base.covered = data.base.covered + add_day + delta.days
+            self.base.set()
 
         else:
             self.copy(data)
@@ -242,7 +198,7 @@ class Data:
                 if key == Key.__date__:
                     continue
                 y[key] = data[key].copy()
-                for t in range(0, self.range):
+                for t in range(0, self.base.range):
                     revenue = float(data[Key.flight.value][t])
                     if revenue == 0.:
                         y[key][t] = 0 if key != Key.flight.value else 1
@@ -265,8 +221,8 @@ class Data:
                                      Key.credit,
                                      Key.lpa]])[0]
 
-        y = {"flow": [0] * self.covered, "gain": [0] * self.covered, "loss": [0] * self.covered}
-        for t in range(0, self.covered):
+        y = {"flow": [0] * self.base.covered, "gain": [0] * self.base.covered, "loss": [0] * self.base.covered}
+        for t in range(0, self.base.covered):
             y["flow"][t] = sum(self.fields[Key.lap.value][Field.data.value]) / 7.
             y["loss"][t] = y["flow"][t]
             for key, field in self.fields.items():
@@ -297,7 +253,7 @@ class Data:
         for key, field in self.fields.items():
             if key == Key.__date__ or key in excluded_keys:
                 continue
-            if abs(sum(field[Field.data.value])) / self.range < thd * self.period:
+            if abs(sum(field[Field.data.value])) / self.base.range < thd * self.base.period:
                 excluded_keys.append(key)
 
         for key in excluded_keys:
@@ -314,11 +270,11 @@ class Data:
     def reduce(self, y):
         y_reduced = {}
         for key, val in y.items():
-            y_reduced[key] = [0] * self.range
-            for t in range(0, self.range * self.period):
+            y_reduced[key] = [0] * self.base.range
+            for t in range(0, self.base.range * self.base.period):
                 try:
-                    shift = self.offset * self.period + self.start
-                    y_reduced[key][int(t / self.period)] += y[key][t + shift]
+                    shift = self.base.offset * self.base.period + self.base.start
+                    y_reduced[key][int(t / self.base.period)] += y[key][t + shift]
                 except IndexError:
                     continue
 
@@ -339,7 +295,7 @@ class Data:
                                hour=int(time_split[0]), minute=int(time_split[1]), second=int(time_split[2]))
 
         # Current data are already up to date
-        if self.date is None or self.date < export_date:
+        if self.base.date is None or self.base.date < export_date:
             fields = {Key.__date__: export_date.isoformat()}
 
             exports_matrix.remove(exports_matrix[1])
@@ -357,8 +313,8 @@ class Data:
                         continue
 
             self.fields = fields
-            self.date = export_date
-            self.covered = len(self.fields[Key.flight.value][Field.data.value])
+            self.base.date = export_date
+            self.base.covered = len(self.fields[Key.flight.value][Field.data.value])
 
     def _write_json(self):
         try:
@@ -375,8 +331,8 @@ class Data:
         json_filename = self.filename.replace(".csv", ".json")
         with open(Data.EXPORTS_ROOT + json_filename, "r") as json_file:
             self.fields = json.load(json_file)
-            self.date = datetime.fromisoformat(self.fields[Key.__date__])
-            self.covered = len(self.fields[Key.flight.value][Field.data.value])
+            self.base.date = datetime.fromisoformat(self.fields[Key.__date__])
+            self.base.covered = len(self.fields[Key.flight.value][Field.data.value])
 
 
 class Plot:
@@ -384,10 +340,10 @@ class Plot:
     @staticmethod
     def date_ticks(data):
         day = timedelta(days=1)
-        x = [0] * data.range
-        for k in range(0, data.range):
-            x[k] = (data.date + ((k + data.offset) * data.period - data.covered + 1 + data.start) * day).strftime(
-                "%m-%d")
+        x = [0] * data.base.range
+        for k in range(0, data.base.range):
+            shift = (k + data.base.offset) * data.base.period - data.base.covered + 1 + data.base.start
+            x[k] = (data.base.date + shift * day).strftime("%m-%d")
         return x
 
     @staticmethod
