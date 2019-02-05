@@ -105,7 +105,7 @@ class Plot:
         # get the tick label font size
         dpi = 72.27
 
-        # comput the matrix height in points and inches
+        # compute the matrix height in points and inches
         matrix_height_pt = 40 * values.shape[0]
         matrix_height_in = matrix_height_pt / dpi
 
@@ -141,6 +141,5 @@ class Plot:
         ax.set_title("Profitability comparison")
         plt.tight_layout()
 
-        # let seaborn do it's thing
         plt.show()
 
