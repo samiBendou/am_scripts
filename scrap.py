@@ -13,7 +13,7 @@ from Plane import Plane
 parser = AdvancedHTMLParser.AdvancedHTMLParser()
 
 hubs = [
-    Hub(tax=4497.0)
+    Hub(name="HYD", tax=4497.0)
 ]
 
 market = ["eco", "biz", "pre"]
