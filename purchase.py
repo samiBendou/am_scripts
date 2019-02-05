@@ -1,5 +1,6 @@
 from GenericPlot import GenericPlot
 
+from Market import Market
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -22,9 +23,9 @@ class Data:
 
         planes = {}
         for l in self.lines:
-            planes[l.name] = list(
+            planes[l.dst.iata] = list(
                 filter(lambda x: True if x.range > l.distance and x.name in planes_names else False, self.planes))
-            planes[l.name] = sorted(planes[l.name], key=lambda x: x.profitability(l), reverse=True)
+            planes[l.dst.iata] = sorted(planes[l.dst.iata], key=lambda x: x.profitability(l), reverse=True)
 
         return planes
 
@@ -33,7 +34,7 @@ class Data:
 
         planes = {}
         for l in self.lines:
-            planes[l.name] = list(filter(lambda x: True if x.name in planes_names else False, self.planes))
+            planes[l.dst.iata] = list(filter(lambda x: True if x.name in planes_names else False, self.planes))
 
         return planes
 
@@ -57,13 +58,14 @@ class Plot(GenericPlot):
 
         for l in data.lines:
             profits = tuple(
-                map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.name][:max_planes]))
+                map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.dst.iata][:max_planes]))
             initial_costs = tuple(
-                map(lambda x: x.price * x.match_demand(l)["eco"] / 100.e6, sorted_planes[l.name][:max_planes]))
+                map(lambda x: x.price * x.match_demand(l)[Market.eco.name] / 100.e6,
+                    sorted_planes[l.dst.iata][:max_planes]))
             profitability = tuple(
-                map(lambda x: x.profitability(l), sorted_planes[l.name][:max_planes]))
+                map(lambda x: x.profitability(l), sorted_planes[l.dst.iata][:max_planes]))
             names = tuple(
-                map(lambda x: x.name, sorted_planes[l.name][:max_planes]))
+                map(lambda x: x.name, sorted_planes[l.dst.iata][:max_planes]))
 
             if names == ():
                 continue
@@ -86,23 +88,23 @@ class Plot(GenericPlot):
                     label="Profitability")
 
             plt.xticks(index + bar_width / 3, names)
-            cls.render(xl="Planes", title="Profits vs initial cost HYD-" + l.name)
+            cls.render(xl="Planes", title="Profits vs initial cost HYD-" + l.dst.iata)
 
-            sorted_planes[l.name][0].display_matching_infos(l)
-            sorted_planes[l.name][1].display_matching_infos(l)
+            sorted_planes[l.dst.iata][0].display_matching_infos(l)
+            sorted_planes[l.dst.iata][1].display_matching_infos(l)
 
     @classmethod
     def heatmap(cls, data, included_planes=None, excluded_planes=None):
         heatmap_planes = data.heatmap(included_planes, excluded_planes)
 
-        lines_ticks = [l.hub.name + "-" + l.name for l in data.lines]
+        lines_ticks = [l.hub.iata + "-" + l.dst.iata for l in data.lines]
         planes_ticks = list(filter(lambda s: True if s in included_planes else False, [x.name for x in data.planes]))
         values = []
         for i in range(0, len(data.lines)):
             values.append([])
             for j in range(0, len(planes_ticks)):
-                if heatmap_planes[data.lines[i].name][j].range > data.lines[i].distance:
-                    values[i].append(heatmap_planes[data.lines[i].name][j].profitability(data.lines[i]))
+                if heatmap_planes[data.lines[i].dst.iata][j].range > data.lines[i].distance:
+                    values[i].append(heatmap_planes[data.lines[i].dst.iata][j].profitability(data.lines[i]))
                 else:
                     values[i].append(0)
 

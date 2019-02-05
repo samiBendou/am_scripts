@@ -1,3 +1,4 @@
+from Market import Market
 import numpy as np
 
 additional_flight_time = 1.0  # hours
@@ -5,8 +6,6 @@ hours_day = 24  # hours / day
 l_petrol_bar = 159.0  # L / barrel
 petrol_price = 53.53 / l_petrol_bar  # $/L
 fill_ratio = 0.86  # expected aircraft filling ratio
-
-market = ["eco", "biz", "pre"]
 
 
 class Plane:
@@ -40,12 +39,12 @@ class Plane:
         # demand_max = sum(line.demand.values())
         flight_per_day = self.flights_per_day(line)
 
-        for m in market:
+        for m in Market:
             try:
-                count_planes[m] = int(
-                    np.round(line.demand[m] / (2 * fill_ratio * self.pax[m] * flight_per_day)))
+                count_planes[m.name] = int(
+                    np.round(line.demand[m.name] / (2 * fill_ratio * self.pax[m.name] * flight_per_day)))
             except ZeroDivisionError:
-                count_planes[m] = 0
+                count_planes[m.name] = 0
                 continue
 
         return count_planes
@@ -54,16 +53,16 @@ class Plane:
         count_planes = self.match_demand(line)
 
         best_pax = {}
-        for m in market:
-            best_pax[m] = count_planes["eco"] * self.flights_per_day(line) * 2 * self.pax[m]
+        for m in Market:
+            best_pax[m.name] = count_planes[Market.eco.name] * self.flights_per_day(line) * 2 * self.pax[m.name]
 
         return best_pax
 
     def pax_delta(self, line):
         matching_pax = self.pax_capacity_at_matching(line)
         matching_delta = line.demand.copy()
-        for m in market:
-            matching_delta[m] -= int(matching_pax[m])
+        for m in Market:
+            matching_delta[m.name] -= int(matching_pax[m.name])
 
         return matching_delta
 
@@ -71,33 +70,33 @@ class Plane:
         matching_pax = self.pax_capacity_at_matching(line)
 
         best_pax = {}
-        for m in market:
-            best_pax[m] = int(min(line.demand[m], matching_pax[m]))
+        for m in Market:
+            best_pax[m.name] = int(min(line.demand[m.name], matching_pax[m.name]))
 
         return best_pax
 
     def consumption_at_matching(self, line):
         best_pax = self.pax_at_matching(line)
         matching_cons = {}
-        for m in market:
-            matching_cons[m] = 2 * line.distance * best_pax[m] * self.cons / 100.0
+        for m in Market:
+            matching_cons[m.name] = 2 * line.distance * best_pax[m.name] * self.cons / 100.0
 
         return matching_cons
 
     def revenue_at_matching(self, line):
         best_pax = self.pax_at_matching(line)
         best_revenue = {}
-        for m in market:
-            best_revenue[m] = best_pax[m] * line.ticket_price[m]
+        for m in Market:
+            best_revenue[m.name] = best_pax[m.name] * line.ticket_price[m.name]
 
         return best_revenue
 
     def cost_at_matching(self, line):
         matching_cons = self.consumption_at_matching(line)
         matching_cost = matching_cons
-        for m in market:
-            matching_cost[m] *= petrol_price
-            matching_cost[m] += (line.tax + line.hub.tax) * int(self.flights_per_day(line) / len(market))
+        for m in Market:
+            matching_cost[m.name] *= petrol_price
+            matching_cost[m.name] += (line.tax + line.hub.tax) * int(self.flights_per_day(line) / 3.)
 
         return matching_cost
 
@@ -105,19 +104,24 @@ class Plane:
         matching_profits = {}
         matching_cost = self.cost_at_matching(line)
         matching_revenue = self.revenue_at_matching(line)
-        for m in market:
-            matching_profits[m] = float(matching_revenue[m] - matching_cost[m])
+        for m in Market:
+            matching_profits[m.name] = float(matching_revenue[m.name] - matching_cost[m.name])
 
         return matching_profits
 
     def profitability(self, line):
         count_planes = self.match_demand(line)
-        matching_monthly_pofits = 30 * sum(self.profits_at_matching(line).values())
+        matching_monthly_profits = 30 * sum(self.profits_at_matching(line).values())
         wear_cost = (self.wear_rate / 100. * self.flights_per_day(line) * 2 * self.flight_time(line)) * self.price
-        cost = float(count_planes["eco"]) * self.price + line.price
+        try:
+            cost = float(count_planes[Market.eco.name]) * self.price + line.dst.price + line.hub.price
+        except TypeError:
+            print("Type error")
+            return 0
+
         if cost == 0 and wear_cost == 0:
             return 0.0
-        return matching_monthly_pofits / (cost + wear_cost)
+        return matching_monthly_profits / (cost + wear_cost)
 
     def display_matching_infos(self, line):
         count_planes = self.match_demand(line)
@@ -127,25 +131,25 @@ class Plane:
         matching_cost = self.cost_at_matching(line)
         matching_profits = self.profits_at_matching(line)
 
-        print("{}\tHYD-{}\tFlight time {}".format(self.name, line.name, self.flight_time_verbose(line)))
+        print("{}\tHYD-{}\tFlight time {}".format(self.name, line.dst.iata, self.flight_time_verbose(line)))
         print("Market\t|Planes\t|PAX\t|PAXr\t|Revenue(M$)|Cost(M$)\t|Profits(M$)|")
-        for m in market:
-            best_pax_align = '\t' if best_pax[m] < 100 else ''
-            matching_delta_align = '\t' if len(str(int(matching_delta[m]))) < 3 else ''
-            matching_profits_align = '\t' if matching_profits[m] > 0 else ''
+        for m in Market:
+            best_pax_align = '\t' if best_pax[m.name] < 100 else ''
+            matching_delta_align = '\t' if len(str(int(matching_delta[m.name]))) < 3 else ''
+            matching_profits_align = '\t' if matching_profits[m.name] > 0 else ''
             print("{}\t\t|{:d}\t\t|{:d}{}\t|{:d}{}\t|{:2.4f}\t\t|{:2.4f}\t\t|{:2.4f}\t{}|".format(m,
-                                                                                                  count_planes[m],
-                                                                                                  int(best_pax[m]),
+                                                                                                  count_planes[m.name],
+                                                                                                  int(best_pax[m.name]),
                                                                                                   best_pax_align,
                                                                                                   int(matching_delta[
-                                                                                                          m]),
+                                                                                                          m.name]),
                                                                                                   matching_delta_align,
                                                                                                   best_revenue[
-                                                                                                      m] / 1.e6,
+                                                                                                      m.name] / 1.e6,
                                                                                                   matching_cost[
-                                                                                                      m] / 1.e6,
+                                                                                                      m.name] / 1.e6,
                                                                                                   matching_profits[
-                                                                                                      m] / 1.e6,
+                                                                                                      m.name] / 1.e6,
                                                                                                   matching_profits_align
                                                                                                   )
                   )
@@ -155,8 +159,8 @@ class Plane:
         print("Total cost (M$)          : {:2.4f}".format(sum(matching_cost.values()) / 1.e6))
         print("Total profit (M$)        : {:2.4f}".format(sum(matching_profits.values()) / 1.e6))
 
-        print("Price of airplanes (M$)  : {:4.2f}".format(self.price * count_planes["eco"] / 1.e6))
-        print("Price of airport (M$)    : {:2.4f}".format(line.price / 1.e6))
+        print("Price of airplanes (M$)  : {:4.2f}".format(self.price * count_planes[Market.eco.name] / 1.e6))
+        print("Price of airport (M$)    : {:2.4f}".format(line.dst.price / 1.e6))
         print("Price of hub (M$)        : {:2.4f}".format(line.hub.price / 1.e6))
 
         print("Rentability              : {:2.4f}".format(self.profitability(line)))

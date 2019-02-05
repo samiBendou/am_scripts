@@ -1,10 +1,12 @@
+from Airport import Airport
+
+
 class Line:
-    def __init__(self, name, distance, tax, hub, demand, ticket_price=None, price=0., new=False):
-        self.name = name
-        self.distance = distance  # in km
-        self.tax = tax  # in $/flight
-        self.hub = hub
-        self.demand = demand
-        self.ticket_price = ticket_price  # in $
-        self.price = price  # acquisition price
-        self.new = new
+    def __init__(self, hub, dst, demand, ticket_price=None, distance=None, new=False):
+        self.hub = hub  # departure hub Airport
+        self.dst = dst  # destination Airport
+        self.demand = demand  # pax hashed by market ("eco", "biz", "pre")
+        self.ticket_price = ticket_price  # $ hashed by market ("eco", "biz", "pre")
+        self.distance = distance  # km
+        self.new = new  # True if the line has not been acquired yet
+        self.tax = hub.tax + dst.tax

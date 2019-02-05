@@ -2,26 +2,23 @@ import json
 
 import AdvancedHTMLParser
 import matplotlib.pyplot as plt
+import openflights
+
 from numpy import concatenate
 from numpy import linspace
 from scipy.interpolate import interp1d
 
-from Hub import Hub
+from Market import Market
+from Airport import Airport
 from Line import Line
 from Plane import Plane
 
 parser = AdvancedHTMLParser.AdvancedHTMLParser()
 
-hubs = [
-    Hub(name="HYD", tax=4497.0)
-]
-
-market = ["eco", "biz", "pre"]
-
 SCRAP_ROOT = "scrap/"
 PLANES_PATH = SCRAP_ROOT + "planes/"
 NETWORK_PATH = SCRAP_ROOT + "network/"
-NEwLINE_PATH = SCRAP_ROOT + "newline/"
+NEWLINE_PATH = SCRAP_ROOT + "newline/"
 MARKETING_PATH = SCRAP_ROOT + "marketing/"
 
 NEWLINES = ["thailand.html", "india.html", "singapore.html", "taiwan.html", "vietnam.html"]
@@ -31,25 +28,25 @@ def _base_price_function(lines, plot_interpolation_data=False):
     sorted_lines = sorted(lines, key=lambda x: x.distance)
 
     x_num = {}
-    for m in market:
-        x_num[m] = list(map(lambda x: x.ticket_price[m], sorted_lines))
+    for m in Market:
+        x_num[m.name] = list(map(lambda x: x.ticket_price[m.name], sorted_lines))
 
     x_den = list(map(lambda x: x.distance, sorted_lines))
 
     y = {}
-    for m in market:
-        y[m] = []
+    for m in Market:
+        y[m.name] = []
         for k in range(0, len(x_den)):
-            y[m].append(x_num[m][k] / x_den[k])
+            y[m.name].append(x_num[m.name][k] / x_den[k])
 
     x_interp = linspace(400, 2000, 4096)
 
     base_price_function = {}
-    for m in market:
-        base_price_function[m] = interp1d(x_den, y[m], kind="quadratic", fill_value="extrapolate")
+    for m in Market:
+        base_price_function[m.name] = interp1d(x_den, y[m.name], kind="quadratic", fill_value="extrapolate")
         if plot_interpolation_data:
             plt.plot(x_den, y[m], 'o', x_interp, base_price_function[m](x_interp), '--')
-            plt.title("Price/Distance " + m)
+            plt.title("Price/Distance " + m.value)
             plt.show()
     return base_price_function
 
@@ -61,9 +58,25 @@ def _lines_attributes_from_planes_page():
     return json.loads(json_str)
 
 
+def hub_data():
+    parser.parseFile(NETWORK_PATH + "hub.html")
+    map_network_json = json.loads(parser.getElementById('map_NetworkJson').innerText)
+    box2 = parser.getElementById("box2")
+    tax = float(box2.getChildren()[3].getChildren()[0].innerText.replace("\xa0", "").replace("$", ""))
+    iata = map_network_json["airports"][0]["iata"]
+    hub = openflights.airports[iata]
+    hub.tax = tax
+
+    return hub
+
+
 def lines_data():
+    hub = hub_data()
+    airports = []
     lines = []
     plane_page_attributes = _lines_attributes_from_planes_page()
+    market_index = {Market.eco.name: 0, Market.biz.name: 0, Market.pre.name: 0}
+    market_key = {Market.eco.name: "paxAttEco", Market.biz.name: "paxAttBus", Market.pre.name: "paxAttFirst"}
     for line_key, line_attrib in plane_page_attributes.items():
         parser.parseFile(NETWORK_PATH + line_key + ".html")
         tax = float(
@@ -74,34 +87,41 @@ def lines_data():
         marketing_elem = parser.getElementById("marketing_linePricing").getElementsByClassName("box1")[0]
         price_boxes = marketing_elem.getElementsByClassName("priceBox")
 
-        ticket_price = {
-            "eco": price_boxes[0].getElementsByClassName("price")[0].getChildren()[0],
-            "biz": price_boxes[1].getElementsByClassName("price")[0].getChildren()[0],
-            "pre": price_boxes[2].getElementsByClassName("price")[0].getChildren()[0]
-        }
+        ticket_price = {key: price_boxes[i].getElementsByClassName("price")[0].getChildren()[0] for key, i in
+                        market_index.items()}
+        ticket_price = {m.name: float(ticket_price[m.name].innerText.replace("$", "").replace("\xa0", "")) for m in
+                        Market}
 
-        for m in market:
-            ticket_price[m] = float(ticket_price[m].innerText.replace("$", "").replace("\xa0", ""))
-
-        name = line_attrib["name"]
         distance = line_attrib["distance"]
 
-        demand = {
-            "eco": line_attrib["paxAttEco"],
-            "biz": line_attrib["paxAttBus"],
-            "pre": line_attrib["paxAttFirst"]
-        }
+        demand = {key: line_attrib[val] for key, val in market_key.items()}
 
-        lines.append(Line(name, distance, tax, hubs[0], demand, ticket_price, False))
+        map_network_json = json.loads(parser.getElementById('map_NetworkJson').innerText)
+        iata = map_network_json["airports"][1]["iata"]
+        try:
+            airport = openflights.airports[iata]
+            airport.tax = tax
+        except KeyError:
+            lat = map_network_json["airports"][1]["latitude"]
+            lon = map_network_json["airports"][1]["longitude"]
+            airport = Airport(lat, lon, tax=tax, iata=iata)
 
-    return lines
+        airports.append(airport)
+
+        print(json.dumps(map_network_json, indent=4))
+
+        lines.append(Line(hub, airports[-1], demand, ticket_price, distance, False))
+
+    return lines, airports
 
 
 def newlines_data(lines):
+    hub = hub_data()
+    airports = []
     newlines = []
     base_price_per_km = _base_price_function(lines)
     for filename in NEWLINES:
-        parser.parseFile(NEwLINE_PATH + filename)
+        parser.parseFile(NEWLINE_PATH + filename)
         airport_list_elem = parser.getElementsByClassName("airportList")[0]
         airport_list_elem = concatenate([airport_list_elem.getElementsByClassName("greenOutline"),
                                          airport_list_elem.getElementsByClassName("yellowOutline")])
@@ -109,22 +129,28 @@ def newlines_data(lines):
             content = airport.getElementsByClassName("hubCategoryBox")[0]
             demand_elem = airport.getElementsByClassName("demand")[0].getChildren()
 
-            name = airport.getElementsByClassName("hubNameBox")[0].innerText.split()[0]
+            iata = airport.getElementsByClassName("hubNameBox")[0].innerText.split()[0]
             distance = float(
                 content.getElementsByClassName("lineDistance")[0].innerText.replace("km", "").replace(" ", ""))
             tax = float(content.getChildren()[3].getChildren()[0].innerHTML.replace("&nbsp;", "").replace("$/vol", ""))
 
             demand = {
-                "eco": float(demand_elem[1].getChildren()[1].innerHTML.split()[-1]),
-                "biz": float(demand_elem[2].getChildren()[1].innerHTML.split()[-1]),
-                "pre": float(demand_elem[3].getChildren()[1].innerHTML.split()[-1])
+                Market.eco.name: float(demand_elem[1].getChildren()[1].innerHTML.split()[-1]),
+                Market.biz.name: float(demand_elem[2].getChildren()[1].innerHTML.split()[-1]),
+                Market.pre.name: float(demand_elem[3].getChildren()[1].innerHTML.split()[-1])
             }
 
-            ticket_price = {}
-            for m in market:
-                ticket_price[m] = distance * base_price_per_km[m](distance)
+            ticket_price = {m.name: distance * base_price_per_km[m.name](distance) for m in Market}
 
-            newlines.append(Line(name, distance, tax, hubs[0], demand, ticket_price, True))
+            try:
+                airport = openflights.airports[iata]
+                airport.tax = tax
+            except KeyError:
+                airport = Airport(0, 0, tax=tax, iata=iata)
+
+            airports.append(airport)
+
+            newlines.append(Line(hub, airports[-1], demand, ticket_price, distance, True))
 
     return newlines
 
@@ -154,6 +180,12 @@ def planes_data():
             cons = float(list_elem.getChildren()[2].getChildren()[0].innerText.replace("L/100km/pax", ""))
             wear_rate = float(list_elem.getChildren()[3].getChildren()[0].innerText.replace("%/100h", "")) / 100.
 
-            planes.append(Plane(name, {"eco": pax, "biz": 0, "pre": 0}, speed, cons, year, max_range, price, wear_rate))
+            planes.append(Plane(name, {Market.eco.name: pax, Market.biz.name: 0, Market.pre.name: 0}, speed, cons, year,
+                                max_range, price, wear_rate))
 
     return planes
+
+
+hubs = [hub_data()]
+planes = planes_data()
+lines, airports = lines_data()
