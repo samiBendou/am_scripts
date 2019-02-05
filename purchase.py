@@ -142,6 +142,5 @@ class Plot:
         plt.tight_layout()
 
         # let seaborn do it's thing
-        plt.savefig("img.png")
         plt.show()
 
