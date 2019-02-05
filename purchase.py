@@ -15,49 +15,60 @@ class Data:
     planes which have sufficient range to flight to destination. The planes are sorted by decreasing profitability.
     """
 
-    def sort(self, excluded_planes=None):
-        # excluded_planes = ["F-100", "DC8-73", "DC8-55", "DC-3"]
-        excluded_planes = [] if excluded_planes is None else excluded_planes
-        sorted_planes = {}
+    def sort(self, included_planes=None, excluded_planes=None):
+        planes_names = self._filter_planes(included_planes, excluded_planes)
+
+        planes = {}
         for l in self.lines:
-            sorted_planes[l.name] = list(
-                filter(lambda x: True if x.range > l.distance and x.name not in excluded_planes else False,
-                       self.planes))
-            sorted_planes[l.name] = sorted(sorted_planes[l.name], key=lambda x: x.profitability(l), reverse=True)
+            planes[l.name] = list(
+                filter(lambda x: True if x.range > l.distance and x.name in planes_names else False, self.planes))
+            planes[l.name] = sorted(planes[l.name], key=lambda x: x.profitability(l), reverse=True)
 
-        return sorted_planes
+        return planes
 
-    def compare(self, included_planes):
-        sorted_planes = {}
+    def heatmap(self, included_planes=None, excluded_planes=None):
+        planes_names = self._filter_planes(included_planes, excluded_planes)
+
+        planes = {}
         for l in self.lines:
-            sorted_planes[l.name] = list(filter(lambda x: True if x.name in included_planes else False, self.planes))
+            planes[l.name] = list(filter(lambda x: True if x.name in planes_names else False, self.planes))
 
-        return sorted_planes
+        return planes
+
+    def _filter_planes(self, included_planes, excluded_planes):
+        inc = [x.name for x in self.planes] if included_planes is None else included_planes
+        exc = [] if excluded_planes is None else excluded_planes
+        inc = filter(lambda x: False if x in exc else True, inc)
+
+        return list(inc)
 
 
 class Plot:
     @classmethod
-    def sort(cls, data, excluded_planes=None):
-        sorted_planes = data.sort(excluded_planes)
+    def sort(cls, data, included_planes=None, excluded_planes=None):
+        sorted_planes = data.sort(included_planes, excluded_planes)
 
         bar_width = 0.2
         opacity = 0.4
         error_config = {"ecolor": "0.3"}
-        max = 7
+        max_planes = 7
 
-        for l in data.line:
+        for l in data.lines:
             profits = tuple(
-                map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.name][:max]))
+                map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.name][:max_planes]))
             initial_costs = tuple(
-                map(lambda x: x.price * x.match_demand(l)["eco"] / 100.e6, sorted_planes[l.name][:max]))
+                map(lambda x: x.price * x.match_demand(l)["eco"] / 100.e6, sorted_planes[l.name][:max_planes]))
             profitability = tuple(
-                map(lambda x: x.profitability(l), sorted_planes[l.name][:max]))
+                map(lambda x: x.profitability(l), sorted_planes[l.name][:max_planes]))
             names = tuple(
-                map(lambda x: x.name, sorted_planes[l.name]))
+                map(lambda x: x.name, sorted_planes[l.name][:max_planes]))
+
+            if names == ():
+                continue
 
             fig, ax = plt.subplots()
 
-            index = np.arange(max)
+            index = np.arange(min(max_planes, len(names)))
 
             rects1 = plt.bar(index, profits, bar_width,
                              alpha=opacity,
@@ -82,21 +93,22 @@ class Plot:
             plt.tight_layout()
 
             sorted_planes[l.name][0].display_matching_infos(l)
+            sorted_planes[l.name][1].display_matching_infos(l)
 
         plt.show()
 
     @classmethod
-    def compare(cls, data, included_planes=None):
-        sorted_planes = data.compare(included_planes)
+    def heatmap(cls, data, included_planes=None, excluded_planes=None):
+        heatmap_planes = data.heatmap(included_planes, excluded_planes)
 
         lines_ticks = [l.hub.name + "->" + l.name for l in data.lines]
         planes_ticks = list(filter(lambda s: True if s in included_planes else False, [x.name for x in data.planes]))
         values = []
         for i in range(0, len(data.lines)):
             values.append([])
-            for j in range(0, len(included_planes)):
-                if sorted_planes[data.lines[i].name][j].range > data.lines[i].distance:
-                    values[i].append(sorted_planes[data.lines[i].name][j].profitability(data.lines[i]))
+            for j in range(0, len(planes_ticks)):
+                if heatmap_planes[data.lines[i].name][j].range > data.lines[i].distance:
+                    values[i].append(heatmap_planes[data.lines[i].name][j].profitability(data.lines[i]))
                 else:
                     values[i].append(0)
 
@@ -111,7 +123,7 @@ class Plot:
 
         # compute the required figure height
         top_margin = 0.07  # in percentage of the figure height
-        bottom_margin = 0.07   # in percentage of the figure height
+        bottom_margin = 0.07  # in percentage of the figure height
         figure_height = matrix_height_in / (1 - top_margin - bottom_margin)
 
         # build the figure instance with the desired height
@@ -136,10 +148,9 @@ class Plot:
         # Loop over data dimensions and create text annotations.
         for i in range(len(lines_ticks)):
             for j in range(len(included_planes)):
-                text = ax.text(j + 0.5, i + 0.5, "{:d} %".format(int(100 * values[i, j])), ha="center", va="center", color="w")
+                ax.text(j + 0.5, i + 0.5, "{:d} %".format(int(100 * values[i, j])), ha="center", va="center", color="w")
 
         ax.set_title("Profitability comparison")
+
         plt.tight_layout()
-
         plt.show()
-
