@@ -339,7 +339,7 @@ class Data:
 
 
 class Plot(GenericPlot):
-    GenericPlot.RENDER_ROOT = GenericPlot.RENDER_ROOT + "finance/"
+    RENDER_ROOT = GenericPlot.RENDER_ROOT + "finance/"
 
     @staticmethod
     def date_ticks(data):
@@ -362,7 +362,7 @@ class Plot(GenericPlot):
         k = 0
         for keys in Data.keys:
             Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Millions $", label,
-                      title="Raw Accounting {:d}".format(k + 1), date=data.base.bound("end"), average=average)
+                      title="Raw Accounting {:d}".format(k + 1), date=data.base.end_date(), average=average)
             k += 1
 
     @staticmethod
@@ -374,7 +374,7 @@ class Plot(GenericPlot):
         k = 0
         for keys in Data.keys:
             Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Percent %", label,
-                      title="Relative Accounting {:d}".format(k + 1), date=data.base.bound("end"), average=average)
+                      title="Relative Accounting {:d}".format(k + 1), date=data.base.end_date(), average=average)
             k += 1
 
     @staticmethod
@@ -383,7 +383,7 @@ class Plot(GenericPlot):
         y = Plot.scale(data.flow())
         label = {"flow": "Cash flow", "gain": "Benefits", "loss": "Costs"}
         Plot.keys(x, y, "Date MM-DD", "Millions $", label,
-                  title="Cash flow", date=data.base.bound("end"), average=average)
+                  title="Cash flow", date=data.base.end_date(), average=average)
 
     @staticmethod
     def pie(data):
@@ -391,7 +391,7 @@ class Plot(GenericPlot):
         size = 0.3
         fig, ax = plt.subplots()
         colors = plt.get_cmap("Set3")(np.arange(len(y)))
-        title = "repartition from " + data.base.bound("start").strftime("%m-%d-%y")
+        title = "repartition from " + data.base.start_date().strftime("%m-%d-%y")
         ax.pie(list(y.values()),
                radius=1,
                wedgeprops=dict(width=size, edgecolor="w"),
@@ -400,7 +400,7 @@ class Plot(GenericPlot):
                autopct="%1.1f%%"
                )
         ax.set(aspect="equal")
-        Plot.render(title=title, date=data.base.bound("end"), legend=False)
+        Plot.render(title=title, date=data.base.end_date(), legend=False)
 
     @staticmethod
     def keys(x, y, xl, yl, label, title=None, date=None, average=False):

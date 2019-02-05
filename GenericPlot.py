@@ -23,11 +23,11 @@ class GenericPlot:
         if yl is not None:
             plt.ylabel(yl)
 
-        if GenericPlot.save:
+        if cls.save:
             filename = "untitled" if title is None else dated_title.replace(" ", "_").lower()
-            plt.savefig(GenericPlot.RENDER_ROOT + filename)
+            plt.savefig(cls.RENDER_ROOT + filename)
 
-        if GenericPlot.show:
+        if cls.show:
             plt.show()
 
         plt.clf()

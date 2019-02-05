@@ -40,12 +40,11 @@ class DateBase:
             x[k] = (self.date + shift * day)
         return x
 
-    def bound(self, str):
-        day = timedelta(days=1)
-        if str == "start":
-            return self.start * day + self.raw_start
-        elif str == "end":
-            return self.end * day + self.raw_start
+    def start_date(self):
+        return self.start * timedelta(days=1) + self.raw_start
+
+    def end_date(self):
+        return self.end * timedelta(days=1) + self.raw_start
 
     def _unwrap(self):
         assert self.date is not None and self.covered > 0

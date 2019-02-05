@@ -1,3 +1,5 @@
+from GenericPlot import GenericPlot
+
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -43,16 +45,15 @@ class Data:
         return list(inc)
 
 
-class Plot:
+class Plot(GenericPlot):
+    RENDER_ROOT = GenericPlot.RENDER_ROOT + "purchase/"
 
     @classmethod
-    def sort(cls, data, included_planes=None, excluded_planes=None):
+    def sort(cls, data, included_planes=None, excluded_planes=None, max_planes=7):
         sorted_planes = data.sort(included_planes, excluded_planes)
 
         bar_width = 0.2
         opacity = 0.4
-        error_config = {"ecolor": "0.3"}
-        max_planes = 7
 
         for l in data.lines:
             profits = tuple(
@@ -67,42 +68,34 @@ class Plot:
             if names == ():
                 continue
 
-            fig, ax = plt.subplots()
-
             index = np.arange(min(max_planes, len(names)))
 
-            rects1 = plt.bar(index, profits, bar_width,
-                             alpha=opacity,
-                             color="b",
-                             label="Profits (Millions $)")
+            plt.bar(index, profits, bar_width,
+                    alpha=opacity,
+                    color="b",
+                    label="Profits (Millions $)")
 
-            rects2 = plt.bar(index + bar_width, initial_costs, bar_width,
-                             alpha=opacity,
-                             color="r",
-                             label="Initial cost (100M$)")
+            plt.bar(index + bar_width, initial_costs, bar_width,
+                    alpha=opacity,
+                    color="r",
+                    label="Initial cost (100M$)")
 
-            rects3 = plt.bar(index + 2 * bar_width, profitability, bar_width,
-                             alpha=opacity,
-                             color="g",
-                             label="Profitability")
+            plt.bar(index + 2 * bar_width, profitability, bar_width,
+                    alpha=opacity,
+                    color="g",
+                    label="Profitability")
 
-            plt.xlabel("Planes")
-            plt.title("Profits/Initial cost repartition HYD->" + l.name)
             plt.xticks(index + bar_width / 3, names)
-            plt.legend()
-
-            plt.tight_layout()
+            cls.render(xl="Planes", title="Profits vs initial cost HYD-" + l.name)
 
             sorted_planes[l.name][0].display_matching_infos(l)
             sorted_planes[l.name][1].display_matching_infos(l)
-
-        plt.show()
 
     @classmethod
     def heatmap(cls, data, included_planes=None, excluded_planes=None):
         heatmap_planes = data.heatmap(included_planes, excluded_planes)
 
-        lines_ticks = [l.hub.name + "->" + l.name for l in data.lines]
+        lines_ticks = [l.hub.name + "-" + l.name for l in data.lines]
         planes_ticks = list(filter(lambda s: True if s in included_planes else False, [x.name for x in data.planes]))
         values = []
         for i in range(0, len(data.lines)):
@@ -151,7 +144,4 @@ class Plot:
             for j in range(len(included_planes)):
                 ax.text(j + 0.5, i + 0.5, "{:d} %".format(int(100 * values[i, j])), ha="center", va="center", color="w")
 
-        ax.set_title("Profitability comparison")
-
-        plt.tight_layout()
-        plt.show()
+        cls.render(title="Profitability comparison", legend=False)
