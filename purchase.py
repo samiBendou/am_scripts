@@ -90,8 +90,11 @@ class Plot(GenericPlot):
             plt.xticks(index + bar_width / 3, names)
             cls.render(xl="Planes", title="Profits vs initial cost HYD-" + l.dst.iata)
 
-            sorted_planes[l.dst.iata][0].display_matching_infos(l)
-            sorted_planes[l.dst.iata][1].display_matching_infos(l)
+            try:
+                sorted_planes[l.dst.iata][0].display_matching_infos(l)
+                sorted_planes[l.dst.iata][1].display_matching_infos(l)
+            except IndexError:
+                continue
 
     @classmethod
     def heatmap(cls, data, included_planes=None, excluded_planes=None):

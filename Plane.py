@@ -113,11 +113,8 @@ class Plane:
         count_planes = self.match_demand(line)
         matching_monthly_profits = 30 * sum(self.profits_at_matching(line).values())
         wear_cost = (self.wear_rate / 100. * self.flights_per_day(line) * 2 * self.flight_time(line)) * self.price
-        try:
-            cost = float(count_planes[Market.eco.name]) * self.price + line.dst.price + line.hub.price
-        except TypeError:
-            print("Type error")
-            return 0
+        cost = float(count_planes[Market.eco.name]) * self.price + line.dst.price + line.hub.price
+
 
         if cost == 0 and wear_cost == 0:
             return 0.0

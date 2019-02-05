@@ -27,10 +27,7 @@ NEWLINES = ["thailand.html", "india.html", "singapore.html", "taiwan.html", "vie
 def _base_price_function(lines, plot_interpolation_data=False):
     sorted_lines = sorted(lines, key=lambda x: x.distance)
 
-    x_num = {}
-    for m in Market:
-        x_num[m.name] = list(map(lambda x: x.ticket_price[m.name], sorted_lines))
-
+    x_num = {m.name: list(map(lambda x: x.ticket_price[m.name], sorted_lines)) for m in Market}
     x_den = list(map(lambda x: x.distance, sorted_lines))
 
     y = {}
@@ -108,8 +105,6 @@ def lines_data():
 
         airports.append(airport)
 
-        print(json.dumps(map_network_json, indent=4))
-
         lines.append(Line(hub, airports[-1], demand, ticket_price, distance, False))
 
     return lines, airports
@@ -118,8 +113,8 @@ def lines_data():
 def newlines_data(lines):
     hub = hub_data()
     airports = []
-    newlines = []
     base_price_per_km = _base_price_function(lines)
+    newlines = []
     for filename in NEWLINES:
         parser.parseFile(NEWLINE_PATH + filename)
         airport_list_elem = parser.getElementsByClassName("airportList")[0]
@@ -152,7 +147,7 @@ def newlines_data(lines):
 
             newlines.append(Line(hub, airports[-1], demand, ticket_price, distance, True))
 
-    return newlines
+    return newlines, airports
 
 
 def planes_data():
@@ -189,3 +184,4 @@ def planes_data():
 hubs = [hub_data()]
 planes = planes_data()
 lines, airports = lines_data()
+newlines, newairports = newlines_data(lines)
