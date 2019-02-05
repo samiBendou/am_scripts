@@ -44,6 +44,7 @@ class Data:
 
 
 class Plot:
+
     @classmethod
     def sort(cls, data, included_planes=None, excluded_planes=None):
         sorted_planes = data.sort(included_planes, excluded_planes)

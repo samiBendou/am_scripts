@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 from enum import Enum
 from DateBase import DateBase
+from GenericPlot import GenericPlot
 from matplotlib.colors import rgb2hex
 import matplotlib.pyplot as plt
 import numpy as np
@@ -149,6 +150,9 @@ class Data:
         if delta > timedelta(0):
             add_day = 1 if ((delta - timedelta(days=delta.days)) + data.base.date).day != data.base.date.day else 0
             shift_day = self.base.covered - add_day - delta.days - 1
+
+            assert shift_day >= 0
+
             for key in Data.all_keys:
                 if key == Key.__date__:
                     continue
@@ -334,7 +338,9 @@ class Data:
                             covered=len(self.fields[Key.flight.value][Field.data.value]))
 
 
-class Plot:
+class Plot(GenericPlot):
+    GenericPlot.RENDER_ROOT = GenericPlot.RENDER_ROOT + "finance/"
+
     @staticmethod
     def date_ticks(data):
         ticks = list(map(lambda t: t.strftime("%m-%d"), data.base.list()))
@@ -352,23 +358,32 @@ class Plot:
         x = Plot.date_ticks(data)
         y = Plot.scale(data.raw())
         label = {key: data.fields[key][Field.name.value] for key in list(y.keys())}
+
+        k = 0
         for keys in Data.keys:
-            Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Millions $", label, average)
+            Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Millions $", label,
+                      title="Raw Accounting {:d}".format(k + 1), date=data.base.bound("end"), average=average)
+            k += 1
 
     @staticmethod
     def rel(data, average=False):
         x = Plot.date_ticks(data)
         y = Plot.scale(data.rel(), 1.e-2)
         label = {key: data.fields[key][Field.name.value] for key in list(y.keys())}
+
+        k = 0
         for keys in Data.keys:
-            Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Percent %", label, average)
+            Plot.keys(x, {key: y[key] for key in keys}, "Date MM-DD", "Percent %", label,
+                      title="Relative Accounting {:d}".format(k + 1), date=data.base.bound("end"), average=average)
+            k += 1
 
     @staticmethod
     def flow(data, average=False):
         x = Plot.date_ticks(data)
         y = Plot.scale(data.flow())
         label = {"flow": "Cash flow", "gain": "Benefits", "loss": "Costs"}
-        Plot.keys(x, y, "Date MM-DD", "Millions $", label, average)
+        Plot.keys(x, y, "Date MM-DD", "Millions $", label,
+                  title="Cash flow", date=data.base.bound("end"), average=average)
 
     @staticmethod
     def pie(data):
@@ -376,8 +391,7 @@ class Plot:
         size = 0.3
         fig, ax = plt.subplots()
         colors = plt.get_cmap("Set3")(np.arange(len(y)))
-        title = "Budget repartition : "
-        title += data.base.bound("start").strftime("%m-%d-%y") + " -> " + data.base.bound("end").strftime("%m-%d-%y")
+        title = "repartition from " + data.base.bound("start").strftime("%m-%d-%y")
         ax.pie(list(y.values()),
                radius=1,
                wedgeprops=dict(width=size, edgecolor="w"),
@@ -385,21 +399,18 @@ class Plot:
                labels=[data.fields[key][Field.name.value] for key in list(y.keys())],
                autopct="%1.1f%%"
                )
-        ax.set(aspect="equal", title=title)
-        plt.show()
+        ax.set(aspect="equal")
+        Plot.render(title=title, date=data.base.bound("end"), legend=False)
 
     @staticmethod
-    def keys(x, y, xl, yl, label, average=False):
-        keys = list(y.keys())
+    def keys(x, y, xl, yl, label, title=None, date=None, average=False):
+        plot_keys = list(y.keys())
         n = len(x)
-        colors = plt.get_cmap("Dark2")(np.arange(len(keys)))
-        for k in range(0, len(keys)):
-            plt.plot(x, y[keys[k]], label=label[keys[k]], color=rgb2hex(colors[k][:3]))
+        colors = plt.get_cmap("Dark2")(np.arange(len(plot_keys)))
+        for k in range(0, len(plot_keys)):
+            plt.plot(x, y[plot_keys[k]], label=label[plot_keys[k]], color=rgb2hex(colors[k][:3]))
             if average is True:
-                y_avg = [sum(y[keys[k]]) / len(y[keys[k]])] * n
+                y_avg = [sum(y[plot_keys[k]]) / len(y[plot_keys[k]])] * n
                 plt.plot(x, y_avg, "--", label=None, color=rgb2hex(colors[k][:3]))
-            plt.legend()
-            plt.xlabel(xl)
-            plt.ylabel(yl)
 
-        plt.show()
+        Plot.render(xl, yl, title, date=date, legend=True)
