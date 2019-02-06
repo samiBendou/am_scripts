@@ -173,18 +173,17 @@ class Plane:
             matching_delta_align = '\t' if len(str(int(matching_delta[m.name]))) < 3 else ''
             matching_profits_align = '\t' if matching_profits[m.name] > 0 else ''
             format_line = "{}\t\t|{:d}\t\t|{:d}{}\t|{:d}{}\t|{:2.4f}\t\t|{:2.4f}\t\t|{:2.4f}\t{}|"
-            format_line.format(m,
-                               count_planes[m.name],
-                               int(best_pax[m.name]),
-                               best_pax_align,
-                               int(matching_delta[m.name]),
-                               matching_delta_align,
-                               best_revenue[m.name] / 1.e6,
-                               matching_cost[m.name] / 1.e6,
-                               matching_profits[m.name] / 1.e6,
-                               matching_profits_align
-                               )
-            print(format_line)
+            print(format_line.format(m,
+                                     count_planes[m.name],
+                                     int(best_pax[m.name]),
+                                     best_pax_align,
+                                     int(matching_delta[m.name]),
+                                     matching_delta_align,
+                                     best_revenue[m.name] / 1.e6,
+                                     matching_cost[m.name] / 1.e6,
+                                     matching_profits[m.name] / 1.e6,
+                                     matching_profits_align
+                                     ))
 
         print("Flights per day          : {:d}".format(self.flights_per_day(line)))
         print("Total revenue (M$)       : {:2.4f}".format(sum(best_revenue.values()) / 1.e6))
