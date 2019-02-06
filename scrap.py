@@ -7,11 +7,7 @@ import openflights
 from numpy import concatenate
 from numpy import linspace
 from scipy.interpolate import interp1d
-
-from Market import Market
-from Airport import Airport
-from Line import Line
-from Plane import Plane
+from model import *
 
 parser = AdvancedHTMLParser.AdvancedHTMLParser()
 

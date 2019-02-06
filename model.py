@@ -1,4 +1,4 @@
-from Market import Market
+from enum import Enum
 import numpy as np
 
 additional_flight_time = 1.0  # hours
@@ -6,6 +6,33 @@ hours_day = 24  # hours / day
 l_petrol_bar = 159.0  # L / barrel
 petrol_price = 53.53 / l_petrol_bar  # $/L
 fill_ratio = 0.86  # expected aircraft filling ratio
+
+
+class Market(Enum):
+    eco = "economic"
+    biz = "business"
+    pre = "premium"
+
+
+class Airport:
+
+    def __init__(self, lat, lon, tax, price=0., iata=None, name=None, loc=None):
+        self.lat = lat  # latitude
+        self.lon = lon  # longitude
+        self.tax = tax  # $/flights
+        self.price = price  # acquisition price in $
+        self.iata = iata  # IATA code of airport as string
+        self.name = name  # name of the airport
+        self.loc = loc  # Country, city and offset from GMT timezone in hours of airport
+
+    @classmethod
+    def from_dict(cls, airport):
+        return Airport(lat=airport["lat"],
+                       lon=airport["lon"],
+                       tax=airport["tax"],
+                       iata=airport["iata"],
+                       name=airport["name"],
+                       loc=airport["loc"])
 
 
 class Plane:
@@ -169,3 +196,35 @@ class Plane:
         print("Price of hub (M$)        : {:2.4f}".format(line.hub.price / 1.e6))
 
         print("Rentability              : {:2.4f}".format(self.profitability(line)))
+
+
+class Line:
+    def __init__(self, hub, dst, demand, ticket_price=None, distance=None, new=False, tax=None):
+        self.hub = hub  # departure hub Airport
+        self.dst = dst  # destination Airport
+        self.demand = demand  # pax hashed by market ("eco", "biz", "pre")
+        self.ticket_price = ticket_price  # $ hashed by market ("eco", "biz", "pre")
+        self.distance = distance  # km
+        self.new = new  # True if the line has not been acquired yet
+        self.tax = hub.tax + dst.tax if tax is None else tax
+
+    def __dict__(self):
+        return {
+            "hub": self.hub.iata,
+            "dst": self.dst.iata,
+            "demand": self.demand,
+            "ticket_price": self.ticket_price,
+            "distance": self.distance,
+            "new": self.new,
+            "tax": self.tax
+        }
+
+    @classmethod
+    def from_dict(cls, line, hub, dst):
+        return Line(hub=hub,
+                    dst=dst,
+                    demand=line["demand"],
+                    ticket_price=line["ticket_price"],
+                    distance=line["distance"],
+                    new=line["new"],
+                    tax=line["tax"])

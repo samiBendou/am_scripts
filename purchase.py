@@ -1,6 +1,6 @@
-from GenericPlot import GenericPlot
+from utilities import GenericPlot
+from model import Market
 
-from Market import Market
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns

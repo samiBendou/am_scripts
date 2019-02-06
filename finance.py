@@ -1,10 +1,7 @@
 import csv
 import json
-from datetime import datetime
-from datetime import timedelta
 from enum import Enum
-from DateBase import DateBase
-from GenericPlot import GenericPlot
+from utilities import *
 from matplotlib.colors import rgb2hex
 import matplotlib.pyplot as plt
 import numpy as np

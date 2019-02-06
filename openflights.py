@@ -1,9 +1,8 @@
 import csv
-import json
 from enum import Enum
 
-from Airport import Airport
-from Plane import Plane
+from model import Airport
+from model import Plane
 
 OPENFLIGHTS_ROOT = "openflights/"
 
@@ -39,7 +38,6 @@ def _read_csv(filename):
             for j in range(0, len(csv_matrix[-1])):
                 elem = ""
                 split = str(csv_matrix[-1][j]).split(" ")
-                last = ""
                 for word in split:
                     if word == "":
                         break
