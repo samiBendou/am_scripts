@@ -36,6 +36,16 @@ def _read_csv(filename):
         csv_matrix = []
         for row in csv_reader:
             csv_matrix.append(row)
+            for j in range(0, len(csv_matrix[-1])):
+                elem = ""
+                split = str(csv_matrix[-1][j]).split(" ")
+                last = ""
+                for word in split:
+                    if word == "":
+                        break
+                    elem += word + " "
+
+                csv_matrix[-1][j] = elem[:-1]
 
     return csv_matrix
 

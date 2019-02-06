@@ -75,7 +75,10 @@ class Data:
             self.base.set(period, offset, start, end)
 
     def __str__(self):
-        return json.dumps(self.fields, indent=4)
+        return json.dumps(self.__dict__, indent=4)
+
+    def __dict__(self):
+        return self.fields
 
     """
     @brief switches files format contained in filename

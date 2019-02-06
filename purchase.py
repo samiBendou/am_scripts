@@ -22,10 +22,14 @@ class Data:
         planes_names = self._filter_planes(included_planes, excluded_planes)
 
         planes = {}
-        for l in self.lines:
-            planes[l.dst.iata] = list(
-                filter(lambda x: True if x.range > l.distance and x.name in planes_names else False, self.planes))
-            planes[l.dst.iata] = sorted(planes[l.dst.iata], key=lambda x: x.profitability(l), reverse=True)
+        for iata, h in self.lines.items():
+            planes[iata] = {}
+            for l in h.values():
+                planes[iata][l.dst.iata] = list(
+                    filter(lambda x: True if x.range > l.distance and x.name in planes_names else False,
+                           self.planes.values()))
+                planes[iata][l.dst.iata] = sorted(planes[iata][l.dst.iata], key=lambda x: x.profitability(l),
+                                                  reverse=True)
 
         return planes
 
@@ -33,8 +37,11 @@ class Data:
         planes_names = self._filter_planes(included_planes, excluded_planes)
 
         planes = {}
-        for l in self.lines:
-            planes[l.dst.iata] = list(filter(lambda x: True if x.name in planes_names else False, self.planes))
+        for iata, h in self.lines.items():
+            planes[iata] = {}
+            for l in h.values():
+                planes[iata][l.dst.iata] = list(
+                    filter(lambda x: True if x.name in planes_names else False, self.planes.values()))
 
         return planes
 
@@ -56,97 +63,104 @@ class Plot(GenericPlot):
         bar_width = 0.2
         opacity = 0.4
 
-        for l in data.lines:
-            profits = tuple(
-                map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6, sorted_planes[l.dst.iata][:max_planes]))
-            initial_costs = tuple(
-                map(lambda x: x.price * x.match_demand(l)[Market.eco.name] / 100.e6,
-                    sorted_planes[l.dst.iata][:max_planes]))
-            profitability = tuple(
-                map(lambda x: x.profitability(l), sorted_planes[l.dst.iata][:max_planes]))
-            names = tuple(
-                map(lambda x: x.name, sorted_planes[l.dst.iata][:max_planes]))
+        for iata, h in data.lines.items():
+            for l in h.values():
+                profits = tuple(
+                    map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6,
+                        sorted_planes[iata][l.dst.iata][:max_planes]))
+                initial_costs = tuple(
+                    map(lambda x: x.price * x.match_demand(l)[Market.eco.name] / 100.e6,
+                        sorted_planes[iata][l.dst.iata][:max_planes]))
+                profitability = tuple(
+                    map(lambda x: x.profitability(l),
+                        sorted_planes[iata][l.dst.iata][:max_planes]))
+                names = tuple(
+                    map(lambda x: x.name,
+                        sorted_planes[iata][l.dst.iata][:max_planes]))
 
-            if names == ():
-                continue
+                if names == ():
+                    continue
 
-            index = np.arange(min(max_planes, len(names)))
+                index = np.arange(min(max_planes, len(names)))
 
-            plt.bar(index, profits, bar_width,
-                    alpha=opacity,
-                    color="b",
-                    label="Profits (Millions $)")
+                plt.bar(index, profits, bar_width,
+                        alpha=opacity,
+                        color="b",
+                        label="Profits (Millions $)")
 
-            plt.bar(index + bar_width, initial_costs, bar_width,
-                    alpha=opacity,
-                    color="r",
-                    label="Initial cost (100M$)")
+                plt.bar(index + bar_width, initial_costs, bar_width,
+                        alpha=opacity,
+                        color="r",
+                        label="Initial cost (100M$)")
 
-            plt.bar(index + 2 * bar_width, profitability, bar_width,
-                    alpha=opacity,
-                    color="g",
-                    label="Profitability")
+                plt.bar(index + 2 * bar_width, profitability, bar_width,
+                        alpha=opacity,
+                        color="g",
+                        label="Profitability")
 
-            plt.xticks(index + bar_width / 3, names)
-            cls.render(xl="Planes", title="Profits vs initial cost HYD-" + l.dst.iata)
+                plt.xticks(index + bar_width / 3, names)
+                cls.render(xl="Planes", title="Profits vs initial cost " + iata + "-" + l.dst.iata)
 
-            try:
-                sorted_planes[l.dst.iata][0].display_matching_infos(l)
-                sorted_planes[l.dst.iata][1].display_matching_infos(l)
-            except IndexError:
-                continue
+                try:
+                    sorted_planes[iata][l.dst.iata][0].display_matching_infos(l)
+                    sorted_planes[iata][l.dst.iata][1].display_matching_infos(l)
+                except IndexError:
+                    continue
 
     @classmethod
     def heatmap(cls, data, included_planes=None, excluded_planes=None):
         heatmap_planes = data.heatmap(included_planes, excluded_planes)
 
-        lines_ticks = [l.hub.iata + "-" + l.dst.iata for l in data.lines]
-        planes_ticks = list(filter(lambda s: True if s in included_planes else False, [x.name for x in data.planes]))
-        values = []
-        for i in range(0, len(data.lines)):
-            values.append([])
-            for j in range(0, len(planes_ticks)):
-                if heatmap_planes[data.lines[i].dst.iata][j].range > data.lines[i].distance:
-                    values[i].append(heatmap_planes[data.lines[i].dst.iata][j].profitability(data.lines[i]))
-                else:
-                    values[i].append(0)
+        planes_names = [x.name for x in list(data.planes.values())]
+        planes_ticks = list(filter(lambda s: True if s in included_planes else False, planes_names))
+        for iata, h in data.lines.items():
+            lines_ticks = [iata + "-" + l.dst.iata for l in h.values()]
+            values = []
+            dst_iata = list(h.keys())
+            for i in range(0, len(h)):
+                values.append([])
+                for j in range(0, len(planes_ticks)):
+                    plane = heatmap_planes[iata][h[dst_iata[i]].dst.iata][j]
+                    values[i].append(
+                        plane.profitability(h[dst_iata[i]]) if plane.range > h[dst_iata[i]].distance else 0)
 
-        values = np.array(values)
+            values = np.array(values)
 
-        # get the tick label font size
-        dpi = 72.27
+            # get the tick label font size
+            dpi = 72.27
 
-        # compute the matrix height in points and inches
-        matrix_height_pt = 40 * values.shape[0]
-        matrix_height_in = matrix_height_pt / dpi
+            # compute the matrix height in points and inches
+            matrix_height_pt = 40 * values.shape[0]
+            matrix_height_in = matrix_height_pt / dpi
 
-        # compute the required figure height
-        top_margin = 0.07  # in percentage of the figure height
-        bottom_margin = 0.07  # in percentage of the figure height
-        figure_height = matrix_height_in / (1 - top_margin - bottom_margin)
+            # compute the required figure height
+            top_margin = 0.07  # in percentage of the figure height
+            bottom_margin = 0.07  # in percentage of the figure height
+            figure_height = matrix_height_in / (1 - top_margin - bottom_margin)
 
-        # build the figure instance with the desired height
-        fig, ax = plt.subplots(
-            figsize=(7, figure_height),
-            gridspec_kw=dict(top=1 - top_margin, bottom=bottom_margin))
+            # build the figure instance with the desired height
+            fig, ax = plt.subplots(
+                figsize=(7, figure_height),
+                gridspec_kw=dict(top=1 - top_margin, bottom=bottom_margin))
 
-        ax = sns.heatmap(values, ax=ax, cbar=False, cmap="winter")
+            ax = sns.heatmap(values, ax=ax, cbar=False, cmap="winter")
 
-        # We want to show all ticks...
-        ax.set_xticks(np.arange(len(planes_ticks)))
-        ax.set_yticks(np.arange(len(lines_ticks)))
-        # ... and label them with the respective list entries
-        ax.set_xticklabels(planes_ticks)
-        ax.set_yticklabels(lines_ticks)
+            # We want to show all ticks...
+            ax.set_xticks(np.arange(len(planes_ticks)))
+            ax.set_yticks(np.arange(len(lines_ticks)))
+            # ... and label them with the respective list entries
+            ax.set_xticklabels(planes_ticks)
+            ax.set_yticklabels(lines_ticks)
 
-        # Rotate the tick labels and set their alignment.
-        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+            # Rotate the tick labels and set their alignment.
+            plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-        plt.setp(ax.get_yticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+            plt.setp(ax.get_yticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-        # Loop over data dimensions and create text annotations.
-        for i in range(len(lines_ticks)):
-            for j in range(len(included_planes)):
-                ax.text(j + 0.5, i + 0.5, "{:d} %".format(int(100 * values[i, j])), ha="center", va="center", color="w")
+            # Loop over data dimensions and create text annotations.
+            for i in range(len(lines_ticks)):
+                for j in range(len(included_planes)):
+                    ax.text(j + 0.5, i + 0.5, "{:d} %".format(int(100 * values[i, j])), ha="center", va="center",
+                            color="w")
 
-        cls.render(title="Profitability comparison", legend=False)
+            cls.render(title="Profitability comparison", legend=False)

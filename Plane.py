@@ -19,6 +19,17 @@ class Plane:
         self.wear_rate = wear_rate
         self.year = year
 
+    @classmethod
+    def from_dict(cls, plane):
+        return Plane(name=plane["name"],
+                     pax=plane["pax"],
+                     speed=plane["speed"],
+                     cons=plane["cons"],
+                     max_range=plane["range"],
+                     price=plane["price"],
+                     wear_rate=plane["wear_rate"],
+                     year=plane["year"])
+
     def flights_per_day(self, line):
         return int(np.floor(hours_day / (2 * self.flight_time(line))))
 
@@ -115,7 +126,6 @@ class Plane:
         wear_cost = (self.wear_rate / 100. * self.flights_per_day(line) * 2 * self.flight_time(line)) * self.price
         cost = float(count_planes[Market.eco.name]) * self.price + line.dst.price + line.hub.price
 
-
         if cost == 0 and wear_cost == 0:
             return 0.0
         return matching_monthly_profits / (cost + wear_cost)
@@ -128,28 +138,26 @@ class Plane:
         matching_cost = self.cost_at_matching(line)
         matching_profits = self.profits_at_matching(line)
 
-        print("{}\tHYD-{}\tFlight time {}".format(self.name, line.dst.iata, self.flight_time_verbose(line)))
+        print("{}\t" + line.hub.iata + "-{}\tFlight time {}".format(self.name, line.dst.iata,
+                                                                    self.flight_time_verbose(line)))
         print("Market\t|Planes\t|PAX\t|PAXr\t|Revenue(M$)|Cost(M$)\t|Profits(M$)|")
         for m in Market:
             best_pax_align = '\t' if best_pax[m.name] < 100 else ''
             matching_delta_align = '\t' if len(str(int(matching_delta[m.name]))) < 3 else ''
             matching_profits_align = '\t' if matching_profits[m.name] > 0 else ''
-            print("{}\t\t|{:d}\t\t|{:d}{}\t|{:d}{}\t|{:2.4f}\t\t|{:2.4f}\t\t|{:2.4f}\t{}|".format(m,
-                                                                                                  count_planes[m.name],
-                                                                                                  int(best_pax[m.name]),
-                                                                                                  best_pax_align,
-                                                                                                  int(matching_delta[
-                                                                                                          m.name]),
-                                                                                                  matching_delta_align,
-                                                                                                  best_revenue[
-                                                                                                      m.name] / 1.e6,
-                                                                                                  matching_cost[
-                                                                                                      m.name] / 1.e6,
-                                                                                                  matching_profits[
-                                                                                                      m.name] / 1.e6,
-                                                                                                  matching_profits_align
-                                                                                                  )
-                  )
+            format_line = "{}\t\t|{:d}\t\t|{:d}{}\t|{:d}{}\t|{:2.4f}\t\t|{:2.4f}\t\t|{:2.4f}\t{}|"
+            format_line.format(m,
+                               count_planes[m.name],
+                               int(best_pax[m.name]),
+                               best_pax_align,
+                               int(matching_delta[m.name]),
+                               matching_delta_align,
+                               best_revenue[m.name] / 1.e6,
+                               matching_cost[m.name] / 1.e6,
+                               matching_profits[m.name] / 1.e6,
+                               matching_profits_align
+                               )
+            print(format_line)
 
         print("Flights per day          : {:d}".format(self.flights_per_day(line)))
         print("Total revenue (M$)       : {:2.4f}".format(sum(best_revenue.values()) / 1.e6))
