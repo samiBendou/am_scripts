@@ -1,0 +1,138 @@
+[
+  {
+    "hub": "HYD",
+    "dst": "BLR",
+    "demand": {
+      "eco": 3049,
+      "biz": 125,
+      "pre": 17
+    },
+    "ticket_price": {
+      "eco": 236.0,
+      "biz": 236.0,
+      "pre": 236.0
+    },
+    "distance": 456,
+    "new": false,
+    "tax": 10273.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "BOM",
+    "demand": {
+      "eco": 3177,
+      "biz": 130,
+      "pre": 18
+    },
+    "ticket_price": {
+      "eco": 286.0,
+      "biz": 286.0,
+      "pre": 286.0
+    },
+    "distance": 622,
+    "new": false,
+    "tax": 11185.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "CCU",
+    "demand": {
+      "eco": 2748,
+      "biz": 113,
+      "pre": 15
+    },
+    "ticket_price": {
+      "eco": 462.0,
+      "biz": 462.0,
+      "pre": 462.0
+    },
+    "distance": 1207,
+    "new": false,
+    "tax": 9363.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "DEL",
+    "demand": {
+      "eco": 3213,
+      "biz": 132,
+      "pre": 18
+    },
+    "ticket_price": {
+      "eco": 480.0,
+      "biz": 480.0,
+      "pre": 480.0
+    },
+    "distance": 1267,
+    "new": false,
+    "tax": 12739.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "GOI",
+    "demand": {
+      "eco": 2763,
+      "biz": 106,
+      "pre": 15
+    },
+    "ticket_price": {
+      "eco": 259.0,
+      "biz": 259.0,
+      "pre": 259.0
+    },
+    "distance": 532,
+    "new": false,
+    "tax": 9695.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "ISB",
+    "demand": {
+      "eco": 2957,
+      "biz": 105,
+      "pre": 11
+    },
+    "ticket_price": {
+      "eco": 669.0,
+      "biz": 669.0,
+      "pre": 669.0
+    },
+    "distance": 1897,
+    "new": false,
+    "tax": 9650.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "KHI",
+    "demand": {
+      "eco": 2715,
+      "biz": 100,
+      "pre": 9
+    },
+    "ticket_price": {
+      "eco": 533.0,
+      "biz": 533.0,
+      "pre": 533.0
+    },
+    "distance": 1446,
+    "new": false,
+    "tax": 10155.0
+  },
+  {
+    "hub": "HYD",
+    "dst": "MAA",
+    "demand": {
+      "eco": 3065,
+      "biz": 126,
+      "pre": 17
+    },
+    "ticket_price": {
+      "eco": 252.0,
+      "biz": 252.0,
+      "pre": 252.0
+    },
+    "distance": 508,
+    "new": false,
+    "tax": 9917.0
+  }
+]

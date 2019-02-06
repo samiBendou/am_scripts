@@ -1,0 +1,115 @@
+[
+  {
+    "lat": 17.2313175201,
+    "lon": 78.4298553467,
+    "tax": 4497.0,
+    "price": 0.0,
+    "iata": "HYD",
+    "name": "Rajiv Gandhi International Airport",
+    "loc": {
+      "country": "India",
+      "city": "Hyderabad",
+      "tmz": 5.5
+    }
+  },
+  {
+    "lat": 13.1979,
+    "lon": 77.706299,
+    "tax": 5776.0,
+    "price": 0.0,
+    "iata": "BLR",
+    "name": "Kempegowda International Airport",
+    "loc": {
+      "country": "India",
+      "city": "Bangalore",
+      "tmz": 5.5
+    }
+  },
+  {
+    "lat": 19.0886993408,
+    "lon": 72.8678970337,
+    "tax": 6688.0,
+    "price": 0.0,
+    "iata": "BOM",
+    "name": "Chhatrapati Shivaji International Airport",
+    "loc": {
+      "country": "India",
+      "city": "Mumbai",
+      "tmz": 5.5
+    }
+  },
+  {
+    "lat": 22.654699325561523,
+    "lon": 88.44670104980469,
+    "tax": 4866.0,
+    "price": 0.0,
+    "iata": "CCU",
+    "name": "Netaji Subhash Chandra Bose International Airport",
+    "loc": {
+      "country": "India",
+      "city": "Kolkata",
+      "tmz": 5.5
+    }
+  },
+  {
+    "lat": 28.5665,
+    "lon": 77.103104,
+    "tax": 8242.0,
+    "price": 0.0,
+    "iata": "DEL",
+    "name": "Indira Gandhi International Airport",
+    "loc": {
+      "country": "India",
+      "city": "Delhi",
+      "tmz": 5.5
+    }
+  },
+  {
+    "lat": 15.3808002472,
+    "lon": 73.8313980103,
+    "tax": 5198.0,
+    "price": 0.0,
+    "iata": "GOI",
+    "name": "Dabolim Airport",
+    "loc": {
+      "country": "India",
+      "city": "Goa",
+      "tmz": 5.5
+    }
+  },
+  {
+    "lat": 33.616653,
+    "lon": 73.099233,
+    "tax": 5153.0,
+    "price": 0.0,
+    "iata": "ISB",
+    "name": null,
+    "loc": null
+  },
+  {
+    "lat": 24.9065,
+    "lon": 67.160797,
+    "tax": 5658.0,
+    "price": 0.0,
+    "iata": "KHI",
+    "name": "Jinnah International Airport",
+    "loc": {
+      "country": "Pakistan",
+      "city": "Karachi",
+      "tmz": 5.0
+    }
+  },
+  {
+    "lat": 12.990005493164062,
+    "lon": 80.16929626464844,
+    "tax": 5420.0,
+    "price": 0.0,
+    "iata": "MAA",
+    "name": "Chennai International Airport",
+    "loc": {
+      "country": "India",
+      "city": "Madras",
+      "tmz": 5.5
+    }
+  }
+]
