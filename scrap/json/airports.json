@@ -83,8 +83,12 @@
         "tax": 5153.0,
         "price": 0.0,
         "iata": "ISB",
-        "name": null,
-        "loc": null
+        "name": "Benazir Bhutto International Airport",
+        "loc": {
+            "country": "Pakistan",
+            "city": null,
+            "tmz": null
+        }
     },
     {
         "lat": 24.9065,
@@ -110,6 +114,240 @@
             "country": "India",
             "city": "Madras",
             "tmz": 5.5
+        }
+    },
+    {
+        "lat": 13.9125995636,
+        "lon": 100.607002258,
+        "tax": 10034.0,
+        "price": 0.0,
+        "iata": "DMK",
+        "name": "Don Mueang International Airport",
+        "loc": {
+            "country": "Thailand",
+            "city": "Bangkok",
+            "tmz": 7.0
+        }
+    },
+    {
+        "lat": 8.1132,
+        "lon": 98.316902,
+        "tax": 4941.0,
+        "price": 0.0,
+        "iata": "HKT",
+        "name": "Phuket International Airport",
+        "loc": {
+            "country": "Thailand",
+            "city": "Phuket",
+            "tmz": 7.0
+        }
+    },
+    {
+        "lat": 6.93320989609,
+        "lon": 100.392997742,
+        "tax": 4957.0,
+        "price": 0.0,
+        "iata": "HDY",
+        "name": "Hat Yai International Airport",
+        "loc": {
+            "country": "Thailand",
+            "city": "Hat Yai",
+            "tmz": 7.0
+        }
+    },
+    {
+        "lat": 17.238000869750977,
+        "lon": 99.81819915771484,
+        "tax": 4047.0,
+        "price": 0.0,
+        "iata": "THS",
+        "name": "Sukhothai Airport",
+        "loc": {
+            "country": "Thailand",
+            "city": "Sukhothai",
+            "tmz": 7.0
+        }
+    },
+    {
+        "lat": 25.883899688699998,
+        "lon": 93.77110290530001,
+        "tax": 4019.0,
+        "price": 0.0,
+        "iata": "DMU",
+        "name": "Dimapur Airport",
+        "loc": {
+            "country": "India",
+            "city": "Dimapur",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 23.0771999359,
+        "lon": 72.63469696039999,
+        "tax": 5490.0,
+        "price": 0.0,
+        "iata": "AMD",
+        "name": "Sardar Vallabhbhai Patel International Airport",
+        "loc": {
+            "country": "India",
+            "city": "Ahmedabad",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 22.336201,
+        "lon": 73.226303,
+        "tax": 4419.0,
+        "price": 0.0,
+        "iata": "BDQ",
+        "name": "Vadodara Airport",
+        "loc": {
+            "country": "India",
+            "city": "Baroda",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 31.7096004486,
+        "lon": 74.7973022461,
+        "tax": 5224.0,
+        "price": 0.0,
+        "iata": "ATQ",
+        "name": "Sri Guru Ram Dass Jee International Airport",
+        "loc": {
+            "country": "India",
+            "city": "Amritsar",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 15.361700058,
+        "lon": 75.08489990230001,
+        "tax": 3212.0,
+        "price": 0.0,
+        "iata": "HBX",
+        "name": "Hubli Airport",
+        "loc": {
+            "country": "India",
+            "city": "Hubli",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 26.68120002746582,
+        "lon": 88.32859802246094,
+        "tax": 4206.0,
+        "price": 0.0,
+        "iata": "IXB",
+        "name": "Bagdogra Airport",
+        "loc": {
+            "country": "India",
+            "city": "Baghdogra",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 30.673500061035156,
+        "lon": 76.78849792480469,
+        "tax": 4176.0,
+        "price": 0.0,
+        "iata": "IXC",
+        "name": "Chandigarh Airport",
+        "loc": {
+            "country": "India",
+            "city": "Chandigarh",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 12.9612998962,
+        "lon": 74.8900985718,
+        "tax": 3965.0,
+        "price": 0.0,
+        "iata": "IXE",
+        "name": "Mangalore International Airport",
+        "loc": {
+            "country": "India",
+            "city": "Mangalore",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 9.83450984955,
+        "lon": 78.09339904790001,
+        "tax": 3436.0,
+        "price": 0.0,
+        "iata": "IXM",
+        "name": "Madurai Airport",
+        "loc": {
+            "country": "India",
+            "city": "Madurai",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 26.10610008239746,
+        "lon": 91.58589935302734,
+        "tax": 4542.0,
+        "price": 0.0,
+        "iata": "GAU",
+        "name": "Lokpriya Gopinath Bordoloi International Airport",
+        "loc": {
+            "country": "India",
+            "city": "Guwahati",
+            "tmz": 5.5
+        }
+    },
+    {
+        "lat": 1.35019,
+        "lon": 103.994003,
+        "tax": 11839.0,
+        "price": 0.0,
+        "iata": "SIN",
+        "name": "Singapore Changi Airport",
+        "loc": {
+            "country": "Singapore",
+            "city": "Singapore",
+            "tmz": 8.0
+        }
+    },
+    {
+        "lat": 25.0777,
+        "lon": 121.233002,
+        "tax": 9122.0,
+        "price": 0.0,
+        "iata": "TPE",
+        "name": "Taiwan Taoyuan International Airport",
+        "loc": {
+            "country": "Taiwan",
+            "city": "Taipei",
+            "tmz": 8.0
+        }
+    },
+    {
+        "lat": 10.8187999725,
+        "lon": 106.652000427,
+        "tax": 7228.0,
+        "price": 0.0,
+        "iata": "SGN",
+        "name": "Tan Son Nhat International Airport",
+        "loc": {
+            "country": "Vietnam",
+            "city": "Ho Chi Minh City",
+            "tmz": 7.0
+        }
+    },
+    {
+        "lat": 21.221200942993164,
+        "lon": 105.80699920654297,
+        "tax": 5817.0,
+        "price": 0.0,
+        "iata": "HAN",
+        "name": "Noi Bai International Airport",
+        "loc": {
+            "country": "Vietnam",
+            "city": "Hanoi",
+            "tmz": 7.0
         }
     }
 ]
