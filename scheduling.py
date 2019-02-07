@@ -16,7 +16,7 @@ class Planning:
             for dst_iata, line in lines.items():
                 count[hub_iata][dst_iata] = {}
                 for plane_id, week_schedule in self.schedule.items():
-                    count[hub_iata][dst_iata][plane_id] = len(week_schedule[day])
+                    count[hub_iata][dst_iata][plane_id] = week_schedule[day].count(hub_iata + "-" + dst_iata)
 
         return count
 
@@ -156,7 +156,7 @@ class Planning:
         return percent
 
 
-schedule = {"Q-400": [[0, 0, 0]] * 7}
+schedule = {"Q-400": [["HYD-ISB", "HYD-ISB", "HYD-ISB"]] * 7}
 plan = Planning({"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}, {"Q-400": scrap.JSON.planes["Q-400"]}, schedule)
-data = plan.profitability(0)
+data = plan.flights(0)
 print(data)
