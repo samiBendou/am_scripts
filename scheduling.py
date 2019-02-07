@@ -135,7 +135,7 @@ class Planning:
 
         return cash
 
-    def profitability(self, day):
+    def profitability(self, day, loan_rate=0.01):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
 
@@ -147,7 +147,7 @@ class Planning:
                 for plane_id, week_schedule in self.schedule.items():
                     percent[hub_iata][dst_iata][plane_id] = {}
                     wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id]
-                    plane_cost = self.planes[plane_id].price * (1. + wear_ratio)
+                    plane_cost = self.planes[plane_id].price * (1. + wear_ratio + loan_rate)
                     acq_cost = line.tax + line.hub.tax
                     for m in Market:
                         cash = profits[hub_iata][dst_iata][plane_id][m.name]
@@ -155,8 +155,100 @@ class Planning:
 
         return percent
 
+    def margin(self, day, loan_rate=0.01, loan_period=30):
+        flight_time = self.flight_time(day)
+        profits = self.profits(day)
+        costs = self.cost(day)
 
-schedule = {"Q-400": [["HYD-ISB", "HYD-ISB", "HYD-ISB"]] * 7}
-plan = Planning({"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}, {"Q-400": scrap.JSON.planes["Q-400"]}, schedule)
-data = plan.flights(0)
-print(data)
+        percent = {}
+        for hub_iata, lines in self.lines.items():
+            percent[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                percent[hub_iata][dst_iata] = {}
+                for plane_id, week_schedule in self.schedule.items():
+                    percent[hub_iata][dst_iata][plane_id] = {}
+                    wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id]
+                    plane_cost = self.planes[plane_id].price * (1. + wear_ratio + loan_rate) / (loan_period * 7)
+                    acq_cost = (line.tax + line.hub.tax) * (1 + loan_rate) / (loan_period * 7)
+                    for m in Market:
+                        op_cost = costs[hub_iata][dst_iata][plane_id][m.name]
+                        cash = profits[hub_iata][dst_iata][plane_id][m.name] - plane_cost - acq_cost
+                        percent[hub_iata][dst_iata][plane_id][m.name] = cash / (plane_cost + acq_cost + op_cost)
+
+        return percent
+
+    def reduce_by_hub(self, data, by_market=False):
+        line_data = self.reduce_by_line(data, by_market)
+
+        new_data = {}
+        for hub_iata, lines in self.lines.items():
+            if not by_market:
+                new_data[hub_iata] = sum(line_data[hub_iata].values())
+                continue
+
+            new_data[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                for m in Market:
+                    data_by_class = line_data[hub_iata][dst_iata][m.name]
+                    try:
+                        new_data[hub_iata][m.name] += data_by_class
+                    except KeyError:
+                        new_data[hub_iata][m.name] = data_by_class
+
+        return new_data
+
+    def reduce_by_line(self, data, by_market=False):
+        plane_data = self.reduce_by_plane(data, by_market)
+
+        new_data = {}
+        for hub_iata, lines in self.lines.items():
+            new_data[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                if not by_market:
+                    new_data[hub_iata][dst_iata] = sum(plane_data[hub_iata][dst_iata].values())
+                    continue
+
+                new_data[hub_iata][dst_iata] = {}
+                for plane_id, week_schedule in self.schedule.items():
+                    for m in Market:
+                        data_by_class = plane_data[hub_iata][dst_iata][plane_id][m.name]
+                        try:
+                            new_data[hub_iata][dst_iata][m.name] += data_by_class
+                        except KeyError:
+                            new_data[hub_iata][dst_iata][m.name] = data_by_class
+
+        return new_data
+
+    def reduce_by_plane(self, data, by_market=False):
+        new_data = {}
+        for hub_iata, lines in self.lines.items():
+            new_data[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                new_data[hub_iata][dst_iata] = {}
+                for plane_id, week_schedule in self.schedule.items():
+                    if not by_market:
+                        try:
+                            new_data[hub_iata][dst_iata][plane_id] = sum(data[hub_iata][dst_iata][plane_id].values())
+                        except AttributeError:
+                            new_data[hub_iata][dst_iata][plane_id] = data[hub_iata][dst_iata][plane_id]
+                        continue
+
+                    try:
+                        new_data[hub_iata][dst_iata][plane_id] = data[hub_iata][dst_iata][plane_id].copy()
+                    except AttributeError:
+                        new_data[hub_iata][dst_iata][plane_id] = {}
+                        for m in Market:
+                            new_data[hub_iata][dst_iata][plane_id][m.name] = data[hub_iata][dst_iata][plane_id] / 3.
+
+        return new_data
+
+
+plan = Planning(
+    {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}},
+    {"Q-400-1": scrap.JSON.planes["Q-400"], "Q-400-2": scrap.JSON.planes["Q-400"]},
+    {"Q-400-1": [["HYD-ISB", "HYD-ISB", "HYD-ISB"]] * 7, "Q-400-2": [["HYD-ISB", "HYD-ISB", "HYD-ISB"]] * 7}
+)
+flights_data = plan.flights(0)
+new_flights_data = plan.reduce_by_hub(flights_data, by_market=True)
+
+print(new_flights_data)
