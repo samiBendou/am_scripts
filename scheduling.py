@@ -177,6 +177,19 @@ class Planning:
 
         return percent
 
+    def use_rate(self, day):
+        flight_time = self.flight_time(day)
+
+        percent = {}
+        for hub_iata, lines in self.lines.items():
+            percent[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                percent[hub_iata][dst_iata] = {}
+                for plane_id, week_schedule in self.schedule.items():
+                    percent[hub_iata][dst_iata][plane_id] = flight_time[hub_iata][dst_iata][plane_id] / 24.
+
+        return percent
+
     def reduce_by_hub(self, data, by_market=False):
         line_data = self.reduce_by_line(data, by_market)
 
