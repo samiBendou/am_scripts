@@ -9,6 +9,8 @@ class Planning:
         self.schedule = {} if schedule is None else schedule
         self.fill = fill
 
+        self.generate_schedule()
+
     def flights(self, day):
         count = {}
         for hub_iata, lines in self.lines.items():
@@ -190,8 +192,8 @@ class Planning:
 
         return percent
 
-    def reduce_by_plane(self, data, by_market=False):
-        plane_data = self.by_plane(data, by_market)
+    def reduce_by_plane_id(self, data, by_market=False):
+        plane_data = self.by_plane_id(data, by_market)
         new_data = {}
         for plane_id in self.planes.keys():
             for hub_iata, lines in self.lines.items():
@@ -235,7 +237,7 @@ class Planning:
         return new_data
 
     def by_line(self, data, by_market=False):
-        plane_data = self.by_plane(data, by_market)
+        plane_data = self.by_plane_id(data, by_market)
 
         new_data = {}
         for hub_iata, lines in self.lines.items():
@@ -256,7 +258,7 @@ class Planning:
 
         return new_data
 
-    def by_plane(self, data, by_market=False):
+    def by_plane_id(self, data, by_market=False):
         new_data = {}
         for hub_iata, lines in self.lines.items():
             new_data[hub_iata] = {}
@@ -283,12 +285,14 @@ class Planning:
         if self.schedule is None:
             raise NotImplementedError
 
+        assert self.schedule_is_valid()
+
     def schedule_is_valid(self):
         if self.schedule == {}:
             return False
 
         for day in range(0, 7):
-            use_rate = self.reduce_by_plane(self.use_rate(day))
+            use_rate = self.reduce_by_plane_id(self.use_rate(day))
             for plane_id in self.planes.keys():
                 if use_rate[plane_id] > 1.:
                     return False
@@ -297,22 +301,43 @@ class Planning:
 
 
 class FlatPlanning(Planning):
-    def __init__(self, lines, planes, fill=0.86):
+    def __init__(self, lines, planes, fill=0.86, target=Market.eco):
+        self.target = target
         super().__init__(lines, planes, fill=fill)
-        self.generate_schedule()
 
     def generate_schedule(self):
-        raise NotImplementedError
+        self.schedule = {}
+        excluded_planes = []
+        for hub_iata, lines in self.lines.items():
+            for dst_iata, line in lines.items():
+                pax_rem = line.demand.copy()
+                while pax_rem[self.target.name] > 0:
+                    sorted_planes = list(filter(lambda x: True if x.range > line.distance else False,
+                                                self.planes.values()))
+                    sorted_planes = list(filter(lambda x: True if x.id not in excluded_planes else False,
+                                                sorted_planes))
+                    sorted_planes = sorted(sorted_planes,
+                                           key=lambda x: x.price * x.match_demand(line)[self.target.name])
+
+                    if len(sorted_planes) == 0:
+                        break
+
+                    flights = sorted_planes[0].flights_per_day(line)
+                    self.schedule[sorted_planes[0].id] = [[hub_iata + "-" + dst_iata] * flights] * 7
+                    excluded_planes.append(sorted_planes[0].id)
+                    for m in Market:
+                        pax_rem[m.name] -= 2 * flights * sorted_planes[0].pax[m.name]
 
 
-plan = Planning(
-    {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}},
-    {"Q-400-1": scrap.JSON.planes["Q-400"], "Q-400-2": scrap.JSON.planes["Q-400"]},
-    {"Q-400-1": [["HYD-ISB", "HYD-ISB", "HYD-ISB"]] * 7, "Q-400-2": [["HYD-ISB", "HYD-ISB", "HYD-ISB"]] * 7}
-)
+test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}
+test_planes = {"Q-400-1": scrap.JSON.planes["Q-400"], "ERJ-195-1": scrap.JSON.planes["ERJ-195"]}
+for plane_id, plane in test_planes.items():
+    plane.id = plane_id
+
+plan = FlatPlanning(test_lines, test_planes)
 
 flights_data = plan.profitability(0)
-new_flights_data = plan.reduce_by_plane(flights_data, by_market=False)
+new_flights_data = plan.reduce_by_plane_id(flights_data, by_market=False)
 
 print(new_flights_data)
 print(plan.schedule_is_valid())

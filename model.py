@@ -35,7 +35,8 @@ class Airport:
 
 
 class Plane:
-    def __init__(self, name, pax, speed, cons, year, max_range=np.infty, price=0., wear_rate=0.):
+    def __init__(self, name, pax, speed, cons, year, max_range=np.infty, price=0., wear_rate=0., id=None):
+        self.id = id
         self.name = name
         self.pax = pax
         self.speed = speed  # in km/h
