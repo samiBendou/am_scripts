@@ -8,30 +8,19 @@ import seaborn as sns
 
 class Data:
 
-    def __init__(self, planes, lines):
-        self.planes = planes
-        self.lines = lines
+    def __init__(self, plannings):
+        self.plannings = plannings
+        for plan in self.plannings:
+            assert plan.lines == self.plannings[0].lines
 
     """
-    @brief Sort planes by lines and profitability
+    @brief Sort plannings by profitability
     @details Returns a dictionary which contains planes sorted by lines. For each line the corresponding planes are the
     planes which have sufficient range to flight to destination. The planes are sorted by decreasing profitability.
     """
 
-    def sort(self, included_planes=None, excluded_planes=None):
-        planes_names = self._filter_planes(included_planes, excluded_planes)
-
-        planes = {}
-        for iata, h in self.lines.items():
-            planes[iata] = {}
-            for l in h.values():
-                planes[iata][l.dst.iata] = list(
-                    filter(lambda x: True if x.range > l.distance and x.name in planes_names else False,
-                           self.planes.values()))
-                planes[iata][l.dst.iata] = sorted(planes[iata][l.dst.iata], key=lambda x: x.profitability(l),
-                                                  reverse=True)
-
-        return planes
+    def sorted(self, day=0):
+        return sorted(self.plannings, key=lambda x: sum(x.by_hubs(x.profitability(day)).values()), reverse=True)
 
     def heatmap(self, included_planes=None, excluded_planes=None):
         planes_names = self._filter_planes(included_planes, excluded_planes)
@@ -57,31 +46,33 @@ class Plot(GenericPlot):
     RENDER_ROOT = GenericPlot.RENDER_ROOT + "purchase/"
 
     @classmethod
-    def sort(cls, data, included_planes=None, excluded_planes=None, max_planes=7):
-        sorted_planes = data.sort(included_planes, excluded_planes)
+    def sort(cls, data, day=0, max_plans=7):
+        sorted_plans = data.sorted()
+        size = min(max_plans, len(sorted_plans))
 
         bar_width = 0.2
         opacity = 0.4
 
-        for iata, h in data.lines.items():
-            for l in h.values():
-                profits = tuple(
-                    map(lambda x: sum(x.profits_at_matching(l).values()) / 1.e6,
-                        sorted_planes[iata][l.dst.iata][:max_planes]))
-                initial_costs = tuple(
-                    map(lambda x: x.price * x.match_demand(l)[Market.eco.name] / 100.e6,
-                        sorted_planes[iata][l.dst.iata][:max_planes]))
-                profitability = tuple(
-                    map(lambda x: x.profitability(l),
-                        sorted_planes[iata][l.dst.iata][:max_planes]))
-                names = tuple(
-                    map(lambda x: x.name,
-                        sorted_planes[iata][l.dst.iata][:max_planes]))
+        profits_by_line = []
+        profitability_by_line = []
 
-                if names == ():
-                    continue
+        for plan in sorted_plans:
+            profits_by_line.append(plan.by_lines(plan.profits(day)))
+            profitability_by_line.append(plan.by_lines(plan.profitability(day)))
 
-                index = np.arange(min(max_planes, len(names)))
+        for hub_iata, lines in data.plannings[0].lines.items():
+            for dst_iata, line in lines.items():
+                profits, initial_costs, profitability, names = [], [], [], []
+
+                for k in range(0, size):
+                    count = len(lines) * len(sorted_plans[k].lines)
+                    cost = sorted_plans[k].total_planes_cost() + sorted_plans[k].total_acq_cost()
+                    profits.append(profits_by_line[k][hub_iata][dst_iata] / 1.e6)
+                    initial_costs.append(cost / count / 1.e8)
+                    profitability.append(profitability_by_line[k][hub_iata][dst_iata])
+                    names.append("Planning {:d}".format(k + 1))
+
+                index = np.arange(size)
 
                 plt.bar(index, profits, bar_width,
                         alpha=opacity,
@@ -99,13 +90,8 @@ class Plot(GenericPlot):
                         label="Profitability")
 
                 plt.xticks(index + bar_width / 3, names)
-                cls.render(xl="Planes", title="Profits vs initial cost " + iata + "-" + l.dst.iata)
+                cls.render(xl="Planes", title="Profits vs initial cost " + hub_iata + "-" + dst_iata)
 
-                try:
-                    sorted_planes[iata][l.dst.iata][0].display_matching_infos(l)
-                    sorted_planes[iata][l.dst.iata][1].display_matching_infos(l)
-                except IndexError:
-                    continue
 
     @classmethod
     def heatmap(cls, data, included_planes=None, excluded_planes=None):

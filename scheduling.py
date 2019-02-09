@@ -17,6 +17,21 @@ class Planning:
 
         self.generate_schedule()
 
+    def total_planes_cost(self):
+        cost = 0.
+        for plane in self.planes.values():
+            cost += plane.price
+
+        return cost
+
+    def total_acq_cost(self):
+        cost = 0.
+        for hub_iata, lines in self.lines.items():
+            for line in lines.values():
+                cost += line.hub.price + line.dst.price
+
+        return cost
+
     def flights(self, day):
         count = {}
         for hub_iata, lines in self.lines.items():
@@ -89,7 +104,7 @@ class Planning:
 
         return fuel
 
-    def turnover(self, day):
+    def turnovers(self, day):
         pax = self.pax(day)
 
         cash = {}
@@ -105,7 +120,7 @@ class Planning:
 
         return cash
 
-    def cost(self, day):
+    def costs(self, day):
         fuel = self.fuel_cons(day)
         flights = self.flights(day)
 
@@ -117,7 +132,7 @@ class Planning:
                 for plane_id in self.planes.keys():
                     cash[hub_iata][dst_iata][plane_id] = {}
                     fuel_cons = fuel[hub_iata][dst_iata][plane_id]
-                    tax = flights[hub_iata][dst_iata][plane_id] * (line.tax + line.hub.tax)
+                    tax = flights[hub_iata][dst_iata][plane_id] * line.tax
                     pax = sum(self.planes[plane_id].pax.values())
                     for m in Market:
                         pax_ratio = self.planes[plane_id].pax[m.name] / float(pax)
@@ -126,8 +141,8 @@ class Planning:
         return cash
 
     def profits(self, day):
-        turnover = self.turnover(day)
-        cost = self.cost(day)
+        turnover = self.turnovers(day)
+        cost = self.costs(day)
 
         cash = {}
         for hub_iata, lines in self.lines.items():
@@ -146,6 +161,8 @@ class Planning:
     def profitability(self, day, loan_rate=0.01):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
+        planes_cost = self.total_planes_cost() * (1. + loan_rate)
+        acq_cost = self.total_acq_cost() * (1. + loan_rate)
 
         percent = {}
         for hub_iata, lines in self.lines.items():
@@ -154,34 +171,46 @@ class Planning:
                 percent[hub_iata][dst_iata] = {}
                 for plane_id in self.planes.keys():
                     percent[hub_iata][dst_iata][plane_id] = {}
-                    wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id]
-                    plane_cost = self.planes[plane_id].price * (1. + wear_ratio + loan_rate)
-                    acq_cost = line.tax + line.hub.tax
+                    wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id] / 100.
+                    plane_eff_cost = self.planes[plane_id].price * wear_ratio + planes_cost
+                    pax = sum(self.planes[plane_id].pax.values())
                     for m in Market:
-                        cash = profits[hub_iata][dst_iata][plane_id][m.name]
-                        percent[hub_iata][dst_iata][plane_id][m.name] = cash / (plane_cost + acq_cost)
+                        pax_ratio = self.planes[plane_id].pax[m.name] / float(pax)
+                        cash = 30 * profits[hub_iata][dst_iata][plane_id][m.name]
+                        cost = pax_ratio * (plane_eff_cost + acq_cost)
+                        try:
+                            percent[hub_iata][dst_iata][plane_id][m.name] = cash / cost
+                        except ZeroDivisionError:
+                            percent[hub_iata][dst_iata][plane_id][m.name] = 0.
 
         return percent
 
     def margin(self, day, loan_rate=0.01, loan_period=30):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
-        costs = self.cost(day)
+        costs = self.costs(day)
 
         percent = {}
         for hub_iata, lines in self.lines.items():
             percent[hub_iata] = {}
+            count = len(self.planes) * len(self.lines) * len(lines)
             for dst_iata, line in lines.items():
                 percent[hub_iata][dst_iata] = {}
                 for plane_id in self.planes.keys():
                     percent[hub_iata][dst_iata][plane_id] = {}
-                    wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id]
+                    wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id] / 100.
                     plane_cost = self.planes[plane_id].price * (1. + wear_ratio + loan_rate) / (loan_period * 7)
-                    acq_cost = (line.tax + line.hub.tax) * (1 + loan_rate) / (loan_period * 7)
+                    acq_cost = (line.dst.price + line.hub.price) * (1 + loan_rate) / (loan_period * 7)
+                    pax = sum(self.planes[plane_id].pax.values())
                     for m in Market:
+                        pax_ratio = self.planes[plane_id].pax[m.name] / float(pax)
                         op_cost = costs[hub_iata][dst_iata][plane_id][m.name]
-                        cash = profits[hub_iata][dst_iata][plane_id][m.name] - plane_cost - acq_cost
-                        percent[hub_iata][dst_iata][plane_id][m.name] = cash / (plane_cost + acq_cost + op_cost)
+                        cash = profits[hub_iata][dst_iata][plane_id][m.name] - pax_ratio * (plane_cost + acq_cost)
+                        cost = pax_ratio * (plane_cost + acq_cost + op_cost)
+                        try:
+                            percent[hub_iata][dst_iata][plane_id][m.name] = cash / cost / count
+                        except ZeroDivisionError:
+                            percent[hub_iata][dst_iata][plane_id][m.name] = 0.
 
         return percent
 
@@ -261,6 +290,33 @@ class Planning:
                             new_data[hub_iata][dst_iata][m.name] += data_by_class
                         except KeyError:
                             new_data[hub_iata][dst_iata][m.name] = data_by_class
+
+        return new_data
+
+    def by_plane(self, data, by_market=False):
+        plane_data = self.by_plane_id(data, by_market)
+
+        new_data = {}
+        for hub_iata, lines in self.lines.items():
+            new_data[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                new_data[hub_iata][dst_iata] = {}
+                for plane_id, plane in self.planes.items():
+                    if not by_market:
+                        data_by_plane = plane_data[hub_iata][dst_iata][plane_id]
+                        try:
+                            new_data[hub_iata][dst_iata][plane.name] += data_by_plane
+                        except KeyError:
+                            new_data[hub_iata][dst_iata][plane.name] = data_by_plane
+                        continue
+
+                    new_data[hub_iata][dst_iata][plane.name] = {}
+                    for m in Market:
+                        data_by_class = plane_data[hub_iata][dst_iata][plane_id][m.name]
+                        try:
+                            new_data[hub_iata][dst_iata][plane.name][m.name] += data_by_class
+                        except KeyError:
+                            new_data[hub_iata][dst_iata][plane.name][m.name] = data_by_class
 
         return new_data
 
@@ -360,7 +416,7 @@ test_planes = [scrap.JSON.planes["Q-400"], scrap.JSON.planes["ERJ-190"]]
 
 plan = FlatPlanning.match(test_lines, test_planes)
 
-flights_data = plan.profitability(0)
-new_flights_data = plan.reduce_by_plane_id(flights_data, by_market=False)
+flights_data = plan.margin(0)
+new_flights_data = plan.by_plane(flights_data, by_market=False)
 
 print(new_flights_data)
