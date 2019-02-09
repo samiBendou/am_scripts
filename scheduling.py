@@ -1,13 +1,19 @@
 from model import *
 import scrap
+import copy
+
+hours_day = 24
+liters_barrel = 159.0
+petrol_price = 53.53 / liters_barrel  # $/L
 
 
 class Planning:
-    def __init__(self, lines, planes, schedule=None, fill=0.86):
+    def __init__(self, lines, planes, schedule=None, fill=0.86, add_time=1.):
         self.lines = lines
         self.planes = planes
         self.schedule = {} if schedule is None else schedule
         self.fill = fill
+        self.add_time = add_time
 
         self.generate_schedule()
 
@@ -63,7 +69,7 @@ class Planning:
             for dst_iata, line in lines.items():
                 time[hub_iata][dst_iata] = {}
                 for plane_id in self.planes.keys():
-                    flight_time = self.planes[plane_id].flight_time(line) + add_time
+                    flight_time = self.planes[plane_id].flight_time(line.distance, self.add_time)
                     time[hub_iata][dst_iata][plane_id] = 2 * flight_time * flights[hub_iata][dst_iata][plane_id]
 
         return time
@@ -216,8 +222,8 @@ class Planning:
 
         return new_data
 
-    def by_hub(self, data, by_market=False):
-        line_data = self.by_line(data, by_market)
+    def by_hubs(self, data, by_market=False):
+        line_data = self.by_lines(data, by_market)
 
         new_data = {}
         for hub_iata, lines in self.lines.items():
@@ -236,7 +242,7 @@ class Planning:
 
         return new_data
 
-    def by_line(self, data, by_market=False):
+    def by_lines(self, data, by_market=False):
         plane_data = self.by_plane_id(data, by_market)
 
         new_data = {}
@@ -301,9 +307,9 @@ class Planning:
 
 
 class FlatPlanning(Planning):
-    def __init__(self, lines, planes, fill=0.86, target=Market.eco):
+    def __init__(self, lines, planes, fill=0.86, add_time=1., target=Market.eco):
         self.target = target
-        super().__init__(lines, planes, fill=fill)
+        super().__init__(lines, planes, fill, add_time)
 
     def generate_schedule(self):
         self.schedule = {}
@@ -312,32 +318,49 @@ class FlatPlanning(Planning):
             for dst_iata, line in lines.items():
                 pax_rem = line.demand.copy()
                 while pax_rem[self.target.name] > 0:
-                    sorted_planes = list(filter(lambda x: True if x.range > line.distance else False,
-                                                self.planes.values()))
-                    sorted_planes = list(filter(lambda x: True if x.id not in excluded_planes else False,
-                                                sorted_planes))
-                    sorted_planes = sorted(sorted_planes,
-                                           key=lambda x: x.price * x.match_demand(line)[self.target.name])
+                    planes = list(filter(lambda x: True if x.range > line.distance else False, self.planes.values()))
+                    planes = list(filter(lambda x: True if x.id not in excluded_planes else False, planes))
+                    planes = sorted(planes, key=lambda x: x.price * x.match_demand(line)[self.target.name])
 
-                    if len(sorted_planes) == 0:
+                    if len(planes) == 0:
                         break
 
-                    flights = sorted_planes[0].flights_per_day(line)
-                    self.schedule[sorted_planes[0].id] = [[hub_iata + "-" + dst_iata] * flights] * 7
-                    excluded_planes.append(sorted_planes[0].id)
+                    flights = planes[0].flights_per_day(line.distance, self.add_time)
+                    self.schedule[planes[0].id] = [[hub_iata + "-" + dst_iata] * flights] * 7
+                    excluded_planes.append(planes[0].id)
                     for m in Market:
-                        pax_rem[m.name] -= 2 * flights * sorted_planes[0].pax[m.name]
+                        pax_rem[m.name] -= 2 * flights * planes[0].pax[m.name]
+
+        super().generate_schedule()
+
+    @classmethod
+    def match(cls, target_lines, included_planes, fill=0.86, add_time=1., target=Market.eco):
+
+        planes = {}
+        for hub_iata, lines in target_lines.items():
+            for dst_iata, line in lines.items():
+                bench_plan = []
+                for plane in included_planes:
+                    planes_list = [copy.copy(plane) for _ in range(0, plane.match_demand(line, add_time)[target.name])]
+                    planes_dict = Plane.id_with(hub_iata + "-" + dst_iata, planes_list)
+                    bench_plan.append(FlatPlanning({hub_iata: {dst_iata: line}}, planes_dict, fill, add_time, target))
+
+                bench_plan = sorted(bench_plan,
+                                    key=lambda x: x.by_lines(x.profitability(0))[hub_iata][dst_iata],
+                                    reverse=True)
+
+                for plane in bench_plan[0].planes.values():
+                    planes[plane.id] = plane
+
+        return FlatPlanning(target_lines, planes, fill, add_time, target)
 
 
 test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}
-test_planes = {"Q-400-1": scrap.JSON.planes["Q-400"], "ERJ-195-1": scrap.JSON.planes["ERJ-195"]}
-for plane_id, plane in test_planes.items():
-    plane.id = plane_id
+test_planes = [scrap.JSON.planes["Q-400"], scrap.JSON.planes["ERJ-190"]]
 
-plan = FlatPlanning(test_lines, test_planes)
+plan = FlatPlanning.match(test_lines, test_planes)
 
 flights_data = plan.profitability(0)
 new_flights_data = plan.reduce_by_plane_id(flights_data, by_market=False)
 
 print(new_flights_data)
-print(plan.schedule_is_valid())

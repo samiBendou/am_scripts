@@ -1,11 +1,6 @@
 from enum import Enum
 import numpy as np
 
-add_time = 1.0  # hours
-hours_day = 24  # hours / day
-l_petrol_bar = 159.0  # L / barrel
-petrol_price = 53.53 / l_petrol_bar  # $/L
-
 
 class Market(Enum):
     eco = "economic"
@@ -35,16 +30,40 @@ class Airport:
 
 
 class Plane:
-    def __init__(self, name, pax, speed, cons, year, max_range=np.infty, price=0., wear_rate=0., id=None):
-        self.id = id
+    def __init__(self, name, pax, speed, cons, year, plane_range=np.infty, price=0., wear_rate=0., plane_id=None):
+        self.id = plane_id
         self.name = name
         self.pax = pax
         self.speed = speed  # in km/h
         self.cons = cons  # in L/100km/pax
-        self.range = max_range
+        self.range = plane_range
         self.price = price
         self.wear_rate = wear_rate
         self.year = year
+
+    def flights_per_day(self, distance, add_time=0.):
+        return int(np.floor(24. / (2 * self.flight_time(distance, add_time))))
+
+    def flight_time(self, distance, add_time=0.):
+        return distance / self.speed + add_time  # in hours
+
+    def flight_time_verbose(self, distance, add_time=0.):
+        flight_time = self.flight_time(distance, add_time)
+        hours = int(np.floor(flight_time))
+        minutes = int((flight_time - hours) * 60.)
+        return str.format("{:d}:{:d}", hours, minutes)
+
+    def match_demand(self, line, add_time=0.):
+        count_planes = {}
+        flight_per_day = self.flights_per_day(line.distance, add_time)
+
+        for m in Market:
+            try:
+                count_planes[m.name] = int(np.round(line.demand[m.name] / (2 * self.pax[m.name] * flight_per_day)))
+            except ZeroDivisionError:
+                count_planes[m.name] = 0
+
+        return count_planes
 
     @classmethod
     def from_dict(cls, plane):
@@ -52,40 +71,19 @@ class Plane:
                      pax=plane["pax"],
                      speed=plane["speed"],
                      cons=plane["cons"],
-                     max_range=plane["range"],
+                     plane_range=plane["range"],
                      price=plane["price"],
                      wear_rate=plane["wear_rate"],
                      year=plane["year"])
 
-    def flights_per_day(self, line):
-        return int(np.floor(24. / (2 * self.flight_time(line))))
-
-    def flight_time(self, line):
-        return line.distance / self.speed  # in hours
-
-    def flight_time_verbose(self, line):
-        flight_time = self.flight_time(line)
-        hours = int(np.floor(flight_time))
-        minutes = int((flight_time - hours) * 60.0)
-        return str.format("{:d}:{:d}", hours, minutes)
-
-    def match_demand(self, line):
-
-        # number of planes too buy to fulfill the demand for each segment
-        count_planes = {}
-        # max_pax = sum(self.pax.values())
-        # demand_max = sum(line.demand.values())
-        flight_per_day = self.flights_per_day(line)
-
-        for m in Market:
-            try:
-                count_planes[m.name] = int(
-                    np.round(line.demand[m.name] / (2 * self.pax[m.name] * flight_per_day)))
-            except ZeroDivisionError:
-                count_planes[m.name] = 0
-                continue
-
-        return count_planes
+    @classmethod
+    def id_with(cls, prefix, planes):
+        planes_dict = {}
+        for k in range(0, len(planes)):
+            plane_id = prefix + "-{:d}".format(k + 1)
+            planes_dict[plane_id] = planes[k]
+            planes_dict[plane_id].id = plane_id
+        return planes_dict
 
 
 class Line:
