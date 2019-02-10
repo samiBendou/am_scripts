@@ -19,8 +19,16 @@ class Data:
     planes which have sufficient range to flight to destination. The planes are sorted by decreasing profitability.
     """
 
-    def sorted(self, day=0):
-        return sorted(self.plannings, key=lambda x: sum(x.by_hubs(x.profitability(day)).values()), reverse=True)
+    def sorted(self):
+        plan_profitability = []
+        for plan in self.plannings:
+            plan_profitability.append(0)
+            for day in range(0, 7):
+                plan_profitability[-1] += sum(plan.by_hubs(plan.profitability(day), day).values()) / 7.
+
+        zip_to_sort = zip(plan_profitability, self.plannings)
+        sorted_plans = [x for _, x in sorted(zip_to_sort, reverse=True)]
+        return sorted_plans
 
     def heatmap(self, included_planes=None, excluded_planes=None):
         planes_names = self._filter_planes(included_planes, excluded_planes)
@@ -57,8 +65,8 @@ class Plot(GenericPlot):
         profitability_by_line = []
 
         for plan in sorted_plans:
-            profits_by_line.append(plan.by_lines(plan.profits(day)))
-            profitability_by_line.append(plan.by_lines(plan.profitability(day)))
+            profits_by_line.append(plan.by_lines(plan.profits(day), day))
+            profitability_by_line.append(plan.by_lines(plan.profitability(day), day))
 
         for hub_iata, lines in data.plannings[0].lines.items():
             for dst_iata, line in lines.items():

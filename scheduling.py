@@ -161,16 +161,17 @@ class Planning:
     def profitability(self, day, loan_rate=0.01):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
+        price_by_line = self.price_by_lines()
 
         percent = {}
         for hub_iata, lines in self.lines.items():
             percent[hub_iata] = {}
             for dst_iata, line in lines.items():
                 percent[hub_iata][dst_iata] = {}
-                for plane_id in self.planes.keys():
+                for plane_id, plane in self.planes.items():
                     percent[hub_iata][dst_iata][plane_id] = {}
-                    wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id] / 100.
-                    plane_cost = self.planes[plane_id].price * (1. + wear_ratio + loan_rate)
+                    wear_ratio = plane.wear_rate * flight_time[hub_iata][dst_iata][plane_id] / 100.
+                    plane_cost = plane.price * (wear_ratio + loan_rate) + price_by_line[hub_iata][dst_iata][plane.name]
                     pax = sum(self.planes[plane_id].pax.values())
                     for m in Market:
                         pax_ratio = self.planes[plane_id].pax[m.name] / float(pax)
@@ -224,6 +225,25 @@ class Planning:
 
         return percent
 
+    def price_by_lines(self):
+        deserve_dst = self.deserve_dst()
+
+        cash = {}
+        for hub_iata, lines in self.lines.items():
+            cash[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                cash[hub_iata][dst_iata] = {}
+                for plane_id, plane in self.planes.items():
+                    if not deserve_dst[hub_iata][dst_iata][plane_id]:
+                        continue
+
+                    try:
+                        cash[hub_iata][dst_iata][plane.name] += plane.price
+                    except KeyError:
+                        cash[hub_iata][dst_iata][plane.name] = plane.price
+
+        return cash
+
     def reduce_by_planes(self, data, by_market=False, avg=False):
         plane_data = self.reduce_by_plane_id(data, by_market)
         count_planes = self.count_planes_by_name()
@@ -232,7 +252,7 @@ class Planning:
         for plane_id, base_data in plane_data.items():
             if not by_market:
 
-                data_by_plane = base_data / count_planes[self.planes[plane_id].name] if avg else base_data
+                data_by_plane = base_data if avg else base_data / count_planes[self.planes[plane_id].name]
 
                 try:
                     new_data[self.planes[plane_id].name] += data_by_plane
@@ -418,7 +438,7 @@ class Planning:
 
         return count_by_lines
 
-    def deserve_dst(self, day):
+    def deserve_dst(self, day=None):
         deserve_dst = {}
 
         for hub_iata, lines in self.lines.items():
@@ -427,8 +447,14 @@ class Planning:
                 deserve_dst[hub_iata][dst_iata] = {}
                 for plane_id, week_schedule in self.schedule.items():
                     deserve_dst[hub_iata][dst_iata][plane_id] = False
-                    if hub_iata + "-" + dst_iata in week_schedule[day]:
-                        deserve_dst[hub_iata][dst_iata][plane_id] = True
+                    if day is not None:
+                        if hub_iata + "-" + dst_iata in week_schedule[day]:
+                            deserve_dst[hub_iata][dst_iata][plane_id] = True
+                        continue
+
+                    for day_schedule in week_schedule:
+                        if hub_iata + "-" + dst_iata in day_schedule:
+                            deserve_dst[hub_iata][dst_iata][plane_id] = True
 
         return deserve_dst
 
@@ -481,6 +507,7 @@ class FlatPlanning(Planning):
     @classmethod
     def match(cls, target_lines, included_planes, fill=0.86, add_time=1., target=Market.eco):
 
+        lines_to_delete = []
         planes = {}
         for hub_iata, lines in target_lines.items():
             for dst_iata, line in lines.items():
@@ -493,6 +520,7 @@ class FlatPlanning(Planning):
                         bench_plan.append(plan)
 
                 if len(bench_plan) == 0:
+                    lines_to_delete.append(hub_iata + "-" + dst_iata)
                     continue
 
                 bench_plan = sorted(bench_plan,
@@ -502,18 +530,22 @@ class FlatPlanning(Planning):
                 for plane in bench_plan[0].planes.values():
                     planes[plane.id] = plane
 
+        for line_id in lines_to_delete:
+            [hub_iata, dst_iata] = line_id.split("-")
+            del target_lines[hub_iata][dst_iata]
+
         return FlatPlanning(target_lines, planes, fill, add_time, target)
 
 
 # test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}
 
-test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"], "BLR": scrap.JSON.lines["HYD"]["BLR"]}}
-test_planes = [scrap.JSON.planes["Q-400"], scrap.JSON.planes["ERJ-190"]]
+test_lines = scrap.JSON.lines
+test_planes = [scrap.JSON.planes["Q-400"]]
 
 plan = FlatPlanning.match(test_lines, test_planes)
 
 test_day = 0
 flights_data = plan.profitability(test_day)
-new_flights_data = plan.reduce_by_planes(flights_data, by_market=False, avg=True)
+new_flights_data = plan.by_hubs(flights_data, test_day, by_market=False, avg=True)
 
 print(new_flights_data)
