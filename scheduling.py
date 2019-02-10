@@ -161,8 +161,6 @@ class Planning:
     def profitability(self, day, loan_rate=0.01):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
-        planes_cost = self.total_planes_cost() * (1. + loan_rate)
-        acq_cost = self.total_acq_cost() * (1. + loan_rate)
 
         percent = {}
         for hub_iata, lines in self.lines.items():
@@ -172,12 +170,12 @@ class Planning:
                 for plane_id in self.planes.keys():
                     percent[hub_iata][dst_iata][plane_id] = {}
                     wear_ratio = self.planes[plane_id].wear_rate * flight_time[hub_iata][dst_iata][plane_id] / 100.
-                    plane_eff_cost = self.planes[plane_id].price * wear_ratio + planes_cost
+                    plane_cost = self.planes[plane_id].price * (1. + wear_ratio + loan_rate)
                     pax = sum(self.planes[plane_id].pax.values())
                     for m in Market:
                         pax_ratio = self.planes[plane_id].pax[m.name] / float(pax)
                         cash = 30 * profits[hub_iata][dst_iata][plane_id][m.name]
-                        cost = pax_ratio * (plane_eff_cost + acq_cost)
+                        cost = pax_ratio * plane_cost
                         try:
                             percent[hub_iata][dst_iata][plane_id][m.name] = cash / cost
                         except ZeroDivisionError:
@@ -193,7 +191,6 @@ class Planning:
         percent = {}
         for hub_iata, lines in self.lines.items():
             percent[hub_iata] = {}
-            count = len(self.planes) * len(self.lines) * len(lines)
             for dst_iata, line in lines.items():
                 percent[hub_iata][dst_iata] = {}
                 for plane_id in self.planes.keys():
@@ -208,7 +205,7 @@ class Planning:
                         cash = profits[hub_iata][dst_iata][plane_id][m.name] - pax_ratio * (plane_cost + acq_cost)
                         cost = pax_ratio * (plane_cost + acq_cost + op_cost)
                         try:
-                            percent[hub_iata][dst_iata][plane_id][m.name] = cash / cost / count
+                            percent[hub_iata][dst_iata][plane_id][m.name] = cash / cost
                         except ZeroDivisionError:
                             percent[hub_iata][dst_iata][plane_id][m.name] = 0.
 
@@ -251,19 +248,25 @@ class Planning:
 
         return new_data
 
-    def by_hubs(self, data, by_market=False):
-        line_data = self.by_lines(data, by_market)
+    def by_hubs(self, data, day, by_market=False, avg=False):
+        line_data = self.by_lines(data, day, by_market, avg)
+        count_lines = self.count_lines_by_hub()
 
         new_data = {}
         for hub_iata, lines in self.lines.items():
             if not by_market:
                 new_data[hub_iata] = sum(line_data[hub_iata].values())
+                if avg:
+                    new_data[hub_iata] /= count_lines[hub_iata]
+
                 continue
 
             new_data[hub_iata] = {}
             for dst_iata, line in lines.items():
                 for m in Market:
                     data_by_class = line_data[hub_iata][dst_iata][m.name]
+                    if avg:
+                        data_by_class /= count_lines[hub_iata]
                     try:
                         new_data[hub_iata][m.name] += data_by_class
                     except KeyError:
@@ -271,8 +274,9 @@ class Planning:
 
         return new_data
 
-    def by_lines(self, data, by_market=False):
+    def by_lines(self, data, day, by_market=False, avg=False):
         plane_data = self.by_plane_id(data, by_market)
+        count_planes = self.count_planes_by_line(day)
 
         new_data = {}
         for hub_iata, lines in self.lines.items():
@@ -280,12 +284,16 @@ class Planning:
             for dst_iata, line in lines.items():
                 if not by_market:
                     new_data[hub_iata][dst_iata] = sum(plane_data[hub_iata][dst_iata].values())
+                    if avg:
+                        new_data[hub_iata][dst_iata] /= count_planes[hub_iata][dst_iata]
                     continue
 
                 new_data[hub_iata][dst_iata] = {}
                 for plane_id in self.planes.keys():
                     for m in Market:
                         data_by_class = plane_data[hub_iata][dst_iata][plane_id][m.name]
+                        if avg:
+                            data_by_class /= count_planes[hub_iata][dst_iata]
                         try:
                             new_data[hub_iata][dst_iata][m.name] += data_by_class
                         except KeyError:
@@ -293,30 +301,39 @@ class Planning:
 
         return new_data
 
-    def by_plane(self, data, by_market=False):
+    def by_plane(self, data, day, by_market=False, avg=False):
         plane_data = self.by_plane_id(data, by_market)
+        count_planes = self.count_planes_by_line(day)
+        deserve_dst = self.deserve_dst(day)
 
         new_data = {}
         for hub_iata, lines in self.lines.items():
             new_data[hub_iata] = {}
             for dst_iata, line in lines.items():
                 new_data[hub_iata][dst_iata] = {}
-                for plane_id, plane in self.planes.items():
-                    if not by_market:
-                        data_by_plane = plane_data[hub_iata][dst_iata][plane_id]
-                        try:
-                            new_data[hub_iata][dst_iata][plane.name] += data_by_plane
-                        except KeyError:
-                            new_data[hub_iata][dst_iata][plane.name] = data_by_plane
+                for plane_id, week_schedule in self.schedule.items():
+                    if not deserve_dst[hub_iata][dst_iata][plane_id]:
                         continue
 
-                    new_data[hub_iata][dst_iata][plane.name] = {}
+                    if not by_market:
+                        data_by_plane = plane_data[hub_iata][dst_iata][plane_id]
+                        if avg:
+                            data_by_plane /= count_planes[hub_iata][dst_iata]
+                        try:
+                            new_data[hub_iata][dst_iata][self.planes[plane_id].name] += data_by_plane
+                        except KeyError:
+                            new_data[hub_iata][dst_iata][self.planes[plane_id].name] = data_by_plane
+                        continue
+
+                    new_data[hub_iata][dst_iata][self.planes[plane_id].name] = {}
                     for m in Market:
                         data_by_class = plane_data[hub_iata][dst_iata][plane_id][m.name]
+                        if avg:
+                            data_by_class /= count_planes[hub_iata][dst_iata]
                         try:
-                            new_data[hub_iata][dst_iata][plane.name][m.name] += data_by_class
+                            new_data[hub_iata][dst_iata][self.planes[plane_id].name][m.name] += data_by_class
                         except KeyError:
-                            new_data[hub_iata][dst_iata][plane.name][m.name] = data_by_class
+                            new_data[hub_iata][dst_iata][self.planes[plane_id].name][m.name] = data_by_class
 
         return new_data
 
@@ -343,6 +360,51 @@ class Planning:
 
         return new_data
 
+    def count_planes_by_names(self):
+        count_names = {}
+        for plane_id, plane in self.planes.items():
+            try:
+                count_names[plane.name] += 1
+            except KeyError:
+                count_names[plane.name] = 1
+
+        return count_names
+
+    def count_lines_by_hub(self):
+        count_by_hub = {}
+        for hub_iata, lines in self.lines.items():
+            count_by_hub[hub_iata] = 0
+            for _ in lines.values():
+                count_by_hub[hub_iata] += 1
+
+        return count_by_hub
+
+    def count_planes_by_line(self, day):
+        count_by_lines = {}
+        for hub_iata, lines in self.lines.items():
+            count_by_lines[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                count_by_lines[hub_iata][dst_iata] = 0
+                for plane_id, week_schedule in self.schedule.items():
+                    if hub_iata + "-" + dst_iata in week_schedule[day]:
+                        count_by_lines[hub_iata][dst_iata] += 1
+
+        return count_by_lines
+
+    def deserve_dst(self, day):
+        deserve_dst = {}
+
+        for hub_iata, lines in self.lines.items():
+            deserve_dst[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                deserve_dst[hub_iata][dst_iata] = {}
+                for plane_id, week_schedule in self.schedule.items():
+                    deserve_dst[hub_iata][dst_iata][plane_id] = False
+                    if hub_iata + "-" + dst_iata in week_schedule[day]:
+                        deserve_dst[hub_iata][dst_iata][plane_id] = True
+
+        return deserve_dst
+
     def generate_schedule(self):
         if self.schedule is None:
             raise NotImplementedError
@@ -351,7 +413,7 @@ class Planning:
 
     def schedule_is_valid(self):
         if self.schedule == {}:
-            return False
+            return True
 
         for day in range(0, 7):
             use_rate = self.reduce_by_plane_id(self.use_rate(day))
@@ -376,7 +438,7 @@ class FlatPlanning(Planning):
                 while pax_rem[self.target.name] > 0:
                     planes = list(filter(lambda x: True if x.range > line.distance else False, self.planes.values()))
                     planes = list(filter(lambda x: True if x.id not in excluded_planes else False, planes))
-                    planes = sorted(planes, key=lambda x: x.price * x.match_demand(line)[self.target.name])
+                    planes = list(filter(lambda x: True if hub_iata + "-" + dst_iata in x.id else False, planes))
 
                     if len(planes) == 0:
                         break
@@ -399,10 +461,15 @@ class FlatPlanning(Planning):
                 for plane in included_planes:
                     planes_list = [copy.copy(plane) for _ in range(0, plane.match_demand(line, add_time)[target.name])]
                     planes_dict = Plane.id_with(hub_iata + "-" + dst_iata, planes_list)
-                    bench_plan.append(FlatPlanning({hub_iata: {dst_iata: line}}, planes_dict, fill, add_time, target))
+                    plan = FlatPlanning({hub_iata: {dst_iata: line}}, planes_dict, fill, add_time, target)
+                    if plan.schedule != {}:
+                        bench_plan.append(plan)
+
+                if len(bench_plan) == 0:
+                    continue
 
                 bench_plan = sorted(bench_plan,
-                                    key=lambda x: x.by_lines(x.profitability(0))[hub_iata][dst_iata],
+                                    key=lambda x: x.by_lines(x.profitability(0), 0)[hub_iata][dst_iata],
                                     reverse=True)
 
                 for plane in bench_plan[0].planes.values():
@@ -411,12 +478,15 @@ class FlatPlanning(Planning):
         return FlatPlanning(target_lines, planes, fill, add_time, target)
 
 
-test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}
+# test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}
+
+test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"], "BLR": scrap.JSON.lines["HYD"]["BLR"]}}
 test_planes = [scrap.JSON.planes["Q-400"], scrap.JSON.planes["ERJ-190"]]
 
 plan = FlatPlanning.match(test_lines, test_planes)
 
-flights_data = plan.margin(0)
-new_flights_data = plan.by_plane(flights_data, by_market=False)
+test_day = 0
+flights_data = plan.profitability(test_day)
+new_flights_data = plan.reduce_by_plane_id(flights_data, by_market=False)
 
 print(new_flights_data)
