@@ -224,6 +224,33 @@ class Planning:
 
         return percent
 
+    def reduce_by_planes(self, data, by_market=False, avg=False):
+        plane_data = self.reduce_by_plane_id(data, by_market)
+        count_planes = self.count_planes_by_name()
+
+        new_data = {}
+        for plane_id, base_data in plane_data.items():
+            if not by_market:
+
+                data_by_plane = base_data / count_planes[self.planes[plane_id].name] if avg else base_data
+
+                try:
+                    new_data[self.planes[plane_id].name] += data_by_plane
+                except KeyError:
+                    new_data[self.planes[plane_id].name] = data_by_plane
+                continue
+
+            for m in Market:
+                data_by_class = plane_data[plane_id][m.name]
+                if avg:
+                    data_by_class /= count_planes[self.planes[plane_id].name]
+                try:
+                    new_data[self.planes[plane_id].name] += data_by_class
+                except KeyError:
+                    new_data[self.planes[plane_id].name] = data_by_class
+
+        return new_data
+
     def reduce_by_plane_id(self, data, by_market=False):
         plane_data = self.by_plane_id(data, by_market)
         new_data = {}
@@ -301,7 +328,7 @@ class Planning:
 
         return new_data
 
-    def by_plane(self, data, day, by_market=False, avg=False):
+    def by_planes(self, data, day, by_market=False, avg=False):
         plane_data = self.by_plane_id(data, by_market)
         count_planes = self.count_planes_by_line(day)
         deserve_dst = self.deserve_dst(day)
@@ -360,7 +387,7 @@ class Planning:
 
         return new_data
 
-    def count_planes_by_names(self):
+    def count_planes_by_name(self):
         count_names = {}
         for plane_id, plane in self.planes.items():
             try:
@@ -487,6 +514,6 @@ plan = FlatPlanning.match(test_lines, test_planes)
 
 test_day = 0
 flights_data = plan.profitability(test_day)
-new_flights_data = plan.reduce_by_plane_id(flights_data, by_market=False)
+new_flights_data = plan.reduce_by_planes(flights_data, by_market=False, avg=True)
 
 print(new_flights_data)
