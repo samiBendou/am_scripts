@@ -11,9 +11,6 @@ The goal is to *automate strategic and operational decision process for an airli
 (fleet, lines, ...) or a given capital,
 **how can I make the better choices in terms of planes/lines purchases and planning?**
 
-Use this project to help you make rational decision while expanding your AM2 airline 
-and accurately visualize the performance of your strategy.
-
 ### Features
 
 - **Planes, Hub and Lines** object data model with JSON interface
@@ -55,10 +52,10 @@ In order to do this follow these steps:
         ```python
         NEWLINES = ["thailand.html", "india.html"]
         ```
-    -   If you use AM2+ you can import .csv financial data given by the AM website. At project root, create a directory
-        named `exports`. Download the last .csv financial report and put it into the `exports` directory.
+    -   If you use AM2+ you can import .csv financial data given by the AM website. 
+        Download the last .csv financial report and put it into the `exports` directory.
         
-    - Your if everything went well your `scrap` directory must looks like :
+    -   If everything went well your `scrap` directory must looks like this :
     
         ![scrap](img/scrap.png)
         
