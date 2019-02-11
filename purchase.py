@@ -1,3 +1,9 @@
+"""
+Tools for purchase strategy analysis.
+Purchase module offers many features to compare Planning objects. It allows to visualize financial results of different
+fleets and plannings over a set of lines and hubs.
+"""
+
 from utilities import GenericPlot
 
 import matplotlib.pyplot as plt
@@ -6,19 +12,20 @@ import seaborn as sns
 
 
 class Data:
+    """
+    Data class represents a list of plannings and provides comparisons operations.
+    Attributes:
+        plannings (list): Planning objects to compare. Theses must have been generated of the same hubs and lines.
+        The lines are not necessarily the ones you purchased in AM2 but also new ones you have audited.
+    """
 
     def __init__(self, plannings):
         self.plannings = plannings
         for plan in self.plannings:
             assert plan.lines == self.plannings[0].lines
 
-    """
-    @brief Sort plannings by profitability
-    @details Returns a dictionary which contains planes sorted by lines. For each line the corresponding planes are the
-    planes which have sufficient range to flight to destination. The planes are sorted by decreasing profitability.
-    """
-
     def sorted(self):
+        """Returns sorted plannings by profitability. Returns a list of plans sorted by decreasing profitability"""
         plan_profitability = []
         for plan in self.plannings:
             plan_profitability.append(0)
@@ -29,6 +36,7 @@ class Data:
         return sorted_plans
 
     def heatmap(self):
+        """Returns a list profitability over the week for each planning. Profitability is indexed by hubs and lines"""
         plan_profitability = []
         for plan in self.plannings:
             plan_profitability.append(plan.by_lines(plan.profitability()))
@@ -37,10 +45,16 @@ class Data:
 
 
 class Plot(GenericPlot):
+    """
+    Plotting static interface class. Used as interface with matplotlib for every result that can be computed with
+    Data objects.
+    """
+
     RENDER_ROOT = GenericPlot.RENDER_ROOT + "purchase/"
 
     @classmethod
-    def sort(cls, data, max_plans=7):
+    def sorted(cls, data, max_plans=7):
+        """Plots sorted comparison data obtained using data.sorted(). Only displays max_plans planning data per plot."""
         sorted_plans = data.sorted()
         size = min(max_plans, len(sorted_plans))
 
@@ -88,6 +102,7 @@ class Plot(GenericPlot):
 
     @classmethod
     def heatmap(cls, data):
+        """Plots a heatmap of profitability over the lines covered and the plannings contained in data"""
         heatmap_planes = data.heatmap()
         size = len(data.plannings)
 
