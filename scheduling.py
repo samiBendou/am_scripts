@@ -706,12 +706,31 @@ class Planning:
 
 
 class FlatPlanning(Planning):
+    """
+    Planning generated using a simple heuristic. The flat planning is one of the most simple planning you can imagine.
+    For each hub and line, a certain number of planes a dedicated and fly only this line.
+
+    You can manually specify the plane by using the following naming convention :
+     "HUB-DST-k" where k is an integer identifying the plane (k > 0).
+    Attributes:
+        lines (dict): lines to deserve, indexed by hub and destination
+        planes (dict): fleet to use, indexed by plane id eg. HYD-ISB-1
+        fill (float): fill ratio, between 0 and 1, 1 means each flight entirely fills the plane
+        add_time (float): additional time in hours for each flight
+        target (model.Market): Market to target to generate planning
+
+    """
 
     def __init__(self, lines, planes, fill=0.86, add_time=1., target=Market.eco):
         self.target = target
         super().__init__(lines, planes, fill, add_time)
 
     def generate_schedule(self):
+        """
+        Generates a Planning by filling weekly plannings for each plane according to it's ID (see ID format above).
+        The plannings generation steps to the next line when all the planes are at max use rate or
+        when there is no PAX remaining for this line.
+        """
         self.schedule = {}
         excluded_planes = []
         for hub_iata, lines in self.lines.items():
@@ -735,7 +754,22 @@ class FlatPlanning(Planning):
 
     @classmethod
     def match(cls, target_lines, included_planes, fill=0.86, add_time=1., target=Market.eco):
+        """
+        Generate a fleet and a flat planning using given planes models and target lines.
 
+        The numbers planes dedicated for a line is computed so that there is minimum PAX remaining. The generated
+        schedule tries to match the demand for each line using the most profitable plane
+
+        For each hub and line, the most profitable plane is selected and the fleet dedicated to this line
+        is generated using only this plane.
+
+        Attributes:
+            target_lines (dict): lines to deserve, indexed by hub and destination
+            included_planes (dict): planes model to use, indexed by model eg. included_plane["737-700"]
+            fill (float): fill ratio, between 0 and 1, 1 means each flight entirely fills the plane
+            add_time (float): additional time in hours for each flight
+            target (model.Market): Market to target to generate planning
+        """
         lines_to_delete = []
         planes = {}
         for hub_iata, lines in target_lines.items():
@@ -764,8 +798,3 @@ class FlatPlanning(Planning):
             del target_lines[hub_iata][dst_iata]
 
         return FlatPlanning(target_lines, planes, fill, add_time, target)
-
-
-"""
-@}
-"""
