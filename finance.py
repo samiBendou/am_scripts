@@ -211,11 +211,6 @@ class Data:
 
         return self.reduce(y)
 
-    """
-    @brief Return dictionary of relative financial data sorted by Key enumeration
-    @details Values are given in percent %
-    """
-
     def rel(self):
         """
         Indexes relative accounting data in % reduced according to the current date base.
@@ -383,15 +378,22 @@ class Data:
 
 
 class Plot(GenericPlot):
+    """
+    Plotting static interface class. Used as interface with matplotlib for every result that can be computed with
+    Data objects.
+    """
+
     RENDER_ROOT = GenericPlot.RENDER_ROOT + "finance/"
 
     @staticmethod
     def date_ticks(data):
+        """Returns a list of date ticks according to given data date base"""
         ticks = list(map(lambda t: t.strftime("%m-%d"), data.base.list()))
         return ticks
 
     @staticmethod
     def scale(y, div=1.e6):
+        """Divides the data by given coefficient"""
         new_y = y.copy()
         for key in list(new_y.keys()):
             new_y[key] = list(map(lambda t: t / div, new_y[key]))
@@ -399,6 +401,7 @@ class Plot(GenericPlot):
 
     @staticmethod
     def raw(data, average=False):
+        """Plots raw financial results"""
         x = Plot.date_ticks(data)
         y = Plot.scale(data.raw())
         label = {key: data.fields[key][Field.name.value] for key in list(y.keys())}
@@ -411,6 +414,7 @@ class Plot(GenericPlot):
 
     @staticmethod
     def rel(data, average=False):
+        """Plots relative financial results"""
         x = Plot.date_ticks(data)
         y = Plot.scale(data.rel(), 1.e-2)
         label = {key: data.fields[key][Field.name.value] for key in list(y.keys())}
@@ -423,6 +427,7 @@ class Plot(GenericPlot):
 
     @staticmethod
     def flow(data, average=False):
+        """Plots structural profits, benefits and costs"""
         x = Plot.date_ticks(data)
         y = Plot.scale(data.flow())
         label = {"flow": "Cash flow", "gain": "Benefits", "loss": "Costs"}
@@ -431,6 +436,7 @@ class Plot(GenericPlot):
 
     @staticmethod
     def pie(data):
+        """Plots pie with expenses and incomes"""
         y = data.pie(thd=3.e5)
         size = 0.3
         fig, ax = plt.subplots()
@@ -448,6 +454,18 @@ class Plot(GenericPlot):
 
     @staticmethod
     def keys(x, y, xl, yl, label, title=None, date=None, average=False):
+        """
+        Generic plotting for financial keys.
+        Parameters:
+            x (list): Date ticks label data
+            y (dict): Dictionary of y data list indexed by keys contained in Key enumeration
+            xl (str): Label of x axis
+            yl (str): Label of y axis
+            label (dict): Dictionary of y data labels indexed by keys contained in Key enumeration
+            title (str): Title of the plot
+            date (datetime): Date of the plot. Used for file naming
+            average (bool): If True plots an horizontal scattered bar representing average of the values of the field
+        """
         plot_keys = list(y.keys())
         n = len(x)
         colors = plt.get_cmap("Dark2")(np.arange(len(plot_keys)))
