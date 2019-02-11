@@ -19,6 +19,11 @@ class Planning:
     When constructing a Planning object you have two choices :
     - Provide a manually filled schedule for this planning
     - Use a sub-class of planning that generates planning from planes and lines
+    All the planning indicators are evaluated on the basis of this schedule. Note that the schedule used
+    does not mention any time data. It's assumed that all the flights in a daily schedule are contiguous and start
+    at 00:00 UTC since Airlines-Manger 2 does not take in account planes filling differences due to disadvantages
+    schedules.
+
     To manually specify a schedule you have to fill a schedule dictionary which is indexed by plane id and week day.
     Eg:
     ```python
@@ -755,7 +760,7 @@ class FlatPlanning(Planning):
     @classmethod
     def match(cls, target_lines, included_planes, fill=0.86, add_time=1., target=Market.eco):
         """
-        Generate a fleet and a flat planning using given planes models and target lines.
+        Generates a fleet and a flat planning using given planes models and target lines.
 
         The numbers planes dedicated for a line is computed so that there is minimum PAX remaining. The generated
         schedule tries to match the demand for each line using the most profitable plane
