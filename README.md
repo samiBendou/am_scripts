@@ -13,7 +13,7 @@ The goal is to *automate strategic and operational decision process for an airli
 
 ### Features
 
-- **Planes, Hub and Lines** object data model with JSON interface
+- **Planes, Airports and Lines** object data model with JSON interface
 - **Accounting** data model with JSON and CSV interfaces
 - **Planning** data model and generation of planning with different heuristic
 - **Performance evaluation** API to visualize how to boost your fleet and which lines and planes to purchase.
