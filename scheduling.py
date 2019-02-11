@@ -1,14 +1,43 @@
+"""
+Tools for fleet planning and scheduling.
+Scheduling modules offers a complete modelization of a fleet planning. Featuring financial indicators
+like profitability or margin for a given planning. This module can help you both to choice the best planes
+and lines to purchase and to find the most profitable planning.
+"""
+
 from model import *
-import scrap
 import copy
 
-hours_day = 24
-liters_barrel = 159.0
+liters_barrel = 159.0  # L/barrel
 petrol_price = 53.53 / liters_barrel  # $/L
 
 
 class Planning:
+    """
+    Base class for plannings.
+    Planning class provides a structure for plannings. Objects are instantiated given target lines and planes model.
+    When constructing a Planning object you have two choices :
+    - Provide a manually filled schedule for this planning
+    - Use a sub-class of planning that generates planning from planes and lines
+    To manually specify a schedule you have to fill a schedule dictionary which is indexed by plane id and week day.
+    Eg:
+    ```python
+    schedule = {"HYD-ISB-1" : [["HYD-ISB"] * 3] * 7}
+    ```
+    Here note that ```"HYD-ISB-1"``` is the plane id, ```[["HYD-ISB"] * 3] * 7``` is the weekly schedule. This schedule
+    programs 3 flights per day from HYD to ISB for ```HYD-ISB-1``` plane. The daily schedule is repeated along the week.
+
+    Attributes:
+        lines (dict): lines to deserve, indexed by hub and destination
+        planes (dict): fleet to use, indexed by plane id eg. HYD-ISB-1
+        schedule (dict): dictionary giving weekly schedule for each plane
+        fill (float): fill ratio, between 0 and 1, 1 means each flight entirely fills the plane
+        add_time (float): additional time in hours for each flight
+
+    """
+
     def __init__(self, lines, planes, schedule=None, fill=0.86, add_time=1.):
+
         self.lines = lines
         self.planes = planes
         self.schedule = {} if schedule is None else schedule
@@ -18,6 +47,13 @@ class Planning:
         self.generate_schedule()
 
     def flights(self, day=None):
+        """
+        Counts number of flights.
+        Parameter:
+            day (int): Week day to count, if None the count is performed over the week
+        Returns:
+            count: Dictionary of flights count indexed by hub, line and plane
+        """
         count = {}
         for hub_iata, lines in self.lines.items():
             count[hub_iata] = {}
@@ -34,6 +70,13 @@ class Planning:
         return count
 
     def pax(self, day=None):
+        """
+        Counts PAX, ie. number of passengers.
+        Parameter:
+            day (int): Week day to count, if None the count is performed over the week
+        Returns:
+            pax: Dictionary of PAX indexed by hub, line, plane and market
+        """
         flights = self.flights(day)
 
         pax = {}
@@ -51,6 +94,13 @@ class Planning:
         return pax
 
     def pax_delta(self, day=None):
+        """
+        Counts PAX remaining with current schedule.
+        Parameter:
+            day (int): Week day to count, if None the count is performed over the week
+        Returns:
+            delta: Dictionary of PAX remaining indexed by hub, line, plane and market
+        """
         pax = self.pax(day)
 
         delta = {}
@@ -66,6 +116,13 @@ class Planning:
         return delta
 
     def flight_time(self, day=None):
+        """
+        Computes flight time in hours.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            time: Dictionary of flight time indexed by hub, line and plane
+        """
         flights = self.flights(day)
 
         time = {}
@@ -79,7 +136,27 @@ class Planning:
 
         return time
 
+    def use_rate(self, day=None):
+        flight_time = self.flight_time(day)
+
+        percent = {}
+        for hub_iata, lines in self.lines.items():
+            percent[hub_iata] = {}
+            for dst_iata, line in lines.items():
+                percent[hub_iata][dst_iata] = {}
+                for plane_id in self.planes.keys():
+                    percent[hub_iata][dst_iata][plane_id] = flight_time[hub_iata][dst_iata][plane_id] / 24.
+
+        return percent
+
     def fuel_cons(self, day=None):
+        """
+        Computes fuel consumption in liters.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            fuel: Dictionary of fuel consumption indexed by hub, line and plane
+        """
         pax = self.pax(day)
 
         fuel = {}
@@ -95,6 +172,13 @@ class Planning:
         return fuel
 
     def turnovers(self, day=None):
+        """
+        Computes operational turnover in dollars $.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            cash: Dictionary of turnovers indexed by hub, line, plane and market
+        """
         pax = self.pax(day)
 
         cash = {}
@@ -111,6 +195,13 @@ class Planning:
         return cash
 
     def costs(self, day=None):
+        """
+        Computes operational cost in dollars $.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            cash: Dictionary of costs indexed by hub, line, plane and market
+        """
         fuel = self.fuel_cons(day)
         flights = self.flights(day)
 
@@ -131,6 +222,13 @@ class Planning:
         return cash
 
     def profits(self, day=None):
+        """
+        Computes operational profit dollars $.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            cash: Dictionary of profits indexed by hub, line, plane and market
+        """
         turnover = self.turnovers(day)
         cost = self.costs(day)
 
@@ -149,6 +247,18 @@ class Planning:
         return cash
 
     def profitability(self, day=None, loan_rate=0.01):
+        """
+        Computes profitability in percent %. It's the ratio between operational profits over the month and the total
+        price of line purchase, which includes lines/hubs acquisition price and planes acquisition prices.
+
+        Plane use is taken in account so the planes looses a certain amount of it's price proportional to it's use rate
+        and wear rate.
+        Parameters:
+            day (int): Week day to compute, if None computing is performed over the week
+            loan_rate (float): Loan rate applied when purchasing lines and hubs
+        Returns:
+            percent: Dictionary of profitability indexed by hub, line, plane and market
+        """
         flight_time = self.flight_time(day)
         profits = self.profits(day)
         price_by_line = self.price_by_lines()
@@ -175,6 +285,20 @@ class Planning:
         return percent
 
     def margin(self, day=None, loan_rate=0.01, loan_period=30):
+        """
+        Computes margin in percent %. It's the ratio between nets daily profits and the net daily costs. Nets profits
+        are computed by subtracting loan repayment to operational profit. Nets costs are computed adding loan
+        repayment to operational costs.
+
+        Plane use is taken in account so the planes looses a certain amount of it's price proportional to it's use rate
+        and wear rate
+        Parameters:
+            day (int): Week day to compute, if None computing is performed over the week
+            loan_rate (float): Loan rate applied when purchasing lines and hubs
+            loan_period (int): Duration of repayment in weeks
+        Returns:
+            percent: Dictionary of margin indexed by hub, line, plane and market
+        """
         flight_time = self.flight_time(day)
         profits = self.profits(day)
         costs = self.costs(day)
@@ -202,35 +326,37 @@ class Planning:
 
         return percent
 
-    def use_rate(self, day=None):
-        flight_time = self.flight_time(day)
-
-        percent = {}
-        for hub_iata, lines in self.lines.items():
-            percent[hub_iata] = {}
-            for dst_iata, line in lines.items():
-                percent[hub_iata][dst_iata] = {}
-                for plane_id in self.planes.keys():
-                    percent[hub_iata][dst_iata][plane_id] = flight_time[hub_iata][dst_iata][plane_id] / 24.
-
-        return percent
-
     def total_planes_cost(self):
-        cost = 0.
+        """
+        Computes total fleet price in dollars $.
+        Returns:
+            cash: Value of total price
+        """
+        cash = 0.
         for plane in self.planes.values():
-            cost += plane.price
+            cash += plane.price
 
-        return cost
+        return cash
 
     def total_acq_cost(self):
-        cost = 0.
+        """
+        Computes total line acquisition price in dollars $.
+        Returns:
+            cash: Value of total price
+        """
+        cash = 0.
         for hub_iata, lines in self.lines.items():
             for line in lines.values():
-                cost += line.hub.price + line.dst.price
+                cash += line.hub.price + line.dst.price
 
-        return cost
+        return cash
 
     def price_by_lines(self):
+        """
+        Computes total fleet price by line in dollars $.
+        Returns:
+            cash: Value of total price indexed by hub, line and plane model
+        """
         deserve_dst = self.deserve_dst()
 
         cash = {}
@@ -250,6 +376,15 @@ class Planning:
         return cash
 
     def reduce_by_planes(self, data, by_market=False, avg=False):
+        """
+        Indexes data by plane model.
+        Parameters:
+            data (dict): Data to re-index. A dictionary generated by the methods above
+            by_market (bool): Index by market
+            avg (bool): Average when re-indexing, if False a sum is performed
+        Returns:
+            new_data: Re-indexed data by plane model and eventually market
+        """
         plane_data = self.reduce_by_plane_id(data, by_market)
         count_planes = self.count_planes_by_name()
 
@@ -277,6 +412,14 @@ class Planning:
         return new_data
 
     def reduce_by_plane_id(self, data, by_market=False):
+        """
+        Indexes data by plane id.
+        Parameters:
+            data (dict): Data to re-index. A dictionary generated by the methods above
+            by_market (bool): Index by market
+        Returns:
+            new_data: Re-indexed plane id and eventually market
+        """
         plane_data = self.by_plane_id(data, by_market)
         new_data = {}
         for plane_id in self.planes.keys():
@@ -301,6 +444,16 @@ class Planning:
         return new_data
 
     def by_hubs(self, data, day=None, by_market=False, avg=False):
+        """
+        Indexes data by hubs.
+        Parameters:
+            day (int): Week day to compute, must be the same as precised when computing data
+            data (dict): Data to re-index. A dictionary generated by the methods above
+            by_market (bool): Index by market
+            avg (bool): Average when re-indexing, if False a sum is performed
+        Returns:
+            new_data: Re-indexed data by hub
+        """
         line_data = self.by_lines(data, day, by_market, avg)
         count_lines = self.count_lines_by_hub()
 
@@ -327,6 +480,16 @@ class Planning:
         return new_data
 
     def by_lines(self, data, day=None, by_market=False, avg=False):
+        """
+        Indexes data by lines.
+        Parameters:
+            day (int): Week day to compute, must be the same as precised when computing data
+            data (dict): Data to re-index. A dictionary generated by the methods above
+            by_market (bool): Index by market
+            avg (bool): Average when re-indexing, if False a sum is performed
+        Returns:
+            new_data: Re-indexed data by hub, line and eventually market
+        """
         plane_data = self.by_plane_id(data, by_market)
         count_planes = self.count_planes_by_line(day)
 
@@ -354,6 +517,16 @@ class Planning:
         return new_data
 
     def by_planes(self, data, day=None, by_market=False, avg=False):
+        """
+        Indexes data by planes model.
+        Parameters:
+            day (int): Week day to compute, must be the same as precised when computing data
+            data (dict): Data to re-index. A dictionary generated by the methods above
+            by_market (bool): Index by market
+            avg (bool): Average when re-indexing, if False a sum is performed
+        Returns:
+            new_data: Re-indexed data by hub, line, plane model and eventually market
+        """
         plane_data = self.by_plane_id(data, by_market)
         count_planes = self.count_planes_by_line(day)
         deserve_dst = self.deserve_dst(day)
@@ -390,6 +563,15 @@ class Planning:
         return new_data
 
     def by_plane_id(self, data, by_market=False):
+        """
+        Indexes data by plane id. Sum data over markets to reduce number of nested indexes when by_market is false.
+        Detail data over markets when by_market is true.
+        Parameters:
+            data (dict): Data to re-index. A dictionary generated by the methods above
+            by_market (bool): Index by market
+        Returns:
+            new_data: Re-indexed data hub, line, plane id and eventually market
+        """
         new_data = {}
         for hub_iata, lines in self.lines.items():
             new_data[hub_iata] = {}
@@ -413,6 +595,11 @@ class Planning:
         return new_data
 
     def count_planes_by_name(self):
+        """
+        Counts planes models in fleet.
+        Returns:
+            count_names: count of plane of a given model indexed by plane model
+        """
         count_names = {}
         for plane_id, plane in self.planes.items():
             try:
@@ -423,6 +610,11 @@ class Planning:
         return count_names
 
     def count_lines_by_hub(self):
+        """
+        Counts lines in planning.
+        Returns:
+            count_by_hub: count of lines indexed by hub
+        """
         count_by_hub = {}
         for hub_iata, lines in self.lines.items():
             count_by_hub[hub_iata] = 0
@@ -432,6 +624,13 @@ class Planning:
         return count_by_hub
 
     def count_planes_by_line(self, day=None):
+        """
+        Counts of planes used by line.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            count_by_lines: count of lines indexed by hub
+        """
         count_by_lines = {}
         for hub_iata, lines in self.lines.items():
             count_by_lines[hub_iata] = {}
@@ -451,6 +650,14 @@ class Planning:
         return count_by_lines
 
     def deserve_dst(self, day=None):
+        """
+        Verifies if plane deserve a destination.
+        Parameter:
+            day (int): Week day to compute, if None computing is performed over the week
+        Returns:
+            deserve_dst: boolean which is True when the plane deserve the destination. Indexed by hub, line and plane.
+        """
+
         deserve_dst = {}
 
         for hub_iata, lines in self.lines.items():
@@ -471,12 +678,21 @@ class Planning:
         return deserve_dst
 
     def generate_schedule(self):
-        if self.schedule is None:
-            raise NotImplementedError
-
+        """
+        Generates a schedule. Planning base class does not provide planning generation features so you must specify your
+        planning manually. This method only verifies that the planning is consistent. Use it when sub-classing planning:
+        override the method generate_schedule to generate the schedule with your method and call
+        super().generate_schedule at the end of the overridden method.
+        """
         assert self.schedule_is_valid()
 
     def schedule_is_valid(self):
+        """
+        Check if a planning is consistent by looking up to use rates. If a plane has a use rate which exceeds 1 the
+        plane is considered inconsistent.
+        Returns:
+            True if the planning is valid
+        """
         if self.schedule == {}:
             return True
 
@@ -490,6 +706,7 @@ class Planning:
 
 
 class FlatPlanning(Planning):
+
     def __init__(self, lines, planes, fill=0.86, add_time=1., target=Market.eco):
         self.target = target
         super().__init__(lines, planes, fill, add_time)
@@ -547,3 +764,8 @@ class FlatPlanning(Planning):
             del target_lines[hub_iata][dst_iata]
 
         return FlatPlanning(target_lines, planes, fill, add_time, target)
+
+
+"""
+@}
+"""
