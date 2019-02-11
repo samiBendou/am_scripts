@@ -2,6 +2,11 @@
 Tools for accounting and financial analysis.
 Finance modules offers both a data interface with CSV financial records from AM2+ and plotting features to perform
 advanced accounting over your airline.
+
+In order to provide a long term analysis (month, year) a local record of financial data must be created and
+maintained each time you load new financial data. The file used for this purpose is main.json located at exports/ .
+Each to you load new financial data, theses new data are merged with main.json so it contains all the financial data
+from the first export you have loaded.
 """
 
 import csv
