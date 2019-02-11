@@ -4,23 +4,23 @@
 
 ### Introduction
 
-am_scripts provides strategic management tools for airlines and more generally transports companies.
-The project is designed around a simple airline model that fits with Airlines-Manager 2 airline management simulation.
+am_scripts provides **scheduling** and **strategic management** tools for airlines and more generally transports companies.
+The project is designed around a simple airline model that fits with **Airlines-Manager 2** airline management simulation.
 
-The goal is to automate strategic and operation decision process for an airline. With a given initial situation
-(fleet, lines, ...) or a given capital, how can I make the better choices in terms of planes/lines purchases and planning.
+The goal is to *automate strategic and operational decision process for an airline*. With a given initial situation
+(fleet, lines, ...) or a given capital,
+**how can I make the better choices in terms of planes/lines purchases and planning?**
 
 Use this project to help you make rational decision while expanding your AM2 airline 
 and accurately visualize the performance of your strategy.
 
-
 ### Features
 
-- Planes, Hub and Lines object data model with JSON interface
-- Financial result data model with JSON and CSV interfaces
-- Planning data model and generation of planning with different heuristic
-- Planing evaluation API to evaluate benefits for your lines and find the planes that matches the best with.
-- Financial reporting API to visualize financial data and process theses
+- **Planes, Hub and Lines** object data model with JSON interface
+- **Accounting** data model with JSON and CSV interfaces
+- **Planning** data model and generation of planning with different heuristic
+- **Performance evaluation** API to visualize how to boost your fleet and which lines and planes to purchase.
+- **Financial evaluation** API to visualize financial data and apply advanced processing.
 
 Thanks to https://openflights.org/ for providing free flights databases to complete AM2+ data.
 
@@ -30,15 +30,16 @@ To install the project, you'll have to download specific html pages before using
 The framework requires scrapped data from your AM2 account.
 Follow theses steps:
 
--   Clone the project. You must have matplotlib, numpy, scipy, AdvancedHTMLParser and seaborn PyPi packages installed.
-    The project runs on python 3.6 or later.
+-   Clone the project. 
 
 -   To use helper scripts you have to manually download web pages from AM2 and put theses in specifics directories :
 
-    -   Create the following directories inside the project root: ![directories](img/directories.png)
+    -   Create the following directories inside the project root: 
+    
+        ![directories](img/directories.png)
     
     -   Fill the `plane` directory. Go to [purchase new plane page](https://www.airlines-manager.com/aircraft/buy/new) and download html page for 
-        each plane range eg. mid-range, long-range by right clicking on link for each range. Put the downloaded files into
+        each plane range (short-range, mid-range, ...) by right clicking on link for each range. Put the downloaded files into
         planes directory.
         
     -   Fill the `marketing` directory. Go to  [pricing management page](https://www.airlines-manager.com/marketing/pricing/).
@@ -85,6 +86,7 @@ predict profitability of a given strategy.
 Here is a simple example of code that compares two flat plannings. The first one is generated only by purchasing Q-400
 and the second one by purchasing ER-190.
 
+First we instantiate lines, planes and plannings :
 ```python
 import schedule as slg
 
@@ -94,7 +96,9 @@ test_planes_q400 = [scrap.JSON.planes["Q-400"]]  # Fleet and planning contains o
 test_planes_erj190 = [scrap.JSON.planes["ERJ-190"]]  # Fleet and planning contains only ERJ-190
 plan_400 = slg.FlatPlanning.match(test_lines, test_planes_q400)
 plan_erj190 = slg.FlatPlanning.match(test_lines, test_planes_erj190)
-
+```
+Then we create a purchase.Data object with a list of the plannings to compare and we plot it.
+```python
 # Bar plot to compare profitability of each plane for the two flat plannings
 purchase_data = purchase.Data([plan_400, plan_erj190])
 purchase.Plot.sorted(purchase_data)
@@ -107,8 +111,9 @@ This code plots evaluation of the plannings for the lines all the lines you owne
 #### Financial reporting
 
 Once you've downloaded your fresh financial data you can process theses and plot the result.
-You can get all commons accounting plots from data provided by AM2+ .csv files, here is a simple code that plots
-your relative and absolute accounting data.
+You can get all commons accounting graphs and visualization from data provided by AM2+ .csv files.
+
+Here is a simple code that plots your relative and absolute accounting data 
 
 ```python
 data = finance.Data("export.csv") # Loads data from AM2+ exports
@@ -136,6 +141,9 @@ Here is a simple example code that plots weekly financial data instead of daily 
 ```python
 data = finance.Data("export.csv", period="week")
 ```
+
+Your can also specify period as a integer representing the interval between data to plot.
+
 #### Generate schedules
 
 Planning objects does not provides any schedule generation features. You can use it to externally generate your own
@@ -164,6 +172,17 @@ If you want to generate more sophisticated schedules you can check at FlatPlanni
 method to compute your schedule with given fleet and lines.
 
 ### Additional information
+
+**Python 3.6**
+
+**Dependencies**
+- matplotlib
+- numpy
+- scipy
+- AdvancedHTMLParser
+- seaborn
+
+Install theses PyPi packages into your Python environment before launching script
 
 **Copyright :** &copy; 2019 Sami Dahoux [(GitHub)](https://github.com/samiBendou/), All Rights Reserved
 
