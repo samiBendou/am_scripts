@@ -48,8 +48,9 @@ class Data:
 
 class Plot(GenericPlot):
     """
-    Plotting static interface class. Used as interface with matplotlib for every result that can be computed with
-    Data objects.
+    Plotting static interface class
+
+    Used as interface with matplotlib for every result that can be computed with Data objects.
     """
 
     RENDER_ROOT = GenericPlot.RENDER_ROOT + "purchase/"

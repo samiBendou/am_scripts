@@ -399,7 +399,9 @@ class Data:
 
 class Plot(GenericPlot):
     """
-    Plotting static interface class. Used as interface with matplotlib for every result that can be computed with
+    Plotting static interface class
+
+    Used as interface with matplotlib for every result that can be computed with
     Data objects.
     """
 

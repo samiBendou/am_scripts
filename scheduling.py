@@ -19,20 +19,24 @@ class Planning:
 
     Planning class provides a structure for plannings. Objects are instantiated given target lines and planes model.
     When constructing a Planning object you have two choices :
+
     - Provide a manually filled schedule for this planning
     - Use a sub-class of planning that generates planning from planes and lines
-    All the planning indicators are evaluated on the basis of this schedule. Note that the schedule used
-    does not mention any time data. It's assumed that all the flights in a daily schedule are contiguous and start
-    at 00:00 UTC since Airlines-Manger 2 does not take in account planes filling differences due to disadvantages
-    schedules.
+
+    All the planning indicators are evaluated on the basis of this schedule.
 
     To manually specify a schedule you have to fill a schedule dictionary which is indexed by plane id and week day.
     Eg:
     ```python
     schedule = {"HYD-ISB-1" : [["HYD-ISB"] * 3] * 7}
     ```
-    Here note that ```"HYD-ISB-1"``` is the plane id, ```[["HYD-ISB"] * 3] * 7``` is the weekly schedule. This schedule
+    Note that ```"HYD-ISB-1"``` is the plane id, ```[["HYD-ISB"] * 3] * 7``` is the weekly schedule. This schedule
     programs 3 flights per day from HYD to ISB for ```HYD-ISB-1``` plane. The daily schedule is repeated along the week.
+
+    Also note that the schedule used does not mention any time data.
+    It's assumed that all the flights in a daily schedule are contiguous and start
+    at 00:00 UTC since Airlines-Manger 2 does not take in account planes filling differences due to disadvantages
+    schedules.
 
     Attributes:
         lines (dict): lines to deserve, indexed by hub and destination
