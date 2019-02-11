@@ -1,5 +1,7 @@
 """
-Data object model for airline. This data models fits Airlines-Manager 2 data model. It provides commons abstractions
+Data object model for airline.
+
+This data models fits Airlines-Manager 2 data model. It provides commons abstractions
 related to airlines and JSON serialization interface.
 The module can be seen as a data model that simply represents an airline
 in order to evaluate financial and planning performances.
@@ -80,10 +82,12 @@ class Plane:
 
     def flights_per_day(self, distance, add_time=0.):
         """
-        Computes number of flight per day
+        Computes number of flight per day.
+
         Parameters:
             distance (float): Distance to fly in km
             add_time (float): Additional landed time between flights in hours h
+
         Returns:
             Number of flights per day
         """
@@ -91,10 +95,12 @@ class Plane:
 
     def flight_time(self, distance, add_time=0.):
         """
-        Computes flight time to distance
+        Computes flight time to distance.
+
         Parameters:
             distance (float): Distance to fly in km
             add_time (float): Additional landed in hours h
+
         Returns:
             Flight time in hours
         """
@@ -103,9 +109,11 @@ class Plane:
     def flight_time_verbose(self, distance, add_time=0.):
         """
         Creates a string representing flight time
+
         Parameters:
             distance (float): Distance to fly in km
             add_time (float): Additional landed in hours h
+
         Returns:
             flight time formatted as "HH:MM"
         """
@@ -116,7 +124,9 @@ class Plane:
 
     def match_demand(self, line, add_time=0.):
         """
-        Computes the number of planes necessary to fill the demand over a given line. Assuming the plane is fully
+        Computes the number of planes necessary to fill the demand over a given line.
+
+        Assuming the plane is fully
         dedicated to this line ie. it's use rate is maximum and there is no PAX remaining.
 
         Parameters:
@@ -151,7 +161,9 @@ class Plane:
     @classmethod
     def id_with(cls, prefix, planes):
         """
-        Identifies given planes with prefix. After the method returns, the given planes are modified so their IDs
+        Identifies given planes with prefix.
+
+        After the method returns, the given planes are modified so their IDs
         correspond to the newly generated ID.
 
         ID are generated as follows : prefix + "-1", prefix + "-2", ...

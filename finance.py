@@ -1,5 +1,6 @@
 """
 Tools for accounting and financial analysis.
+
 Finance modules offers both a data interface with CSV financial records from AM2+ and plotting features to perform
 advanced accounting over your airline.
 
@@ -58,8 +59,11 @@ class Field(Enum):
 
 class Data:
     """
-    Data class represents either a CSV or a JSON file containing AM2+ financial records. The class provides
-    reading and writing features in JSON and can load CSV files from AM2+ and computation of detailed financial results.
+    Data class represents either a CSV or a JSON file containing AM2+ financial records.
+
+    The class provides reading and writing features in JSON and can load CSV files from AM2+ and
+    computation of detailed financial results.
+
     The data are represented in memory using a dictionary and some meta-data.
     They are always stored as daily data but indicators can be obtained as average data over any period (weekly, month,
     63 days, ...) starting and ending at any time.
@@ -87,8 +91,11 @@ class Data:
 
     def __init__(self, filename=None, period=None, offset=None, start=None, end=None):
         """
-        Constructs a Data object with given filename and date base. Starts by reading the file at filename and than
+        Constructs a Data object with given filename and date base.
+
+        Starts by reading the file at filename and than
         instantiates a date base coherent with loaded data and given parameters.
+
         Parameters:
             filename (str): Relative path to file to read
             period (int): Periodicity of the data for indicators computing in days eg. period=7, period="week"...
@@ -119,7 +126,8 @@ class Data:
     def read(self):
         """
         Reads file located at exports/filename where filename is the current filename of the object.
-        When reading a file, current object state is reset
+
+        When reading a file, current object state is reset.
         """
         ext = self.filename.split(".")[1]
         if ext == "json":
@@ -134,7 +142,8 @@ class Data:
 
     def write(self):
         """
-        Writes file located at exports/filename where filename is the current filename of the object
+        Writes file located at exports/filename where filename is the current filename of the object.
+
         If the file already exists than existing data and self data are merged (see merge function).
         """
         ext = self.filename.split(".")[1]
@@ -151,6 +160,7 @@ class Data:
     def update(self):
         """
         Updates main financial data json file with self data.
+
         self data is merged with main json file and is renamed to main.json
         """
         filename = self.filename
@@ -161,6 +171,7 @@ class Data:
     def merge(self, data):
         """
         Merge two Data objects. Self data are updated during merge process.
+
         If self data are older than data to merge, the data to merge are copied into self data.
         Else self data are augmented by concatenating older data and newer data
 
@@ -205,6 +216,7 @@ class Data:
     def raw(self):
         """
         Indexes raw accounting data in $ reduced according to the current date base.
+
         Returns:
              Dictionary of raw financial data sorted by Key enumeration. Each key stores an array representing
              an expense or an income over the period described by the current date base
@@ -219,6 +231,7 @@ class Data:
     def rel(self):
         """
         Indexes relative accounting data in % reduced according to the current date base.
+
         Returns:
              Dictionary of relative financial data sorted by Key enumeration. Each key stores an array representing
              an expense or an income over the period described by the current date base
@@ -242,6 +255,7 @@ class Data:
     def flow(self):
         """
         Computes structural profit in $, total benefits and total costs.
+
         The planes purchase and loan principal amount are not taken in account in structural profit.
 
         Returns:
@@ -274,7 +288,8 @@ class Data:
 
     def pie(self, thd=0.):
         """
-        Returns pie representing expenses and incomes of current data set.
+        Creates pie representing expenses and incomes of current data set.
+
         Filters the values returned by raw function in order to get only average value of keys
         which are greater than the threshold.
 
@@ -461,6 +476,7 @@ class Plot(GenericPlot):
     def keys(x, y, xl, yl, label, title=None, date=None, average=False):
         """
         Generic plotting for financial keys.
+
         Parameters:
             x (list): Date ticks label data
             y (dict): Dictionary of y data list indexed by keys contained in Key enumeration

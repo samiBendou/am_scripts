@@ -1,5 +1,6 @@
 """
 Tools for purchase strategy analysis.
+
 Purchase module offers many features to compare Planning objects. It allows to visualize financial results of different
 fleets and plannings over a set of lines and hubs.
 """
@@ -13,7 +14,8 @@ import seaborn as sns
 
 class Data:
     """
-    Data class represents a list of plannings and provides comparisons operations.
+    Data class represents a list of plannings and provides comparisons features
+
     Attributes:
         plannings (list): Planning objects to compare. Theses must have been generated of the same hubs and lines.
         The lines are not necessarily the ones you purchased in AM2 but also new ones you have audited.

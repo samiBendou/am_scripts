@@ -1,5 +1,6 @@
 """
-Tools for fleet planning and scheduling.
+Tools for fleet planning and scheduling
+
 Scheduling modules offers a complete modelization of a fleet planning. Featuring financial indicators
 like profitability or margin for a given planning. This module can help you both to choice the best planes
 and lines to purchase and to find the most profitable planning.
@@ -14,7 +15,8 @@ petrol_price = 53.53 / liters_barrel  # $/L
 
 class Planning:
     """
-    Base class for plannings.
+    Base class for plannings
+
     Planning class provides a structure for plannings. Objects are instantiated given target lines and planes model.
     When constructing a Planning object you have two choices :
     - Provide a manually filled schedule for this planning
@@ -53,9 +55,11 @@ class Planning:
 
     def flights(self, day=None):
         """
-        Counts number of flights.
+        Counts number of flights
+
         Parameter:
             day (int): Week day to count, if None the count is performed over the week
+
         Returns:
             count: Dictionary of flights count indexed by hub, line and plane
         """
@@ -76,7 +80,7 @@ class Planning:
 
     def pax(self, day=None):
         """
-        Counts PAX, ie. number of passengers.
+        Counts PAX, ie. number of passengers
         Parameter:
             day (int): Week day to count, if None the count is performed over the week
         Returns:
@@ -100,9 +104,11 @@ class Planning:
 
     def pax_delta(self, day=None):
         """
-        Counts PAX remaining with current schedule.
+        Counts PAX remaining with current schedule
+
         Parameter:
             day (int): Week day to count, if None the count is performed over the week
+
         Returns:
             delta: Dictionary of PAX remaining indexed by hub, line, plane and market
         """
@@ -122,9 +128,11 @@ class Planning:
 
     def flight_time(self, day=None):
         """
-        Computes flight time in hours.
+        Computes flight time in hours
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             time: Dictionary of flight time indexed by hub, line and plane
         """
@@ -156,9 +164,11 @@ class Planning:
 
     def fuel_cons(self, day=None):
         """
-        Computes fuel consumption in liters.
+        Computes fuel consumption in liters
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             fuel: Dictionary of fuel consumption indexed by hub, line and plane
         """
@@ -178,9 +188,11 @@ class Planning:
 
     def turnovers(self, day=None):
         """
-        Computes operational turnover in dollars $.
+        Computes operational turnover in dollars $
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             cash: Dictionary of turnovers indexed by hub, line, plane and market
         """
@@ -201,9 +213,11 @@ class Planning:
 
     def costs(self, day=None):
         """
-        Computes operational cost in dollars $.
+        Computes operational cost in dollars $
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             cash: Dictionary of costs indexed by hub, line, plane and market
         """
@@ -228,9 +242,11 @@ class Planning:
 
     def profits(self, day=None):
         """
-        Computes operational profit dollars $.
+        Computes operational profit dollars $
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             cash: Dictionary of profits indexed by hub, line, plane and market
         """
@@ -253,14 +269,18 @@ class Planning:
 
     def profitability(self, day=None, loan_rate=0.01):
         """
-        Computes profitability in percent %. It's the ratio between operational profits over the month and the total
+        Computes profitability in percent %
+
+        It's the ratio between operational profits over the month and the total
         price of line purchase, which includes lines/hubs acquisition price and planes acquisition prices.
 
         Plane use is taken in account so the planes looses a certain amount of it's price proportional to it's use rate
         and wear rate.
+
         Parameters:
             day (int): Week day to compute, if None computing is performed over the week
             loan_rate (float): Loan rate applied when purchasing lines and hubs
+
         Returns:
             percent: Dictionary of profitability indexed by hub, line, plane and market
         """
@@ -291,16 +311,20 @@ class Planning:
 
     def margin(self, day=None, loan_rate=0.01, loan_period=30):
         """
-        Computes margin in percent %. It's the ratio between nets daily profits and the net daily costs. Nets profits
+        Computes margin in percent %
+
+        It's the ratio between nets daily profits and the net daily costs. Nets profits
         are computed by subtracting loan repayment to operational profit. Nets costs are computed adding loan
         repayment to operational costs.
 
         Plane use is taken in account so the planes looses a certain amount of it's price proportional to it's use rate
         and wear rate
+
         Parameters:
             day (int): Week day to compute, if None computing is performed over the week
             loan_rate (float): Loan rate applied when purchasing lines and hubs
             loan_period (int): Duration of repayment in weeks
+
         Returns:
             percent: Dictionary of margin indexed by hub, line, plane and market
         """
@@ -333,7 +357,8 @@ class Planning:
 
     def total_planes_cost(self):
         """
-        Computes total fleet price in dollars $.
+        Computes total fleet price in dollars $
+
         Returns:
             cash: Value of total price
         """
@@ -345,7 +370,8 @@ class Planning:
 
     def total_acq_cost(self):
         """
-        Computes total line acquisition price in dollars $.
+        Computes total line acquisition price in dollars $
+
         Returns:
             cash: Value of total price
         """
@@ -358,7 +384,8 @@ class Planning:
 
     def price_by_lines(self):
         """
-        Computes total fleet price by line in dollars $.
+        Computes total fleet price by line in dollars $
+
         Returns:
             cash: Value of total price indexed by hub, line and plane model
         """
@@ -382,11 +409,13 @@ class Planning:
 
     def reduce_by_planes(self, data, by_market=False, avg=False):
         """
-        Indexes data by plane model.
+        Indexes data by plane model
+
         Parameters:
             data (dict): Data to re-index. A dictionary generated by the methods above
             by_market (bool): Index by market
             avg (bool): Average when re-indexing, if False a sum is performed
+
         Returns:
             new_data: Re-indexed data by plane model and eventually market
         """
@@ -418,10 +447,12 @@ class Planning:
 
     def reduce_by_plane_id(self, data, by_market=False):
         """
-        Indexes data by plane id.
+        Indexes data by plane id
+
         Parameters:
             data (dict): Data to re-index. A dictionary generated by the methods above
             by_market (bool): Index by market
+
         Returns:
             new_data: Re-indexed plane id and eventually market
         """
@@ -450,12 +481,14 @@ class Planning:
 
     def by_hubs(self, data, day=None, by_market=False, avg=False):
         """
-        Indexes data by hubs.
+        Indexes data by hubs
+
         Parameters:
             day (int): Week day to compute, must be the same as precised when computing data
             data (dict): Data to re-index. A dictionary generated by the methods above
             by_market (bool): Index by market
             avg (bool): Average when re-indexing, if False a sum is performed
+
         Returns:
             new_data: Re-indexed data by hub
         """
@@ -486,12 +519,14 @@ class Planning:
 
     def by_lines(self, data, day=None, by_market=False, avg=False):
         """
-        Indexes data by lines.
+        Indexes data by lines
+
         Parameters:
             day (int): Week day to compute, must be the same as precised when computing data
             data (dict): Data to re-index. A dictionary generated by the methods above
             by_market (bool): Index by market
             avg (bool): Average when re-indexing, if False a sum is performed
+
         Returns:
             new_data: Re-indexed data by hub, line and eventually market
         """
@@ -523,12 +558,14 @@ class Planning:
 
     def by_planes(self, data, day=None, by_market=False, avg=False):
         """
-        Indexes data by planes model.
+        Indexes data by planes model
+
         Parameters:
             day (int): Week day to compute, must be the same as precised when computing data
             data (dict): Data to re-index. A dictionary generated by the methods above
             by_market (bool): Index by market
             avg (bool): Average when re-indexing, if False a sum is performed
+
         Returns:
             new_data: Re-indexed data by hub, line, plane model and eventually market
         """
@@ -569,11 +606,15 @@ class Planning:
 
     def by_plane_id(self, data, by_market=False):
         """
-        Indexes data by plane id. Sum data over markets to reduce number of nested indexes when by_market is false.
+        Indexes data by plane id
+
+        Sum data over markets to reduce number of nested indexes when by_market is false.
         Detail data over markets when by_market is true.
+
         Parameters:
             data (dict): Data to re-index. A dictionary generated by the methods above
             by_market (bool): Index by market
+
         Returns:
             new_data: Re-indexed data hub, line, plane id and eventually market
         """
@@ -601,7 +642,8 @@ class Planning:
 
     def count_planes_by_name(self):
         """
-        Counts planes models in fleet.
+        Counts planes models in fleet
+
         Returns:
             count_names: count of plane of a given model indexed by plane model
         """
@@ -616,7 +658,8 @@ class Planning:
 
     def count_lines_by_hub(self):
         """
-        Counts lines in planning.
+        Counts lines in planning
+
         Returns:
             count_by_hub: count of lines indexed by hub
         """
@@ -630,9 +673,11 @@ class Planning:
 
     def count_planes_by_line(self, day=None):
         """
-        Counts of planes used by line.
+        Counts of planes used by line
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             count_by_lines: count of lines indexed by hub
         """
@@ -656,9 +701,11 @@ class Planning:
 
     def deserve_dst(self, day=None):
         """
-        Verifies if plane deserve a destination.
+        Verifies if plane deserve a destination
+
         Parameter:
             day (int): Week day to compute, if None computing is performed over the week
+
         Returns:
             deserve_dst: boolean which is True when the plane deserve the destination. Indexed by hub, line and plane.
         """
@@ -684,7 +731,9 @@ class Planning:
 
     def generate_schedule(self):
         """
-        Generates a schedule. Planning base class does not provide planning generation features so you must specify your
+        Generates a schedule
+
+        Planning base class does not provide planning generation features so you must specify your
         planning manually. This method only verifies that the planning is consistent. Use it when sub-classing planning:
         override the method generate_schedule to generate the schedule with your method and call
         super().generate_schedule at the end of the overridden method.
@@ -693,8 +742,10 @@ class Planning:
 
     def schedule_is_valid(self):
         """
-        Check if a planning is consistent by looking up to use rates. If a plane has a use rate which exceeds 1 the
-        plane is considered inconsistent.
+        Check if a planning is consistent by looking up to use rates
+
+        If a plane has a use rate which exceeds 1 the plane is considered inconsistent.
+
         Returns:
             True if the planning is valid
         """
@@ -712,11 +763,14 @@ class Planning:
 
 class FlatPlanning(Planning):
     """
-    Planning generated using a simple heuristic. The flat planning is one of the most simple planning you can imagine.
+    Planning generated using a simple heuristic
+
+    The flat planning is one of the most simple planning you can imagine.
     For each hub and line, a certain number of planes a dedicated and fly only this line.
 
     You can manually specify the plane by using the following naming convention :
      "HUB-DST-k" where k is an integer identifying the plane (k > 0).
+
     Attributes:
         lines (dict): lines to deserve, indexed by hub and destination
         planes (dict): fleet to use, indexed by plane id eg. HYD-ISB-1
@@ -732,7 +786,8 @@ class FlatPlanning(Planning):
 
     def generate_schedule(self):
         """
-        Generates a Planning by filling weekly plannings for each plane according to it's ID (see ID format above).
+        Generates a Planning by filling weekly plannings for each plane according to it's ID (see ID format above)
+
         The plannings generation steps to the next line when all the planes are at max use rate or
         when there is no PAX remaining for this line.
         """
@@ -760,7 +815,7 @@ class FlatPlanning(Planning):
     @classmethod
     def match(cls, target_lines, included_planes, fill=0.86, add_time=1., target=Market.eco):
         """
-        Generates a fleet and a flat planning using given planes models and target lines.
+        Generates a fleet and a flat planning using given planes models and target lines
 
         The numbers planes dedicated for a line is computed so that there is minimum PAX remaining. The generated
         schedule tries to match the demand for each line using the most profitable plane
