@@ -27,18 +27,19 @@ Thanks to https://openflights.org/ for providing free flights databases to compl
 ### Install
 
 To install the project, you'll have to download specific html pages before using theses scripts. 
-The framework requires scrapped data from your AM2 account.
-Follow theses steps:
+The framework requires scrapped data from your html pages generated with your AM2 account.
+In order to do this follow these steps:
 
 -   Clone the project. 
 
--   To use helper scripts you have to manually download web pages from AM2 and put theses in specifics directories :
+-   Create the following directories inside the project root: 
 
-    -   Create the following directories inside the project root: 
-    
-        ![directories](img/directories.png)
-    
-    -   Fill the `plane` directory. Go to [purchase new plane page](https://www.airlines-manager.com/aircraft/buy/new) and download html page for 
+    ![directories](img/directories.png)
+
+-   Connect to your AM2 acount
+
+-   Download the pages to scrap:
+    -   Fill the `planes` directory. Go to [purchase new plane page](https://www.airlines-manager.com/aircraft/buy/new) and download html page for 
         each plane range (short-range, mid-range, ...) by right clicking on link for each range. Put the downloaded files into
         planes directory.
         
@@ -57,6 +58,10 @@ Follow theses steps:
     -   If you use AM2+ you can import .csv financial data given by the AM website. At project root, create a directory
         named `exports`. Download the last .csv financial report and put it into the `exports` directory.
         
+    - Your if everything went well your `scrap` directory must looks like :
+    
+        ![scrap](img/scrap.png)
+        
 -   Once you've done, run the install.py script. This will scrap data from the html pages you've downloaded and write
     it to a more compact and quick to load JSON file. Do this each time you add new html data (eg. purchase a new line).
     
@@ -74,19 +79,20 @@ After you first complete the install procedure, you only have to keep up to date
 
 ### Getting Started
 
-The module contains three scripts : purchase.py, scrap.py and finance.py. After downloaded and installed the module, you can
-run purchase.py to visualize performances over your lines and financial.py to your visualize financial data.
+The framework contains two plotting modules : `purchase`, and `finance`. Theses have the same structure, they declare
+a first class named `Data` that is used to handle concerned data and a second class `Plot` which is classic and is an
+interface with matplotlib.
 
 #### Purchase helper and planning comparison
 
-If you often ask yourself how much planes and which types should I buy when opening this new line, the purchase.py is
-there to help you. It combines planning generations and lines/planes purchases features with financial previsions to
+If you often ask yourself how much planes and which types should I buy when opening this new line, the `purchase` module
+is there to help you. It combines planning generations and lines/planes purchases features with financial previsions to
 predict profitability of a given strategy.
 
-Here is a simple example of code that compares two flat plannings. The first one is generated only by purchasing Q-400
+Here is a simple example of code that compares two plannings. The first one is generated only by purchasing Q-400
 and the second one by purchasing ER-190.
 
-First we instantiate lines, planes and plannings :
+First instantiate lines, planes and plannings :
 ```python
 import schedule as slg
 
@@ -97,14 +103,16 @@ test_planes_erj190 = [scrap.JSON.planes["ERJ-190"]]  # Fleet and planning contai
 plan_400 = slg.FlatPlanning.match(test_lines, test_planes_q400)
 plan_erj190 = slg.FlatPlanning.match(test_lines, test_planes_erj190)
 ```
-Then we create a purchase.Data object with a list of the plannings to compare and we plot it.
+
+Then create a `purchase.Data` object with a list of the plannings to compare and we plot it.
+
 ```python
 # Bar plot to compare profitability of each plane for the two flat plannings
 purchase_data = purchase.Data([plan_400, plan_erj190])
 purchase.Plot.sorted(purchase_data)
 ```
 
-This code plots evaluation of the plannings for the lines all the lines you owned or purchased audit.
+This code plots evaluation of the plannings for all the lines you owned or purchased audit.
 
 ![Cashflow](img/purchase.png)
 
@@ -127,26 +135,26 @@ This code plots financial data such as the graph bellow :
 
 ![Cashflow](img/cashflow.png)
 
-The financial data are updated and concatenated on a json file `main.json` each time you load new data. 
-It avoid conflicts by writing only most recent data and allows storing and processing of long term data (month, year, more).
+The financial data are updated and merged on a json file `main.json` each time you load new data. 
+It avoid conflicts by writing only most recent data and allows automate storing and processing of long term data (month, year, more).
 
 **Reporting period**
 
 You can plot your financial data over different periods. You can choose the start date, end date of the plots
-and the period (weekly/monthly). To do this you have to specify theses parameters when constructing the finance.Data
+and the period (weekly/monthly). To do this you have to specify theses parameters when constructing the `finance.Data`
 object.
 
-Here is a simple example code that plots weekly financial data instead of daily ones you've plot before :
+Here is a simple example code that plots weekly financial data instead of daily ones you've plotted before :
 
 ```python
 data = finance.Data("export.csv", period="week")
 ```
 
-Your can also specify period as a integer representing the interval between data to plot.
+Your can also specify the period as an integer representing the interval between data to plot.
 
 #### Generate schedules
 
-Planning objects does not provides any schedule generation features. You can use it to externally generate your own
+Planning objects does not provides any schedule generation features. You can use theses to externally generate your own
 schedule :
 ```python
 lines = {"HYD": {"BLR" : scrap.JSON.lines["HYD"]["BLR"]}}
@@ -157,10 +165,10 @@ schedule = {"HYD-BLR-1": [["HYD-BLR"] * 6] * 7}
 ```
 
 The last line of code instantiate the schedule. It contains for each plane a week schedule that is an array of 7
-day schedules. Here you can note that day schedules are identical and contains 6 flights from Hyderbad International (HYD)
+day schedules. Here you can note that daily schedules are identical and contains 6 flights from Hyderbad International (HYD)
 to Kempegowda International Airport (BLR).
 
-Then you can instantiate a planning object  using the previously created schedule:
+Then you can instantiate a planning object using the previously created schedule:
 
 ```python
 import shedule as slg
@@ -168,7 +176,7 @@ import shedule as slg
 plan = slg.Planning(lines, planes, schedule)
 ```
 
-If you want to generate more sophisticated schedules you can check at FlatPlanning schedule or write a personalized
+If you want to generate more sophisticated schedules you can check at `FlatPlanning` class or write a personalized
 method to compute your schedule with given fleet and lines.
 
 ### Additional information
