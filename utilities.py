@@ -1,9 +1,29 @@
+"""
+Various tools classes for the project
+"""
+
 from datetime import timedelta
 from datetime import datetime
 import matplotlib.pyplot as plt
 
 
 class DateBase:
+    """
+    Representation of a time period
+
+    Provides a structure to represent data daily gathered at periodic date interval.
+
+    Attributes:
+        covered (int): Number of days covered by data
+        raw_start: Real start date. Start of data
+        date (datetime): Real end. End date of data
+        period (int/str): Number of days contained in a period eg. period="week", period=12, ...
+        offset (int): Offset from start date in number of periods
+        start (datetime): Effective Start date. Must be coherent with data to represent
+        end (datetime): Effective end date. Must be coherent with data to represent
+        range (int): Number of periods to cover according to other attributes
+    """
+
     day = {"day": 1, "week": 7, "month": 30, "year": 365}
 
     def __init__(self, covered=0, date=None, period=None, offset=None, start=None, end=None):
@@ -15,17 +35,26 @@ class DateBase:
         self.start = None
         self.end = None
         self.range = None
+
         if date is not None and covered > 0:
             self.reset(date, covered)
             self.set(period, offset, start, end)
 
     def reset(self, date=None, covered=None):
+        """
+        Resets DateBase with new data parameters
+
+        Parameters:
+            date (datetime): New real end of the data
+            covered (int): New number of days covered
+        """
         self.date = self.date if date is None else date
         self.covered = self.covered if covered is None else covered
         self.raw_start = self.date - timedelta(days=self.covered - 1)
         self.set()
 
     def set(self, period=None, offset=None, start=None, end=None):
+        """Sets DateBase with new period parameters. See class documentation for more details"""
         self.period = period
         self.offset = offset
         self.start = start
@@ -34,6 +63,7 @@ class DateBase:
         self.range = int((self.end - self.start) / self.period - self.offset) + 1
 
     def list(self):
+        """Returns a list of datetime objects representing the current DateBase state"""
         day = timedelta(days=1)
         x = [0] * self.range
         for k in range(0, self.range):
@@ -42,9 +72,11 @@ class DateBase:
         return x
 
     def start_date(self):
+        """Returns effective datetime start"""
         return self.start * timedelta(days=1) + self.raw_start
 
     def end_date(self):
+        """Return effective datetime end"""
         return self.end * timedelta(days=1) + self.raw_start
 
     def _unwrap(self):
@@ -92,12 +124,35 @@ class DateBase:
 
 
 class GenericPlot:
+    """
+    Plotting static interface base class
+
+    Used as interface with matplotlib for every result that can be computed with Data objects. Provides displays and
+    save functions for any plot of the project.
+
+    Attributes:
+        save (bool): If true, aves the plots onto render/<plot_dir> when render() is called
+        show (bool): If true, shows the plots when render() is called
+    """
+
     RENDER_ROOT = "render/"
     save = True
     show = True
 
     @classmethod
     def render(cls, xl=None, yl=None, title=None, date=None, legend=True):
+        """
+        Generic plotting
+
+        The plots behaves differently when changing cls.save and cls.show attributes.
+
+        Parameters:
+            xl (str): Label of x axis
+            yl (str): Label of y axis
+            title (str): Title of the plot
+            date (datetime): Date of the plot. Used for file naming
+            legend (bool): If true prints legend
+        """
         dated_title = None
 
         if legend is True:
