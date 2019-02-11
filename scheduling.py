@@ -547,17 +547,3 @@ class FlatPlanning(Planning):
             del target_lines[hub_iata][dst_iata]
 
         return FlatPlanning(target_lines, planes, fill, add_time, target)
-
-
-# test_lines = {"HYD": {"ISB": scrap.JSON.lines["HYD"]["ISB"]}}
-
-test_lines = scrap.JSON.lines
-test_planes = [scrap.JSON.planes["Q-400"]]
-
-plan = FlatPlanning.match(test_lines, test_planes)
-
-test_day = 0
-flights_data = plan.profitability()
-new_flights_data = plan.by_hubs(flights_data, by_market=False, avg=True)
-
-print(new_flights_data)

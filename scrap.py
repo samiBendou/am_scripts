@@ -344,11 +344,6 @@ class JSON:
             json.dump(lines_json, json_file, indent=4)
 
 
-# HTML.write()
-# print("HTML Scrap done from " + SCRAP_ROOT)
-
 JSON.read()
 
 print("Scrap JSON data successfully loaded from " + JSON_PATH)
-
-# newlines, newairports = HTML.newlines_data(lines)
