@@ -121,3 +121,10 @@ class GenericPlot:
             plt.show()
 
         plt.clf()
+
+
+def get_enum_value():
+    return lambda e: [list(map(lambda x: x.value, l)) for l in e]
+
+
+enum_value = get_enum_value()

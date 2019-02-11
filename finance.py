@@ -1,3 +1,9 @@
+"""
+Tools for accounting and financial analysis.
+Finance modules offers both a data interface with CSV financial records from AM2+ and plotting features to perform
+advanced accounting over your airline.
+"""
+
 import csv
 import json
 from enum import Enum
@@ -7,15 +13,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def get_enum_value():
-    return lambda e: [list(map(lambda x: x.value, l)) for l in e]
-
-
-enum_value = get_enum_value()
-
-
-# Represents the fields name in csv export from AM2+
 class Key(Enum):
+    """Enumeration of lines labels in AM2+ CSV financial records. Not exhaustive."""
     __date__ = "date"
 
     flight = "flight"
@@ -47,11 +46,29 @@ class Key(Enum):
 
 
 class Field(Enum):
+    """Enumeration of keys for each lines in AM2+ CSV financial records. Used for JSON recording"""
     name = "verbose"
     data = "data"
 
 
 class Data:
+    """
+    Data class represents either a CSV or a JSON file containing AM2+ financial records. The class provides
+    reading and writing features in JSON and can load CSV files from AM2+ and computation of detailed financial results.
+    The data are represented in memory using a dictionary and some meta-data.
+    They are always stored as daily data but indicators can be obtained as average data over any period (weekly, month,
+    63 days, ...) starting and ending at any time.
+
+
+    Attributes:
+        filename (str): Name of the file to load. Precise relative path from exports directory in project root.
+        eg. "exports.csv" will load the file located at exports/exports.csv
+        base (DateBase): Date base representing the duration and periodicity of data.
+        fields (dict): Dictionary of financial reports fields. Indexed by Key enumeration. Each value of this
+        dictionary is a dictionary index by Field enumeration. The value at "data" key is an array representing
+        daily cash flow for "verbose" key for the covered period
+    """
+
     EXPORTS_ROOT = "exports/"
 
     keys = enum_value([
@@ -64,6 +81,16 @@ class Data:
     all_keys = [x.value for x in Key]
 
     def __init__(self, filename=None, period=None, offset=None, start=None, end=None):
+        """
+        Constructs a Data object with given filename and date base. Starts by reading the file at filename and than
+        instantiates a date base coherent with loaded data and given parameters.
+        Parameters:
+            filename (str): Relative path to file to read
+            period (int): Periodicity of the data for indicators computing in days eg. period=7, period="week"...
+            offset (int): Offset in number of period from start day.
+            start (datetime): Starting date for indicators computing
+            end (datetime): Ending date for indicators computing
+        """
         self.filename = filename
         self.base = DateBase()
         self.fields = {}
@@ -77,22 +104,18 @@ class Data:
     def __dict__(self):
         return self.fields
 
-    """
-    @brief switches files format contained in filename
-    """
-
     def switch(self):
+        """Toggle files format contained in filename JSON to CSV or CSV to JSON"""
         if self.filename.split(".")[1] == "csv":
             self.filename = self.filename.replace(".csv", ".json")
         else:
             self.filename = self.filename.replace(".json", ".csv")
 
-    """
-    @brief Reads file located at exports/filename where filename is the current filename of the object
-    @details When reading a file, current object state is reset
-    """
-
     def read(self):
+        """
+        Reads file located at exports/filename where filename is the current filename of the object.
+        When reading a file, current object state is reset
+        """
         ext = self.filename.split(".")[1]
         if ext == "json":
             self._read_json()
@@ -104,12 +127,11 @@ class Data:
 
         self.base.set()
 
-    """
-    @brief Writes file located at exports/filename where filename is the current filename of the object
-    @details If the file already exists than existing data and self data are merged (see merge function).
-    """
-
     def write(self):
+        """
+        Writes file located at exports/filename where filename is the current filename of the object
+        If the file already exists than existing data and self data are merged (see merge function).
+        """
         ext = self.filename.split(".")[1]
         if ext == "json":
             self._write_json()
@@ -121,25 +143,25 @@ class Data:
         self.fields = data.fields
         self.base = DateBase(covered=data.base.covered, date=data.base.date)
 
-    """
-    @brief Updates main financial data json file with self data
-    @details self data is merged with main json file and is renamed to main.json
-    """
-
     def update(self):
+        """
+        Updates main financial data json file with self data.
+        self data is merged with main json file and is renamed to main.json
+        """
         filename = self.filename
         self.filename = "main.json"
         self.write()
         self.filename = filename
 
-    """
-    @param data object representing financial data updated from main report
-    @brief Merge two Data objects in self object
-    @details Self data are updated during merge process. If self data are older than data to merge, the data to merge
-    are copied into self data. Else self data are augmented by concatenating older data and newer data
-    """
-
     def merge(self, data):
+        """
+        Merge two Data objects. Self data are updated during merge process.
+        If self data are older than data to merge, the data to merge are copied into self data.
+        Else self data are augmented by concatenating older data and newer data
+
+        Parameters:
+            data (Data): object representing financial data updated from main report
+        """
         delta = self.base.date - data.base.date
 
         assert data.base.covered >= self.base.covered
@@ -175,12 +197,13 @@ class Data:
         else:
             self.copy(data)
 
-    """
-    @brief Return dictionary of raw financial data sorted by Key enumeration
-    @details Values are given in dollars $
-    """
-
     def raw(self):
+        """
+        Indexes raw accounting data in $ reduced according to the current date base.
+        Returns:
+             Dictionary of raw financial data sorted by Key enumeration. Each key stores an array representing
+             an expense or an income over the period described by the current date base
+        """
         y = {}
         for k in range(0, len(Data.keys)):
             for key in Data.keys[k]:
@@ -194,6 +217,12 @@ class Data:
     """
 
     def rel(self):
+        """
+        Indexes relative accounting data in % reduced according to the current date base.
+        Returns:
+             Dictionary of relative financial data sorted by Key enumeration. Each key stores an array representing
+             an expense or an income over the period described by the current date base
+        """
         data = self.raw()
         y = {}
         for k in range(0, len(Data.keys)):
@@ -210,12 +239,15 @@ class Data:
 
         return y
 
-    """
-    @brief Return the cash flow of the airline
-    @details Values are given in dollars $. The planes purchase and loan principal amount are not taken in account.
-    """
-
     def flow(self):
+        """
+        Computes structural profit in $, total benefits and total costs.
+        The planes purchase and loan principal amount are not taken in account in structural profit.
+
+        Returns:
+            Dictionary with profits, total benefits and total costs indexed respectively as "flow", "gain" and "loss"
+            over the period described by the current date base
+        """
         excluded_keys = enum_value([[Key.plane,
                                      Key.lap,
                                      Key.cka,
@@ -240,15 +272,18 @@ class Data:
 
         return self.reduce(y)
 
-    """
-    @param thd Threshold to exclude data.
-    @brief Returns pie represented by average of current data set
-    @details Filter the values returned by raw function in order to get only
-             average value of keys which are greater than the threshold.
-    @return a dictionary with the remaining keys and the average value
-    """
-
     def pie(self, thd=0.):
+        """
+        Returns pie representing expenses and incomes of current data set.
+        Filters the values returned by raw function in order to get only average value of keys
+        which are greater than the threshold.
+
+        Parameter:
+            thd (float) Threshold to exclude data in $/day
+
+        Returns:
+            Dictionary with averages values of remaining Keys after filter
+        """
         excluded_keys = enum_value([[Key.debit, Key.credit]])[0]
 
         # Filtering keys
@@ -271,6 +306,15 @@ class Data:
         return dict(zip(keys, values))
 
     def reduce(self, y):
+        """
+        Reduces a data set according to a certain date base.
+
+        Parameter:
+            y (dict): A daily data obtain with one of the function above
+
+        Returns:
+            y_reduced: Dictionary of y average values over the period described by current date base
+        """
         y_reduced = {}
         for key, val in y.items():
             y_reduced[key] = [0] * self.base.range
