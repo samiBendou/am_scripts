@@ -17,33 +17,23 @@ class Planning:
 
         self.generate_schedule()
 
-    def total_planes_cost(self):
-        cost = 0.
-        for plane in self.planes.values():
-            cost += plane.price
-
-        return cost
-
-    def total_acq_cost(self):
-        cost = 0.
-        for hub_iata, lines in self.lines.items():
-            for line in lines.values():
-                cost += line.hub.price + line.dst.price
-
-        return cost
-
-    def flights(self, day):
+    def flights(self, day=None):
         count = {}
         for hub_iata, lines in self.lines.items():
             count[hub_iata] = {}
             for dst_iata, line in lines.items():
                 count[hub_iata][dst_iata] = {}
                 for plane_id, week_schedule in self.schedule.items():
-                    count[hub_iata][dst_iata][plane_id] = week_schedule[day].count(hub_iata + "-" + dst_iata)
+                    if day is not None:
+                        count[hub_iata][dst_iata][plane_id] = week_schedule[day].count(hub_iata + "-" + dst_iata)
+                        continue
 
+                    count[hub_iata][dst_iata][plane_id] = 0
+                    for day_schedule in week_schedule:
+                        count[hub_iata][dst_iata][plane_id] += day_schedule.count(hub_iata + "-" + dst_iata)
         return count
 
-    def pax(self, day):
+    def pax(self, day=None):
         flights = self.flights(day)
 
         pax = {}
@@ -60,7 +50,7 @@ class Planning:
 
         return pax
 
-    def pax_delta(self, day):
+    def pax_delta(self, day=None):
         pax = self.pax(day)
 
         delta = {}
@@ -75,7 +65,7 @@ class Planning:
 
         return delta
 
-    def flight_time(self, day):
+    def flight_time(self, day=None):
         flights = self.flights(day)
 
         time = {}
@@ -89,7 +79,7 @@ class Planning:
 
         return time
 
-    def fuel_cons(self, day):
+    def fuel_cons(self, day=None):
         pax = self.pax(day)
 
         fuel = {}
@@ -104,7 +94,7 @@ class Planning:
 
         return fuel
 
-    def turnovers(self, day):
+    def turnovers(self, day=None):
         pax = self.pax(day)
 
         cash = {}
@@ -120,7 +110,7 @@ class Planning:
 
         return cash
 
-    def costs(self, day):
+    def costs(self, day=None):
         fuel = self.fuel_cons(day)
         flights = self.flights(day)
 
@@ -140,7 +130,7 @@ class Planning:
 
         return cash
 
-    def profits(self, day):
+    def profits(self, day=None):
         turnover = self.turnovers(day)
         cost = self.costs(day)
 
@@ -158,7 +148,7 @@ class Planning:
 
         return cash
 
-    def profitability(self, day, loan_rate=0.01):
+    def profitability(self, day=None, loan_rate=0.01):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
         price_by_line = self.price_by_lines()
@@ -175,7 +165,7 @@ class Planning:
                     pax = sum(self.planes[plane_id].pax.values())
                     for m in Market:
                         pax_ratio = self.planes[plane_id].pax[m.name] / float(pax)
-                        cash = 30 * profits[hub_iata][dst_iata][plane_id][m.name]
+                        cash = (4 if day is None else 30) * profits[hub_iata][dst_iata][plane_id][m.name]
                         cost = pax_ratio * plane_cost
                         try:
                             percent[hub_iata][dst_iata][plane_id][m.name] = cash / cost
@@ -184,7 +174,7 @@ class Planning:
 
         return percent
 
-    def margin(self, day, loan_rate=0.01, loan_period=30):
+    def margin(self, day=None, loan_rate=0.01, loan_period=30):
         flight_time = self.flight_time(day)
         profits = self.profits(day)
         costs = self.costs(day)
@@ -212,7 +202,7 @@ class Planning:
 
         return percent
 
-    def use_rate(self, day):
+    def use_rate(self, day=None):
         flight_time = self.flight_time(day)
 
         percent = {}
@@ -224,6 +214,21 @@ class Planning:
                     percent[hub_iata][dst_iata][plane_id] = flight_time[hub_iata][dst_iata][plane_id] / 24.
 
         return percent
+
+    def total_planes_cost(self):
+        cost = 0.
+        for plane in self.planes.values():
+            cost += plane.price
+
+        return cost
+
+    def total_acq_cost(self):
+        cost = 0.
+        for hub_iata, lines in self.lines.items():
+            for line in lines.values():
+                cost += line.hub.price + line.dst.price
+
+        return cost
 
     def price_by_lines(self):
         deserve_dst = self.deserve_dst()
@@ -295,7 +300,7 @@ class Planning:
 
         return new_data
 
-    def by_hubs(self, data, day, by_market=False, avg=False):
+    def by_hubs(self, data, day=None, by_market=False, avg=False):
         line_data = self.by_lines(data, day, by_market, avg)
         count_lines = self.count_lines_by_hub()
 
@@ -321,7 +326,7 @@ class Planning:
 
         return new_data
 
-    def by_lines(self, data, day, by_market=False, avg=False):
+    def by_lines(self, data, day=None, by_market=False, avg=False):
         plane_data = self.by_plane_id(data, by_market)
         count_planes = self.count_planes_by_line(day)
 
@@ -348,7 +353,7 @@ class Planning:
 
         return new_data
 
-    def by_planes(self, data, day, by_market=False, avg=False):
+    def by_planes(self, data, day=None, by_market=False, avg=False):
         plane_data = self.by_plane_id(data, by_market)
         count_planes = self.count_planes_by_line(day)
         deserve_dst = self.deserve_dst(day)
@@ -426,15 +431,22 @@ class Planning:
 
         return count_by_hub
 
-    def count_planes_by_line(self, day):
+    def count_planes_by_line(self, day=None):
         count_by_lines = {}
         for hub_iata, lines in self.lines.items():
             count_by_lines[hub_iata] = {}
             for dst_iata, line in lines.items():
                 count_by_lines[hub_iata][dst_iata] = 0
                 for plane_id, week_schedule in self.schedule.items():
-                    if hub_iata + "-" + dst_iata in week_schedule[day]:
-                        count_by_lines[hub_iata][dst_iata] += 1
+                    if day is not None:
+                        if hub_iata + "-" + dst_iata in week_schedule[day]:
+                            count_by_lines[hub_iata][dst_iata] += 1
+                        continue
+
+                    for day_schedule in week_schedule:
+                        if hub_iata + "-" + dst_iata in day_schedule:
+                            count_by_lines[hub_iata][dst_iata] += 1
+                            break
 
         return count_by_lines
 
@@ -545,7 +557,7 @@ test_planes = [scrap.JSON.planes["Q-400"]]
 plan = FlatPlanning.match(test_lines, test_planes)
 
 test_day = 0
-flights_data = plan.profitability(test_day)
-new_flights_data = plan.by_hubs(flights_data, test_day, by_market=False, avg=True)
+flights_data = plan.profitability()
+new_flights_data = plan.by_hubs(flights_data, by_market=False, avg=True)
 
 print(new_flights_data)

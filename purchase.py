@@ -54,7 +54,7 @@ class Plot(GenericPlot):
     RENDER_ROOT = GenericPlot.RENDER_ROOT + "purchase/"
 
     @classmethod
-    def sort(cls, data, day=0, max_plans=7):
+    def sort(cls, data, max_plans=7):
         sorted_plans = data.sorted()
         size = min(max_plans, len(sorted_plans))
 
@@ -63,20 +63,20 @@ class Plot(GenericPlot):
 
         profits_by_line = []
         profitability_by_line = []
+        price_by_lines = []
 
         for plan in sorted_plans:
-            profits_by_line.append(plan.by_lines(plan.profits(day), day))
-            profitability_by_line.append(plan.by_lines(plan.profitability(day), day))
+            profits_by_line.append(plan.by_lines(plan.profits()))
+            profitability_by_line.append(plan.by_lines(plan.profitability()))
+            price_by_lines.append(plan.price_by_lines())
 
         for hub_iata, lines in data.plannings[0].lines.items():
             for dst_iata, line in lines.items():
                 profits, initial_costs, profitability, names = [], [], [], []
 
                 for k in range(0, size):
-                    count = len(lines) * len(sorted_plans[k].lines)
-                    cost = sorted_plans[k].total_planes_cost() + sorted_plans[k].total_acq_cost()
-                    profits.append(profits_by_line[k][hub_iata][dst_iata] / 1.e6)
-                    initial_costs.append(cost / count / 1.e8)
+                    profits.append(profits_by_line[k][hub_iata][dst_iata] / 1.e6 / 7)
+                    initial_costs.append(sum(price_by_lines[k][hub_iata][dst_iata].values()) / 1.e8)
                     profitability.append(profitability_by_line[k][hub_iata][dst_iata])
                     names.append("Planning {:d}".format(k + 1))
 
@@ -99,7 +99,6 @@ class Plot(GenericPlot):
 
                 plt.xticks(index + bar_width / 3, names)
                 cls.render(xl="Planes", title="Profits vs initial cost " + hub_iata + "-" + dst_iata)
-
 
     @classmethod
     def heatmap(cls, data, included_planes=None, excluded_planes=None):
